@@ -126,43 +126,103 @@ public interface JsonbUnmarshaller {
      * Unmarshal JSON data from the specified file and return the resulting
      * content tree.
      *
-     * @param f the file to unmarshal JSON data from
+     * @param file the file to unmarshal JSON data from
+     *
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshaling.
      * @throws IllegalArgumentException
-     *      If the file parameter is null.
+     *     If the file parameter is null.
      */
-    public Object unmarshal(File f) throws JsonbException;
+    public Object unmarshal(File file) throws JsonbException;
+
+    /**
+     * Unmarshal JSON data from the specified file and return the resulting
+     * content tree.
+     *
+     * @param file the file to unmarshal JSON data from
+     * @param type
+     *      Type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshaling.
+     * @throws IllegalArgumentException
+     *     If any of the parameters is null.
+     */
+    public <T> T unmarshal(File file, Class<T> type) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified string and return the resulting
      * content tree.
      *
-     * @param s the string to unmarshal JSON data from
+     * @param str the string to unmarshal JSON data from
+     *
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshaling.
      * @throws IllegalArgumentException
-     *      If the s parameter is null.
+     *     If any of the parameters is null.
      */
-    public Object unmarshal(String s) throws JsonbException;
+    public Object unmarshal(String str) throws JsonbException;
+
+    /**
+     * Unmarshal JSON data from the specified string and return the resulting
+     * content tree.
+     *
+     * @param str the string to unmarshal JSON data from
+     * @param type
+     *      Type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshaling.
+     * @throws IllegalArgumentException
+     *      If any of the parameters is null.
+     */
+    public <T> T unmarshal(String str, Class<T> type) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified Reader and return the
      * resulting content tree.
      *
      * @param reader the Reader to unmarshal JSON data from.
+     *
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshaling.
      * @throws IllegalArgumentException
-     *      If the reader parameter is null.
+     *      If any of the parameters is null.
      */
     public Object unmarshal(Reader reader) throws JsonbException;
+
+    /**
+     * Unmarshal JSON data from the specified Reader and return the
+     * resulting content tree.
+     *
+     * @param reader the Reader to unmarshal JSON data from.
+     * @param type
+     *      Type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshaling.
+     * @throws IllegalArgumentException
+     *      If any of the parameters is null.
+     */
+    public <T> T unmarshal(Reader reader, Class<T> type) throws JsonbException;
 
     /**
      * Set the particular property in the underlying implementation of
@@ -176,12 +236,14 @@ public interface JsonbUnmarshaller {
      *              supplied string.
      * @param value the value of the property to be set
      *
+     * @return 'this' instance, for fluent support
+     *
      * @throws JsonbConfigurationException when there is an error processing the given
      *                            property or value
      * @throws IllegalArgumentException
      *      If the name parameter is null
      */
-    public void setProperty(String name, Object value) throws JsonbConfigurationException;
+    public JsonbUnmarshaller setProperty(String name, Object value) throws JsonbConfigurationException;
 
     /**
      * Get the particular property in the underlying implementation of

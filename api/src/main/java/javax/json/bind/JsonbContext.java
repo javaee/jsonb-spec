@@ -40,6 +40,7 @@
 
 package javax.json.bind;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -51,7 +52,7 @@ import java.util.Map;
  * output JSON data).
  *
  * <p>A client application normally obtains new instances of this class using
- * one of the createContext methods in {@link Jsonb} factory class.
+ one of the build methods in {@link Jsonb} factory class.
  *
  * <p>All the methods in this class are safe for use by multiple concurrent
  * threads.
@@ -65,7 +66,10 @@ import java.util.Map;
  */
 public abstract class JsonbContext {
 
-    private JsonbContext() { }
+    /**
+     * Protected default constructor, can be created
+     */
+    protected JsonbContext() { }
 
     /**
      * Creates a {@link JsonbMarshaller} object that can be used to convert java content
@@ -117,5 +121,79 @@ public abstract class JsonbContext {
      * @return JsonbUnmarshaller instance
      */
     public abstract JsonbUnmarshaller createUnmarshaller(Map<String, ?> configuration);
+
+    /**
+     * Builder design pattern class for creating JsonbContext objects.
+     */
+    public static class Builder {
+
+        /**
+         * Default JsonbContext Builder constructor.
+         */
+        public Builder() { };
+
+        private Class<?>[] recognizedClasses;
+        private Map<String, Object> configuration = new HashMap<>();
+
+        /**
+        * List of classes that the new context object needs to recognize.
+        *
+        * The implementation will not only recognize the provided classes, but it will
+        * also recognize any classes that are directly or indirectly statically referenced
+        * Subclasses of referenced classes, nor {@link javax.json.bind.annotation.JsonbTransient} annotated classes
+        * are recognized.
+        *
+        * Can be empty, in which case a default {@link JsonbContext} which only
+        * recognizes default spec-defined classes will be returned.
+        *
+        * @param classes list of classes to be recognized
+        *
+        * @return 'this' instance, for fluent support
+        */
+       public Builder setClasses(final Class<?> ... classes) {
+           this.recognizedClasses = classes;
+           return this;
+       }
+
+        /**
+         * Set the particular property for the implementation of
+         * <tt>JsonbContext</tt>. The method can only be used to set one of
+         * the standard JSON Binding properties defined in this class or a provider specific
+         * property. Attempting to set an undefined property will result in
+         * a JsonbConfigurationException being thrown.
+         *
+         * @param name the name of the property to be set. This value can either
+         *              be specified using one of the constant fields or a user
+         *              supplied string.
+         * @param value the value of the property to be set
+         *
+         * @return 'this' instance, for fluent support
+         */
+        public Builder setProperty(final String name, final Object value) {
+            this.configuration.put(name, value);
+            return this;
+        }
+
+        /**
+         * Returns a new instance of JsonbContext based on the parameters passed to
+         * this builder.
+         *
+         * @return JsonbContext
+         *      A new instance of JsonbContext class. Always a non-null valid object.
+         *
+         * @throws javax.json.bind.JsonbException
+         *      If an error was encountered while creating the JsonbContext instance,
+         *      such as (but not limited to) no JSON Binding provider is found, classes
+         *      provide conflicting annotations.
+         *
+         * @throws IllegalArgumentException
+         *      If there's an error processing the set parameters, such as the non-null
+         *      parameter is assigned null value, unrecognized property is set.
+         */
+        public JsonbContext build() {
+            return Jsonb.createContext(recognizedClasses);
+        }
+
+    }
 
 }

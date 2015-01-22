@@ -59,7 +59,7 @@ public abstract class JsonbProvider {
      * A constant representing the name of the default
      * {@code JsonbProvider} implementation class.
      */
-    private static final String DEFAULT_PROVIDER = "org.eclipse.persistence.jsonb.JsonbProvider";
+    private static final String DEFAULT_PROVIDER = "org.eclipse.persistence.json.bind.JsonBindingProvider";
 
     /**
      *
@@ -138,7 +138,7 @@ public abstract class JsonbProvider {
      * The implementation will not only recognize the provided classes, but it will
      * also recognize any classes that are directly or indirectly statically referenced
      * from provided classes. Subclasses of referenced classes, nor
-     * {@link javax.json.bind.annotation.JsonTransient} annotated classes are recognized.
+     * {@link javax.json.bind.annotation.JsonbTransient} annotated classes are recognized.
      *
      * @param classes
      *      List of java classes to be recognized by the new {@link JsonbContext}.
@@ -166,7 +166,7 @@ public abstract class JsonbProvider {
      * The implementation will not only recognize the provided classes, but it will
      * also recognize any classes that are directly or indirectly statically referenced
      * from provided classes. Subclasses of referenced classes, nor
-     * {@link javax.json.bind.annotation.JsonTransient} annotated classes are recognized.
+     * {@link javax.json.bind.annotation.JsonbTransient} annotated classes are recognized.
      *
      * @param configuration
      *      Contains spec defined and provider specific configuration properties. Can be

@@ -64,110 +64,13 @@ import javax.json.bind.spi.JsonbProvider;
  */
 public final class Jsonb {
 
-    /**
-     * No instantiation allowed.
-     */
-    private Jsonb() { }
-
-    /**
-     * Reads in a Java object tree from the given JSON input.
-     *
-     * @param file
-     *      Reads the entire file as JSON.
-     *
-     * @return Newly created root object of the Java object tree.
-     */
-    public static Object unmarshal(final File file) {
-        JsonbContext jsonbContext = JsonbProvider.provider().createContext();
-        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-        return jsonbUnmarshaller.unmarshal(file);
-    }
-
-    /**
-     * Reads in a Java object tree from the given JSON input.
-     *
-     * @param file
-     *      Reads the entire file as JSON.
-     * @param type
-     *      Type of the content tree's root object.
-     *
-     * @return Newly created root object of the Java object tree, of type type.
-     */
-//    public static <T> T unmarshal(File file, Class<T> type) {
-//        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
-//        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-//        return jsonbUnmarshaller.unmarshal(file, type);
-//    }
-
-    /**
-     * Reads in a Java object tree from the given JSON string.
-     *
-     * @param jsonString
-     *      The string is parsed as JSON data.
-     *
-     * @return Newly created root object of the Java object tree.
-     */
-    public static Object unmarshal(final String jsonString) {
-        JsonbContext jsonbContext = JsonbProvider.provider().createContext();
-        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-        return jsonbUnmarshaller.unmarshal(jsonString);
-    }
-
-    /**
-     * Reads in a Java object tree from the given JSON string.
-     *
-     * @param jsonString
-     *      The string is parsed as JSON data.
-     * @param type
-     *      Type of the content tree's root object.
-     *
-     * @return Newly created root object of the Java object tree, of type type.
-     */
-//    public static <T> T unmarshal(String jsonString, Class<T> type) {
-//        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
-//        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-//        return jsonbUnmarshaller.unmarshal(jsonString, type);
-//    }
-
-    /**
-     * Reads in a Java object tree from the given Reader as JSON data.
-     *
-     * @param reader
-     *      The character stream is read as a JSON data.
-     *      Upon a successful completion, the stream will be closed by this method.
-     *
-     * @return Newly created root object of the Java object tree.
-     */
-    public static Object unmarshal(final Reader reader) {
-        JsonbContext jsonbContext = JsonbProvider.provider().createContext();
-        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-        return jsonbUnmarshaller.unmarshal(reader);
-    }
-
-    /**
-     * Reads in a Java object tree from the given Reader as JSON data.
-     *
-     * @param reader
-     *      The character stream is read as a JSON data.
-     *      Upon a successful completion, the stream will be closed by this method.
-     * @param type
-     *      Type of the content tree's root object.
-     *
-     * @return Newly created root object of the Java object tree, of type type.
-     */
-//    public static <T> T unmarshal(Reader reader, Class<T> type) {
-//        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
-//        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-//        return jsonbUnmarshaller.unmarshal(reader, type);
-//    }
-
      /**
      * Returns a new instance of JsonbContext class. The client application has to
      * provide list of classes that the new context object needs to recognize.
      *
      * The implementation will not only recognize the provided classes, but it will
      * also recognize any classes that are directly or indirectly statically referenced
-     * Subclasses of referenced classes, nor {@link javax.json.bind.annotation.JsonTransient} annotated classes
+     * Subclasses of referenced classes, nor {@link javax.json.bind.annotation.JsonbTransient} annotated classes
      * are recognized.
      *
      * @param classes
@@ -199,7 +102,7 @@ public final class Jsonb {
      * The implementation will not only recognize the provided classes, but it will
      * also recognize any classes that are directly or indirectly statically referenced
      * from provided classes. Subclasses of referenced classes, nor
-     * {@link javax.json.bind.annotation.JsonTransient} annotated classes are recognized.
+     * {@link javax.json.bind.annotation.JsonbTransient} annotated classes are recognized.
      *
      * @param configuration
      *      Contains spec defined and provider specific configuration properties. Can be empty.
@@ -222,6 +125,65 @@ public final class Jsonb {
      */
     public static JsonbContext createContext(final Map<String, ?> configuration, final Class<?> ... classes) {
         return JsonbProvider.provider().createContext(configuration, classes);
+    }
+
+    /**
+     * No instantiation allowed.
+     */
+    private Jsonb() { }
+
+    /**
+     * Reads in a Java object tree from the given JSON input.
+     *
+     * @param file
+     *      Reads the entire file as JSON.
+     * @param type
+     *      Type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     * @return Newly created root object of the Java object tree, of type type.
+     */
+    public static <T> T unmarshal(final File file, final Class<T> type) {
+        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
+        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
+        return jsonbUnmarshaller.unmarshal(file, type);
+    }
+
+    /**
+     * Reads in a Java object tree from the given JSON string.
+     *
+     * @param jsonString
+     *      The string is parsed as JSON data.
+     * @param type
+     *      Type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return Newly created root object of the Java object tree, of type type.
+     */
+    public static <T> T unmarshal(final String jsonString, final Class<T> type) {
+        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
+        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
+        return jsonbUnmarshaller.unmarshal(jsonString, type);
+    }
+
+    /**
+     * Reads in a Java object tree from the given Reader as JSON data.
+     *
+     * @param reader
+     *      The character stream is read as a JSON data.
+     *      Upon a successful completion, the stream will be closed by this method.
+     * @param type
+     *      Type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return Newly created root object of the Java object tree, of type type.
+     */
+    public static <T> T unmarshal(final Reader reader, final Class<T> type) {
+        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
+        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
+        return jsonbUnmarshaller.unmarshal(reader, type);
     }
 
     /**

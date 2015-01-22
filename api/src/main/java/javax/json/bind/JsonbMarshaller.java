@@ -134,7 +134,7 @@ public interface JsonbMarshaller {
      * The name of the property used to specify whether or not the marshaled
      * JSON data is formatted with linefeeds and indentation.
      */
-    public static final String JSONB_FORMATTED_OUTPUT = "jsonb.formatted.output";
+    public static final String JSON_BIND_FORMATTED_OUTPUT = "json.binding.formatted.output";
 
     /**
      * Marshal the object content tree into a String instance.
@@ -193,12 +193,14 @@ public interface JsonbMarshaller {
      *              supplied string.
      * @param value the value of the property to be set
      *
+     * @return 'this' instance, for fluent support
+     *
      * @throws JsonbConfigurationException when there is an error processing the given
      *                            property or value
      * @throws IllegalArgumentException
      *      If the name parameter is null
      */
-    public void setProperty(String name, Object value) throws JsonbConfigurationException;
+    public JsonbMarshaller setProperty(String name, Object value) throws JsonbConfigurationException;
 
     /**
      * Get the particular property in the underlying implementation of
@@ -209,6 +211,7 @@ public interface JsonbMarshaller {
      * Supported Properties</a>.
      *
      * @param name the name of the property to retrieve
+     *
      * @return the value of the requested property
      *
      * @throws JsonbConfigurationException

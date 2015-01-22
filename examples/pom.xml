@@ -50,10 +50,10 @@
     </parent>
 
     <groupId>javax.json.bind</groupId>
-    <artifactId>javax.json.bind-api</artifactId>
+    <artifactId>javax.json.bind-examples</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>javax.json.bind-api</name>
+    <packaging>pom</packaging>
+    <name>javax.json.bind-examples</name>
 
     <url>http://jsonb-spec.java.net</url>
 
@@ -124,54 +124,6 @@
         </developer>
     </developers>
 
-    <profiles>
-        <profile>
-            <id>final</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <!-- Final API bundle version properties -->
-                <spec.version>${next.final.spec.version}</spec.version>
-                <new.spec.version />
-                <milestone.number />
-                <non.final>false</non.final>
-            </properties>
-        </profile>
-        <profile>
-            <!-- Use it with release-perform goal to skip another test run. -->
-            <id>skip-tests</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <skip.release.tests>true</skip.release.tests>
-            </properties>
-        </profile>
-        <profile>
-            <id>release</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <build>
         <finalName>${project.artifactId}</finalName>
         <pluginManagement>
@@ -188,7 +140,6 @@
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
-                        <compilerArgument>-Xlint:all</compilerArgument>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -217,67 +168,11 @@
                     </executions>
                 </plugin>
                 <plugin>
-                    <!-- This plugin generates the spec.* properties used in maven-bundle-plugin -->
-                    <groupId>org.glassfish.build</groupId>
-                    <artifactId>spec-version-maven-plugin</artifactId>
-                    <version>1.2</version>
-                    <configuration>
-                        <spec>
-                            <nonFinal>${non.final}</nonFinal>
-                            <jarType>api</jarType>
-                            <specVersion>${spec.version}</specVersion>
-                            <newSpecVersion>${new.spec.version}</newSpecVersion>
-                            <specBuild>${milestone.number}</specBuild>
-                            <specImplVersion>${project.version}</specImplVersion>
-                            <apiPackage>${project.groupId}</apiPackage>
-                        </spec>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>set-spec-properties</goal>
-                                <goal>check-module</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>2.5.0</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <instructions>
-                            <Build-Id>${buildNumber}</Build-Id>
-                            <Bundle-Description>Java API for JSON Binding (JSON-Binding)</Bundle-Description>
-                            <Bundle-Version>${spec.bundle.version}</Bundle-Version>
-                            <Bundle-SymbolicName>${spec.bundle.symbolic-name}</Bundle-SymbolicName>
-                            <DynamicImport-Package>*</DynamicImport-Package>
-                            <Extension-Name>${spec.extension.name}</Extension-Name>
-                            <Implementation-Version>${spec.implementation.version}</Implementation-Version>
-                            <Specification-Version>${spec.specification.version}</Specification-Version>
-                            <Specification-Vendor>Oracle Corporation</Specification-Vendor>
-                            <specversion>${spec.specification.version}</specversion>
-                            <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
-                            <_nodefaultversion>false</_nodefaultversion>
-                        </instructions>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>osgi-bundle</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>bundle</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>2.9.1</version>
                     <configuration>
-                        <doctitle>JSON-Binding ${project.version} API Specification</doctitle>
+                        <doctitle>JSON Binding ${project.version} API Specification</doctitle>
                         <bottom>
                             <![CDATA[Copyright &#169; 1996-2015,
                                 <a href="http://www.oracle.com">Oracle</a>
@@ -336,44 +231,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.1</version>
-                    <configuration>
-                        <retryFailedDeploymentCount>10</retryFailedDeploymentCount>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.4.2</version>
-                    <!--
-                        To release a non-final version:
-                        ===============================
-                        mvn release:prepare -DdryRun=false -DreleaseVersion=<release-version> \
-                                -DdevelopmentVersion=<next-dev-version> -Dtag=<release-version> -Prelease
-
-                        mvn release:perform -DconnectionUrl="scm:git:file://<path-to-local-jsonb-repo>" -Dtag=<release-version> \
-                                -Prelease,skip-tests
-
-                        To release a final version:
-                        ===========================
-                        mvn release:prepare -DdryRun=false -DreleaseVersion=<release-version> \
-                                -DdevelopmentVersion=<next-dev-version> -Dtag=<release-version> -Prelease,final
-
-                        mvn release:perform -DconnectionUrl="scm:git:file://<path-to-local-jsonb-repo>" -Dtag=<release-version> \
-                                -Prelease,skip-tests,final
-                    -->
-                    <configuration>
-                        <arguments>-Dmaven.test.skip=${skip.release.tests} ${release.arguments}</arguments>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <mavenExecutorId>forked-path</mavenExecutorId>
-                        <preparationGoals>clean install</preparationGoals>
-                        <pushChanges>false</pushChanges>
-                        <useReleaseProfile>false</useReleaseProfile>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
                     <version>2.3</version>
                     <executions>
@@ -392,7 +249,7 @@
                     <configuration>
                         <outputDirectory>${project.build.directory}/checkstyle</outputDirectory>
                         <outputFile>${project.build.directory}/checkstyle/checkstyle-result.xml</outputFile>
-                        <configLocation>${basedir}/../etc/config/checkstyle.xml</configLocation>
+                        <configLocation>${basedir}/../../etc/config/checkstyle.xml</configLocation>
                     </configuration>
                     <executions>
                         <execution>
@@ -408,7 +265,7 @@
                     <artifactId>glassfish-copyright-maven-plugin</artifactId>
                     <version>1.39</version>
                     <configuration>
-                        <excludeFile>${basedir}/../etc/config/copyright-exclude</excludeFile>
+                        <excludeFile>${basedir}/../../etc/config/copyright-exclude</excludeFile>
                         <!--svn|mercurial|git - defaults to svn-->
                         <scm>git</scm>
                         <!-- turn on/off debugging -->
@@ -421,7 +278,7 @@
                         <update>false</update>
                         <!-- check that year is correct -->
                         <ignoreYear>false</ignoreYear>
-                        <templateFile>${basedir}/../etc/config/copyright.txt</templateFile>
+                        <templateFile>${basedir}/../../etc/config/copyright.txt</templateFile>
                     </configuration>
                 </plugin>
             </plugins>
@@ -438,10 +295,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -463,31 +316,27 @@
                 <groupId>org.glassfish.copyright</groupId>
                 <artifactId>glassfish-copyright-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.glassfish.build</groupId>
-                <artifactId>spec-version-maven-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.json.bind</groupId>
+                <artifactId>javax.json.bind-api</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <last.final.spec.version>0.1</last.final.spec.version>
-        <milestone.number>01</milestone.number>
-        <next.final.spec.version>1.0</next.final.spec.version>
-        <new.spec.version>${next.final.spec.version}</new.spec.version>
-        <non.final>true</non.final>
-        <skip.release.tests>false</skip.release.tests>
-        <spec.version>${last.final.spec.version}</spec.version>
     </properties>
 
     <reporting>
@@ -499,5 +348,9 @@
             </plugin>
         </plugins>
     </reporting>
-  
+
+    <modules>
+        <module>runtime</module>
+    </modules>
+    
 </project>

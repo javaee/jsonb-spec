@@ -1,0 +1,101 @@
+\documentclass[11pt]{book}
+
+\usepackage[hyperref, thmmarks]{styles/ntheorem}
+\usepackage{framed}
+\usepackage{times}
+\usepackage{textcomp}
+\usepackage{tabularx}
+\usepackage{moreverb}
+\usepackage[pdftex]{graphicx}
+\usepackage{amssymb}
+\usepackage{float}
+
+\usepackage[pdftex,
+  pdftitle={JSON-B: Java API for JSON Binding},
+  pdfauthor={Martin Grebac, Oracle},
+  pdfsubject={JSON-B: Java API for JSON Binding},
+  pdfkeywords={Java JSON Binding API},
+  pdftex,
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  pdfstartview=FitH,
+  bookmarksnumbered=true
+]{hyperref}
+
+% set up page dimensions
+\textwidth = 6.5 in
+\textheight = 9.33 in
+\oddsidemargin = 0.0 in
+\evensidemargin = 0.0 in
+\topmargin = -0.75 in
+\headheight = 15pt
+\headsep = 0.33 in
+\parskip = 6pt
+\parindent = 0.0in
+\footskip=0.5in
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{styles/jsr}
+\theoremstyle{plain}
+\newtheorem{ednote}{Editors Note}[chapter]
+
+\theoremstyle{nonumberplain}
+\theoremindent0cm
+\theoremseparator{:}
+\newtheorem{nnnote}{Note}[chapter]
+
+\usepackage{longtable}
+
+\begin{document}
+
+\frontmatter
+\include{styles/macros}
+\include{styles/jsrfrontstyle}
+
+\include{chapters/titlepage}
+
+\cleardoublepage
+{
+\small
+\include{chapters/license}
+%\include{chapters/license_final}
+}
+
+\pdfbookmark[0]{Contents}{toc}
+\tableofcontents
+
+\mainmatter
+\include{styles/jsrmainstyle}
+
+\setcounter{secnumdepth}{4}
+
+\newcommand{\footnoteremember}[2]{\footnote{#2}\newcounter{#1}\setcounter{#1}{\value{footnote}}}
+\newcommand{\footnoterecall}[1]{\footnotemark[\value{#1}]}
+
+\include{chapters/intro}
+\include{chapters/runtime}
+\include{chapters/defaultmapping}
+\include{chapters/customization}
+%\include{chapters/generics}
+%\include{chapters/extensibility}
+%\include{chapters/invalidcontent}
+%\include{chapters/integration}
+%\include{chapters/integration_validation}
+%\include{chapters/integration_interceptors}
+%\include{chapters/integration_jsonp}
+
+\appendix
+\renewcommand{\chaptermark}[1]{
+  \markboth{\appendixname
+  \ \thechapter.\ #1}{}}
+
+%\include{chapters/annotations}
+%\include{chapters/changes}
+
+\backmatter
+
+\include{chapters/refs}
+
+\end{document}

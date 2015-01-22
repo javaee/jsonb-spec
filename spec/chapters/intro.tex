@@ -1,0 +1,156 @@
+\chapter{Introduction}
+
+This specification defines binding API between Java objects and JSON \cite{json} documents. Readers are assumed to be familiar with JSON; for more information about JSON, see:
+
+\begin{itemize}
+\item Architectural Styles and the Design of Network-based Software Architectures\cite{rest}
+\item The REST Wiki\cite{restwiki}
+\item JSON on Wikipedia\cite{jsonwikipedia}
+\end{itemize}
+
+\section{Status}
+\label{status}
+
+This is an early draft; this specification is not yet complete. A list of open issues can be found at:
+%This is a JCP public review draft; this specification is not yet final. A list of open issues can be found at:
+%This is a JCP final specification. A list of open issues can be found at:
+
+%This is the final release of version 2.0. The issue tracking system for this release can be found at:
+
+\begin{quote}
+http://java.net/jira/browse/JSONB\_SPEC
+\end{quote}
+
+The corresponding Javadocs can be found online at:
+
+\begin{quote}
+http://jsonb-spec.java.net/
+\end{quote}
+
+The reference implementation will be obtained from:
+
+\begin{quote}
+http://eclipselink.org/
+\end{quote}
+
+The expert group seeks feedback from the community on any aspect of this specification, please send comments to:
+
+\begin{quote}
+users@jsonb-spec.java.net
+\end{quote}
+
+\section{Goals}
+
+The following are the goals of the API:
+
+\begin{description}
+
+\item[JSON] 
+Support binding (marshalling and unmarshalling) for all RFC 7159 compatible JSON documents.
+
+\item [Relationships to JSON Related specifications]
+JSON related specifications will be surveyed to determine their relationship to JSON-Binding.
+
+\item[Consistency] 
+Maintain consistency with JAXB (Java API for XML Binding) and other JavaEE and SE APIs.
+
+\item[Convention] 
+Define default mapping of Java classes and instances to JSON document counterparts.
+
+\item[Customization] 
+Allow to customize the default mapping definition.
+
+\item[Ease Of Use] 
+Default use of the APIs SHOULD NOT require prior knowledge of the JSON document format and specification.
+
+\item[Partial Mapping] 
+In many usecases, only a subset of JSON Document is required to be mapped to a Java object  instance.
+
+\item[Integration]
+Define or enable integration with following Java EE technology standards:
+ JSR 353 - Java API for JSON Processing 1.1
+ JSR 349, ... - Bean Validation (BV) 1.1 (2.0)
+ JSR 370 - JavaTM API for RESTful Web Services (JAX-RS) 2.1
+  
+\end{description}
+
+\section{Non-Goals}
+\label{non_goals}
+
+The following are non-goals:
+
+\begin{description}
+
+\item[Preserving equivalence (Round-trip)] The specification recommends, but does not require equivalence of content for unmarshalled and marshalled JSON documents.
+
+\item[JSON Schema] Generation of JSON Schema from Java classes, as well as validation based on JSON schema is out of scope of this specification.
+
+\item[JEP 148 Lightweight JSON API Support] Support and integration with Lightweight JSON API as defined within JEP 198 is out of scope of this specification. Will be reconsidered in future specification revisions.
+
+\end{description}
+
+\section{Conventions}
+
+The keywords `MUST', `MUST NOT', `REQUIRED', `SHALL', `SHALL NOT', `SHOULD', `SHOULD NOT', `RECOMMENDED', `MAY', and `OPTIONAL' in this document are to be interpreted as described in RFC 2119\cite{rfc2119}. 
+
+Java code and sample data fragments are formatted as shown in figure \ref{ex1}:
+
+\begin{figure}[hbtp]
+\caption{Example Java Code}
+\label{ex1}
+\begin{listing}{1}
+package com.example.hello;
+
+public class Hello {
+    public static void main(String args[]) {
+        System.out.println("Hello World");
+    }
+}\end{listing}
+\end{figure}
+
+URIs of the general form `http://example.org/...' and `http://example.com/...' represent application or context-dependent URIs.
+
+All parts of this specification are normative, with the exception of examples, notes and sections explicitly marked as `Non-Normative'. Non-normative notes are formatted as shown below.
+
+\begin{nnnote*}
+This is a note.
+\end{nnnote*}
+
+\section{Terminology}
+\label{terminology}
+
+\begin{description}
+\item[Databinding] Process which defines representation of information in an JSON document as an object instance, and vice versa.
+\item[Unmarshalling] Process of reading a JSON document and construction a tree of content objects, 
+where each object corresponds to part of JSON document, thus the content tree reflects the document's content.
+\item[Marshalling] Inverse process to unmarshalling. Process of traversing content object tree and writing a JSON document that reflects the tree's content.
+
+\end{description}
+
+\section{Expert Group Members} 
+\label{expert_group}
+
+This specification is being developed as part of JSR 367 under the Java Community Process. 
+It is the result of the collaborative work of the members of the JSR 367 Expert Group. 
+The following are the present expert group members:
+
+\begin{list}{$-$}{\parsep 0em \labelwidth 0em}
+\item Martin Grebac (Oracle)
+\item Martin Vojtek (Oracle)
+\item Hendrik Saly (Individual Member)
+\item Gregor Zurowski (Individual Member) 
+\item Inderjeet Singh (Individual Member)
+\item Eugen Cepoi (Individual Member)
+\item Przemyslaw Bielicki (Individual Member)
+\item Kyung Koo Yoon (TmaxSoft, Inc.)
+\item Otavio Santana (Individual Member)
+\item Rick Curtis (IBM)
+\item Alexander Salvanos (Individual Member)
+\end{list}
+
+\section{Acknowledgements}
+\label{acks}
+
+During the course of this JSR we received many excellent suggestions. Special thanks to ... .
+
+During the course of this JSR we received many excellent suggestions on the JSR java.net project mailing lists, thanks in particular to ...  for their contributions. The following individuals have also made invaluable technical contributions: ... .

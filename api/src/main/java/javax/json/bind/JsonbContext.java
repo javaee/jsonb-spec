@@ -67,7 +67,7 @@ import java.util.Map;
 public abstract class JsonbContext {
 
     /**
-     * Protected default constructor, can be created
+     * Protected default constructor.
      */
     protected JsonbContext() { }
 

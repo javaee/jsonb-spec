@@ -40,8 +40,10 @@
 
 package javax.json.bind;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import javax.json.bind.spi.JsonbProvider;
 
 /**
  * <p>
@@ -54,8 +56,8 @@ import java.util.Map;
  * <p>A client application normally obtains new instances of this class using
  one of the build methods in {@link Jsonb} factory class.
  *
- * <p>All the methods in this class are safe for use by multiple concurrent
- * threads.
+ * <p>All the methods in this class, with exception of Builder class methods
+ * are safe for use by multiple concurrent threads.
  *
  * @see Jsonb
  * @see JsonbMarshaller
@@ -136,6 +138,26 @@ public abstract class JsonbContext {
         private Map<String, Object> configuration = new HashMap<>();
 
         /**
+         * Returns map of configuration values for JsonbContext creation. For
+         * more details see ${@link JsonbContext}, ${@link JsonbProvider}.
+         *
+         * @return Map of configuration properties.
+         */
+        public Map<String, Object> getConfiguration() {
+            return (Map<String, Object>) ((HashMap<String, Object>) configuration).clone();
+        }
+
+        /**
+         * Returns array of classes that the JsonbContext must recognize. For more
+         * details see ${@link JsonbContext}, ${@link JsonbProvider}.
+         *
+         * @return array of recognized classes. Can be empty.
+         */
+        public Class[] getClasses() {
+            return Arrays.copyOf(recognizedClasses, recognizedClasses.length);
+        }
+
+        /**
         * List of classes that the new context object needs to recognize.
         *
         * The implementation will not only recognize the provided classes, but it will
@@ -150,10 +172,10 @@ public abstract class JsonbContext {
         *
         * @return 'this' instance, for fluent support
         */
-       public Builder setClasses(final Class<?> ... classes) {
-           this.recognizedClasses = classes;
-           return this;
-       }
+        public Builder setClasses(final Class<?> ... classes) {
+            this.recognizedClasses = Arrays.copyOf(classes, classes.length);
+            return this;
+        }
 
         /**
          * Set the particular property for the implementation of
@@ -191,7 +213,7 @@ public abstract class JsonbContext {
          *      parameter is assigned null value, unrecognized property is set.
          */
         public JsonbContext build() {
-            return Jsonb.createContext(recognizedClasses);
+            return JsonbProvider.provider().createContext(this);
         }
 
     }

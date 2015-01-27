@@ -54,12 +54,17 @@ public class JsonBindingProvider extends JsonbProvider {
 
     @Override
     public JsonbContext createContext(Class<?>... classes) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new JsonBindingContext(classes);
     }
 
     @Override
     public JsonbContext createContext(Map<String, ?> configuration, Class<?>... classes) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new JsonBindingContext(configuration, classes);
+    }
+
+    @Override
+    public JsonbContext createContext(JsonbContext.Builder builder) {
+        return new JsonBindingContext(builder);
     }
 
 }

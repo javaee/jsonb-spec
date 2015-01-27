@@ -189,4 +189,25 @@ public abstract class JsonbProvider {
      */
     public abstract JsonbContext createContext(Map<String, ?> configuration, Class<?>... classes);
 
+    /**
+     * Returns a new instance of JsonbContext class configured with a specific
+     * configuration contained within JsonbContext.Builder instance. Builder provides
+     * necessary getter methods to access required parameters.
+     *
+     * @param builder
+     *      Contains configuration for creating JsonbContext instance.
+     *      See <tt>@JsonbContext</tt> for detailed information.
+     *
+     * @return JsonbContext
+     *      A new instance of JsonbContext class. Always a non-null valid object.
+     *
+     * @throws JsonbException
+     *      If an error was encountered while creating the JsonbContext instance,
+     *      such as (but not limited to) classes provide conflicting annotations.
+     *
+     * @throws IllegalArgumentException
+     *      If the parameter contains {@code null}
+     */
+    public abstract JsonbContext createContext(JsonbContext.Builder builder);
+
 }

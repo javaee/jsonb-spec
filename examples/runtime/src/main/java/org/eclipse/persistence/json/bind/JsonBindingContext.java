@@ -38,81 +38,47 @@
  * holder.
  */
 
-package examples.runtime;
+package org.eclipse.persistence.json.bind;
 
-import examples.model.Author;
-import examples.model.Book;
-import examples.model.Language;
-import javax.json.bind.Jsonb;
+import java.util.Map;
 import javax.json.bind.JsonbContext;
 import javax.json.bind.JsonbMarshaller;
-import javax.json.bind.spi.JsonbProvider;
+import javax.json.bind.JsonbUnmarshaller;
 
 /**
  *
+ * Dummy no-op example of JSON Binding Context implementation.
+ *
  * @author Martin Grebac
  */
-public class Runtime {
+public class JsonBindingContext extends JsonbContext {
 
-    public static void main(String[] args) {
+    protected JsonBindingContext() { }
 
-        Book book = new Book();
-        book.id = 101L;
-        book.lang = Language.CZECH;
+    protected JsonBindingContext(Class[] classes) { }
 
-        book.author = new Author();
-        book.author.firstName = "Jara";
-        book.author.lastName = "Cimrman";
+    protected JsonBindingContext(Map<String, ?> configuration, Class[] classes) { }
 
-// DEFAULT EASE OF USE METHODS
+    protected JsonBindingContext(Builder builder) { builder.getClasses(); }
 
-        /**
-         * Write an object content tree using default JSON mapping
-            {
-              "id" : 101,
-              "author" : {
-                "firstName" : "Jara",
-                "lastName" : "Cimrman"
-              },
-              "lang" : "CZECH"
-            }
-        */
-        String json = Jsonb.marshal(book);
+    @Override
+    public JsonbMarshaller createMarshaller() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-        /**
-         * Read JSON document (from above) into an object content tree using default mapping
-         */
-        Book b1 = Jsonb.unmarshal(json, Book.class);
+    @Override
+    public JsonbMarshaller createMarshaller(Map<String, ?> configuration) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
+    @Override
+    public JsonbUnmarshaller createUnmarshaller() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-// CONTEXT CREATION
-
-        /**
-         * Create context using Jsonb class.
-         */
-        Jsonb.createContext(Book.class);
-
-        /**
-         * Create context using default Provider.
-         */
-        JsonbProvider.provider().createContext(Book.class);
-
-        /**
-         * Create context using specific Provider.
-         */
-        JsonbProvider.provider("org.eclipse.persistence.json.bind.JsonBindingProvider").createContext(Book.class);
-
-        /**
-         * Create context using Builder pattern, use it to create unmarshaller and unmarshal
-         * a json string.
-         */
-        JsonbContext context = new JsonbContext.Builder()
-                .setClasses(Book.class, Author.class, Language.class)
-                .setProperty(JsonbMarshaller.JSON_BIND_FORMATTED_OUTPUT, true)
-                .build();
-        System.out.println(context);
-        Book b2 = (Book) context.createUnmarshaller().unmarshal(json);
-
+    @Override
+    public JsonbUnmarshaller createUnmarshaller(Map<String, ?> configuration) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

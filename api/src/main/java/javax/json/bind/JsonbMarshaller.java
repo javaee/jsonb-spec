@@ -48,10 +48,12 @@ import java.io.Writer;
  * The <tt>JsonbMarshaller</tt> class is responsible for governing the process
  * of serializing Java content trees into JSON data.
  *
+ *
  * <p>
  * Marshaling to a File:
  * <blockquote>
  *    <pre>
+ *       JsonbMarshaller m = Jsonb.createContext(Foo.class).createMarshaller();
  *       m.marshal(object, new File("foo.json");
  *    </pre>
  * </blockquote>
@@ -60,6 +62,7 @@ import java.io.Writer;
  * Marshalling to a Writer:
  * <blockquote>
  *    <pre>
+ *       JsonbMarshaller m = Jsonb.createContext(Foo.class).createMarshaller();
  *       m.marshal(object, new PrintWriter(System.out));
  *    </pre>
  * </blockquote>
@@ -82,8 +85,8 @@ import java.io.Writer;
  * All JSON Binding providers are required to support the following set of properties.
  * Some providers may support additional properties.
  * <dl>
- *   <dt><tt>jsonb.formatted.output</tt> - value must be a java.lang.Boolean
- *   <dd>This property controls whether or not the JsonbMarshaller will format
+ *   <dt><tt>jsonb.formatted.output</tt> - java.lang.Boolean
+ *   <dd>Controls whether or not the JsonbMarshaller will format
  *       the resulting JSON data with line breaks and indentation. A
  *       true value for this property indicates human readable indented
  *       data, while a false value indicates unformatted data.
@@ -115,8 +118,7 @@ import java.io.Writer;
  *   // Invoked by JsonbMarshaller after it has marshalled all properties of this object.
  *  {@literal @}JsonPostMarshal
  *   void afterMarshal();
- </pre>
- * </blockquote>
+ </pre></blockquote>
  * The class defined event callback methods should be used when the callback method requires
  * access to non-public methods and/or fields of the class.
  * <p>
@@ -141,11 +143,14 @@ public interface JsonbMarshaller {
      *
      * @param object
      *      The object content tree to be marshaled.
+     *
      * @return String instance with marshaled JSON data.
+     *
      * @throws JsonbException
      *      If any unexpected problem occurs during the marshaling.
      * @throws IllegalArgumentException
      *      If any of the method parameters is null.
+     *
      * @since JSON Binding 1.0
      */
     public String marshal(Object object) throws JsonbException;
@@ -157,10 +162,12 @@ public interface JsonbMarshaller {
      *      The object content tree to be marshaled.
      * @param file
      *      File to be written. If this file already exists, it will be overwritten.
+     *
      * @throws JsonbException
      *      If any unexpected problem occurs during the marshaling.
      * @throws IllegalArgumentException
      *      If any of the method parameters is null.
+     *
      * @since JSON Binding 1.0
      */
     public void marshal(Object object, File file) throws JsonbException;
@@ -173,17 +180,18 @@ public interface JsonbMarshaller {
      * @param writer
      *      The JSON will be sent as a character stream to the given {@link Writer}.
      *      Upon a successful completion, the stream will be closed by this method.
+     *
      * @throws JsonbException
      *      If any unexpected problem occurs during the marshaling.
-     * @throws IllegalArgumentException
-     *      If any of the method parameters is null.
+     * @throws IllegalArgumentException if any of the method parameters is null.
+     *
      * @since JSON Binding 1.0
      */
     public void marshal(Object object, Writer writer) throws JsonbException;
 
     /**
      * Set the particular property in the underlying implementation of
-     * <tt>JsonbMarshaller</tt>. The method can only be used to set one of
+     * {@code JsonbMarshaller}. The method can only be used to set one of
      * the standard JSON Binding properties defined in this class or a provider specific
      * property. Attempting to set an undefined property will result in
      * a JsonbConfigurationException being thrown.
@@ -197,8 +205,7 @@ public interface JsonbMarshaller {
      *
      * @throws JsonbConfigurationException when there is an error processing the given
      *                            property or value
-     * @throws IllegalArgumentException
-     *      If the name parameter is null
+     * @throws IllegalArgumentException if the name parameter is null.
      */
     public JsonbMarshaller setProperty(String name, Object value) throws JsonbConfigurationException;
 
@@ -217,8 +224,7 @@ public interface JsonbMarshaller {
      * @throws JsonbConfigurationException
      *      when there is an error retrieving the given property or value
      *      property name
-     * @throws IllegalArgumentException
-     *      If the name parameter is null
+     * @throws IllegalArgumentException if the name parameter is null.
      */
     public Object getProperty(String name) throws JsonbConfigurationException;
 

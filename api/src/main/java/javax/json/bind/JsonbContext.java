@@ -47,16 +47,31 @@ import javax.json.bind.spi.JsonbProvider;
 
 /**
  * <p>
- * The <tt>JsonbContext</tt> class provides the client's entry point to the
- * JSON Binding API. It provides an abstraction for managing the Json/Java binding
+ * The {@code JsonbContext} class provides the client's entry point to the
+ * JSON Binding API. It provides an abstraction for managing the JSON/Java binding
  * information necessary to implement the JAXB binding framework operations:
  * unmarshal (input JSON, output Java objects) and marshal (input Java objects,
  * output JSON data).
  *
  * <p>A client application normally obtains new instances of this class using
- one of the build methods in {@link Jsonb} factory class.
+ * one of the creator methods in {@link javax.json.bind.Jsonb} or
+ * {@link javax.json.bind.spi.JsonbProvider} classes:
  *
- * <p>All the methods in this class, with exception of Builder class methods
+ * <pre>{@code
+ * // Example 1
+ * JsonbContext context = JsonbProvider.provider().createContext(Foo.class);
+ *
+ * // Example 2
+ * JsonbContext context = Jsonb.createContext(Foo.class);
+ *
+ * // Example 3
+ * JsonbContext context = new JsonbContext.Builder()
+ *     .setClasses(Foo.class, Bar.class, FooBar.class)
+ *     .setProperty("foo.bar.property", true)
+ *     .build();
+ * }</pre>
+ *
+ * <p>All the methods in this class, with the exception of Builder class methods
  * are safe for use by multiple concurrent threads.
  *
  * @see Jsonb
@@ -95,7 +110,7 @@ public abstract class JsonbContext {
      *
      * @return JsonbMarshaller instance
      */
-    public abstract JsonbMarshaller createMarshaller(Map<String, ?> configuration);
+    public abstract JsonbMarshaller createMarshaller(Map<String, Object> configuration);
 
     /**
      * Creates a {@link JsonbUnmarshaller} object that can be used to convert JSON
@@ -122,11 +137,12 @@ public abstract class JsonbContext {
      *
      * @return JsonbUnmarshaller instance
      */
-    public abstract JsonbUnmarshaller createUnmarshaller(Map<String, ?> configuration);
+    public abstract JsonbUnmarshaller createUnmarshaller(Map<String, Object> configuration);
 
     /**
      * Builder design pattern class for creating JsonbContext objects.
      */
+    @SuppressWarnings("PublicInnerClass")
     public static class Builder {
 
         /**
@@ -135,25 +151,26 @@ public abstract class JsonbContext {
         public Builder() { };
 
         private Class<?>[] recognizedClasses;
-        private Map<String, Object> configuration = new HashMap<>();
+        private final Map<String, Object> configuration = new HashMap<>();
 
         /**
          * Returns map of configuration values for JsonbContext creation. For
-         * more details see ${@link JsonbContext}, ${@link JsonbProvider}.
+         * more details see {@link JsonbContext}, {@link JsonbProvider}.
          *
          * @return Map of configuration properties.
          */
+        @SuppressWarnings("unchecked")
         public Map<String, Object> getConfiguration() {
             return (Map<String, Object>) ((HashMap<String, Object>) configuration).clone();
         }
 
         /**
          * Returns array of classes that the JsonbContext must recognize. For more
-         * details see ${@link JsonbContext}, ${@link JsonbProvider}.
+         * details see {@link JsonbContext}, {@link JsonbProvider}.
          *
          * @return array of recognized classes. Can be empty.
          */
-        public Class[] getClasses() {
+        public Class<?>[] getClasses() {
             return Arrays.copyOf(recognizedClasses, recognizedClasses.length);
         }
 

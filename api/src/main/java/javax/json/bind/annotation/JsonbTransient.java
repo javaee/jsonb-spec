@@ -48,7 +48,7 @@ import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * <p>
- * Prevents the mapping of a Java Bean property or type to JSON representation.
+ * Prevents mapping of a Java Bean property, field or type to JSON representation.
  * <p>
  * When placed on a class, indicates that the class shouldn't be mapped
  * to JSON by itself. Properties on such class will be mapped to JSON along

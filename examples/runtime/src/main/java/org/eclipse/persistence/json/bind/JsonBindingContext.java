@@ -67,7 +67,7 @@ public class JsonBindingContext extends JsonbContext {
     }
 
     @Override
-    public JsonbMarshaller createMarshaller(Map<String, ?> configuration) {
+    public JsonbMarshaller createMarshaller(Map<String, Object> configuration) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -77,7 +77,7 @@ public class JsonBindingContext extends JsonbContext {
     }
 
     @Override
-    public JsonbUnmarshaller createUnmarshaller(Map<String, ?> configuration) {
+    public JsonbUnmarshaller createUnmarshaller(Map<String, Object> configuration) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

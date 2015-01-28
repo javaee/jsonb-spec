@@ -44,17 +44,20 @@ import java.io.File;
 import java.io.Reader;
 
 /**
- * The <tt>JsonbUnmarshaller</tt> class governs the process of deserializing JSON
+ * The {@code JsonbUnmarshaller} class governs the process of deserializing JSON
  * data into newly created Java content trees.
  *
  * <p>
  * Unmarshaling from a File:
  * <blockquote>
  *    <pre>
-       JsonbContext jc = JsonbContext.newInstance(Foo.class,Bar.class);
-       JsonbUnmarshaller ju = jc.createUnmarshaller();
-       Object o = ju.unmarshal(new File("jsonfile.json"));
-    </pre>
+ *     JsonbUnmarshaller u = Jsonb.createContext(Foo.class).createUnmarshaller();
+ *     Object o = u.unmarshal(new File("jsonfile.json"));
+ *   </pre>
+ *    <pre>
+ *     JsonbUnmarshaller u = Jsonb.createContext(Foo.class).createUnmarshaller();
+ *     Foo foo = u.unmarshal(new File("jsonfile.json"), Foo.class);
+ *   </pre>
  * </blockquote>
  *
  * <p>
@@ -62,7 +65,7 @@ import java.io.Reader;
  * <blockquote>
  * Unmarshaling can de-serialize JSON data that represents either an entire JSON document
  * or a subtree of a JSON document.
- * These unmarshal methods utilize {@link JsonbContext}'s type definitions to
+ * These unmarshal methods utilize {@link javax.json.bind.JsonbContext}'s type definitions to
  * to initiate the unmarshaling of the root element of JSON data. When the {@link JsonbContext}'s
  * mappings are not sufficient to unmarshal the root element of JSON data,
  * the application can assist the unmarshaling process by using the 'unmarshal by
@@ -79,16 +82,16 @@ import java.io.Reader;
  * <b>Supported Properties</b><br>
  * <blockquote>
  * <p>
- There currently are not any properties required to be supported by all
- JSON Binding providers on JsonbUnmarshaller.  However, some providers may support
- their own set of provider specific properties.
- </blockquote>
+ * There currently are not any properties required to be supported by all
+ * JSON Binding providers on JsonbUnmarshaller.  However, some providers may support
+ * their own set of provider specific properties.
+ * </blockquote>
  *
  * <p>
  * <a name="unmarshalEventCallback"></a>
  * <b>Unmarshal Event Callbacks</b><br>
  * <blockquote>
- * The {@link JsonbUnmarshaller} provides callback mechanisms
+ * The {@link javax.json.bind.JsonbUnmarshaller} provides callback mechanisms
  * that allow application specific processing during key points in the
  * unmarshaling process. In 'class defined' event callbacks, application
  * specific code placed in JSON Binding mapped classes is triggered during

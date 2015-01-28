@@ -123,7 +123,7 @@ public final class Jsonb {
      * @throws IllegalArgumentException
      *      If the parameter contains {@code null}
      */
-    public static JsonbContext createContext(final Map<String, ?> configuration, final Class<?> ... classes) {
+    public static JsonbContext createContext(final Map<String, Object> configuration, final Class<?> ... classes) {
         return JsonbProvider.provider().createContext(configuration, classes);
     }
 

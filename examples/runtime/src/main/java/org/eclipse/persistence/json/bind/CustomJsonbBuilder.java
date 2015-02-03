@@ -40,31 +40,29 @@
 
 package org.eclipse.persistence.json.bind;
 
-import java.util.Map;
-import javax.json.bind.JsonbContext;
-import javax.json.bind.spi.JsonbProvider;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfiguration;
 
 /**
  *
- * Dummy no-op example of JSON Binding provider implementation.
- *
- * @author snajper
+ * @author Martin Grebac
  */
-public class JsonBindingProvider extends JsonbProvider {
+public class CustomJsonbBuilder extends JsonbBuilder {
 
     @Override
-    public JsonbContext createContext(Class<?>... classes) {
-        return new JsonBindingContext(classes);
+    public JsonbBuilder withConfig(JsonbConfiguration configuration) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonbContext createContext(Map<String, ?> configuration, Class<?>... classes) {
-        return new JsonBindingContext(configuration, classes);
+    public JsonbBuilder withProvider(javax.json.spi.JsonProvider jsonpProvider) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonbContext createContext(JsonbContext.Builder builder) {
-        return new JsonBindingContext(builder);
+    public Jsonb build() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

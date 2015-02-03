@@ -43,6 +43,7 @@ package javax.json.bind;
 /**
  * This exception indicates an error encountered while getting or setting property.
  *
+ * @see JsonbConfiguration
  * @author Martin Grebac
  * @since JSON Binding 1.0
  */

@@ -41,22 +41,25 @@
 package javax.json.bind.spi;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.ServiceLoader;
-import javax.json.bind.JsonbContext;
+import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbException;
 
 /**
- * Service provider for JSON Binding Context objects.
+ * Service provider for JSON Binding implementations.
  *
- * Provider implementors must implement all abstract {@link javax.json.bind.JsonbContext}
- * creation methods.
+ * Provider implementors must implement all abstract {@link javax.json.bind.Jsonb}
+ * methods.
  *
  * API clients can obtain instance of default provider by calling:
  * <pre>
  * {@code
  * JsonbProvider provider = JsonbProvider.provider();
- * JsonbContext jContext = provider.createContext(Foo.class);}</pre>
+ Jsonb jsonb = new Jsonb.JsonbBuilder().
+                      .use(provider)
+                      .build();
+ }}</pre>
+ *
  * Specific provider instance lookup:
  * <pre>
  * {@code
@@ -74,8 +77,8 @@ import javax.json.bind.JsonbException;
  * threads.
  *
  * @author Martin Grebac
- * @see JsonbContext
- * @see ServiceLoader
+ * @see javax.json.bind.Jsonb
+ * @see java.util.ServiceLoader
  * @since JSON Binding 1.0
  */
 public abstract class JsonbProvider {
@@ -119,7 +122,6 @@ public abstract class JsonbProvider {
     }
 
     /**
-     *
      * Creates a JSON Binding provider object. The provider is loaded using the
      * {@link java.util.ServiceLoader#load(Class)} method. The first provider of JsonbProvider
      * class from list of providers returned by ServiceLoader.load call is returned.
@@ -156,97 +158,24 @@ public abstract class JsonbProvider {
     }
 
     /**
-     * Returns a new instance of {@link javax.json.bind.JsonbContext} class.
+     * Returns a new instance of {@link javax.json.bind.JsonbBuilder JsonbBuilder} class.
      *
-     * The client application has to provide list of classes that the new context
-     * object needs to recognize.
-     *
-     * The implementation will not only recognize the provided classes, but it will
-     * also recognize any classes that are directly or indirectly statically referenced
-     * from provided classes. Subclasses of referenced classes, nor
-     * {@link javax.json.bind.annotation.JsonbTransient} annotated classes are recognized.
-     *
-     * @param classes
-     *      List of java classes to be recognized by the new {@link javax.json.bind.JsonbContext}.
-     *      Can be empty, in which case a default {@link javax.json.bind.JsonbContext}
-     *      recognizing only default spec defined classes will be returned.
-     *
-     * @see JsonbContext
-     *
-     * @return JsonbContext
-     *      New instance of {@link javax.json.bind.JsonbContext} class.
-     *      Always a non-null valid object.
-     *
-     * @throws JsonbException
-     *      If an error was encountered while creating the {@link javax.json.bind.JsonbContext}
-     *      instance, such as (but not limited to) when classes provide conflicting annotations.
-     *
-     * @throws IllegalArgumentException
-     *      If the parameter is {@code null}
-     */
-    public abstract JsonbContext createContext(Class<?>... classes);
-
-    /**
-     * Returns a new instance of {@link javax.json.bind.JsonbContext JsonbContext} class
-     * configured with a specific configuration values.
-     *
-     * The client application has to provide list of classes that the new context
-     * object needs to recognize.
-     *
-     * The implementation will not only recognize the provided classes, but it will
-     * also recognize any classes that are directly or indirectly statically referenced
-     * from provided classes. Subclasses of referenced classes, nor
-     * {@link javax.json.bind.annotation.JsonbTransient} annotated classes are recognized.
-     *
-     * @param configuration
-     *      Contains spec defined and provider specific configuration properties. Can be
-     *      null, which is same as empty list.
-     *
-     * @param classes
-     *      List of java classes to be recognized by the new {@link javax.json.bind.JsonbContext}.
-     *      Can be empty, in which case a default {@link javax.json.bind.JsonbContext}
-     *      recognizing only default spec defined classes will be returned.
-     *
-     * @see JsonbContext
-     *
-     * @return JsonbContext
-     *      A new instance of {@link javax.json.bind.JsonbContext} class.
-     *      Always a non-null valid object.
-     *
-     * @throws JsonbException
-     *      If an error was encountered while creating the {@link javax.json.bind.JsonbContext}
-     *      instance, such as (but not limited to) when classes provide conflicting annotations.
-     *
-     * @throws IllegalArgumentException
-     *      If 'classes' parameter is {@code null}
-     */
-    public abstract JsonbContext createContext(Map<String, ?> configuration, Class<?>... classes);
-
-    /**
-     * Returns a new instance of {@link javax.json.bind.JsonbContext JsonbContext} class
-     * configured with a configuration contained within
-     * {@link javax.json.bind.JsonbContext.Builder} instance.
-     *
-     * {@link javax.json.bind.JsonbContext.Builder Builder} provides necessary getter
+     * {@link javax.json.bind.JsonbBuilder JsonbBuilder} provides necessary getter
      * methods to access required parameters.
      *
-     * @param builder
-     *      Contains configuration for creating {@link javax.json.bind.JsonbContext} instance.
-     *      See {@link javax.json.bind.JsonbContext} for detailed information.
+     * @return JsonbBuilder
+     *      A new instance of class implementing {@link javax.json.bind.JsonbBuilder}.
+     *      Always a non-null valid object.
      *
-     * @return JsonbContext
-     *      A new instance of {@link javax.json.bind.JsonbContext} class. Always a non-null valid object.
-     *
-     * @see javax.json.bind.JsonbContext
-     * @see javax.json.bind.JsonbContext.Builder
+     * @see javax.json.bind.Jsonb
+     * @see javax.json.bind.JsonbBuilder
      *
      * @throws JsonbException
-     *      If an error was encountered while creating the JsonbContext instance,
-     *      such as (but not limited to) classes provide conflicting annotations.
+     *      If an error was encountered while creating the {@link JsonbBuilder} instance.
      *
      * @throws IllegalArgumentException
      *      If the parameter is {@code null}
      */
-    public abstract JsonbContext createContext(JsonbContext.Builder builder);
+    public abstract JsonbBuilder create();
 
 }

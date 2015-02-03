@@ -44,9 +44,10 @@ import examples.model.Author;
 import examples.model.Book;
 import examples.model.Language;
 import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbContext;
-import javax.json.bind.JsonbMarshaller;
+
+import javax.json.bind.JsonbBuilder;
 import javax.json.bind.spi.JsonbProvider;
+import org.eclipse.persistence.json.bind.CustomJsonbBuilder;
 
 /**
  *
@@ -64,8 +65,10 @@ public class Runtime {
         book.author.firstName = "Jara";
         book.author.lastName = "Cimrman";
 
-// DEFAULT EASE OF USE METHODS
-
+/**
+ * Default use, shortcut methods
+ */
+{
         /**
          * Write an object content tree using default JSON mapping
             {
@@ -77,42 +80,38 @@ public class Runtime {
               "lang" : "CZECH"
             }
         */
-        String json = Jsonb.marshal(book);
+        String json = JsonbBuilder.create().toJson(book);
 
         /**
          * Read JSON document (from above) into an object content tree using default mapping
          */
-        Book b1 = Jsonb.unmarshal(json, Book.class);
+        Book b = JsonbBuilder.create().fromJson(json, Book.class);
+}
 
+/**
+ * Default, reuse
+ */
+{
+        Jsonb jsonb = JsonbBuilder.create();
+        String json = jsonb.toJson(book);
+        Book b = jsonb.fromJson(json, Book.class);
+}
 
-// CONTEXT CREATION
+/**
+ * Custom providers
+ */
+{
+        // Lookup different provider by provider class name
+        JsonbBuilder.newBuilder("foo.bar.ProviderImpl").build();
 
-        /**
-         * Create context using Jsonb class.
-         */
-        Jsonb.createContext(Book.class);
-
-        /**
-         * Create context using default Provider.
-         */
-        JsonbProvider.provider().createContext(Book.class);
-
-        /**
-         * Create context using specific Provider.
-         */
-        JsonbProvider.provider("org.eclipse.persistence.json.bind.JsonBindingProvider").createContext(Book.class);
-
-        /**
-         * Create context using Builder pattern, use it to create unmarshaller and unmarshal
-         * a json string.
-         */
-        JsonbContext context = new JsonbContext.Builder()
-                .setClasses(Book.class, Author.class, Language.class)
-                .setProperty(JsonbMarshaller.JSON_BIND_FORMATTED_OUTPUT, true)
-                .build();
-        System.out.println(context);
-        Book b2 = (Book) context.createUnmarshaller().unmarshal(json);
+        // Use an explicit implementation of JsonbProvider
+        JsonbBuilder.newBuilder(new JsonbProvider() {
+            @Override
+            public JsonbBuilder create() {
+                return new CustomJsonbBuilder();
+            }
+        }).build();
+}
 
     }
-
 }

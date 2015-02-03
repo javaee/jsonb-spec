@@ -37,221 +37,265 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package javax.json.bind;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Map;
-import javax.json.bind.spi.JsonbProvider;
 
 /**
- * This class defines convenience methods for use of JSON Binding as well as
- * factory methods to create JSON Binding processing objects.
+ * <p>
+ * The {@code Jsonb} class provides the client's entry point to the JSON Binding
+ * API. It provides an abstraction for managing the JSON/Java binding
+ * information necessary to implement the JSON binding framework operations:
+ *
+ * - unmarshaling (input JSON, output Java objects) with methods called fromJson
+ * - marshaling (input Java objects, output JSON data) with methods called toJson
  *
  * <p>
- * Convenience methods defined in this class combine several basic operations
- * in the {@link JsonbContext}, {@link JsonbUnmarshaller}, and {@link JsonbMarshaller}.
- * They locate JSON Binding provider instance using the {@link JsonbProvider#provider()}
- * method.
+ * Instance of this class is created using {@link javax.json.bind.JsonbBuilder JsonbBuilder}
+ * builder methods:
+ *
+ * <pre>{@code
+ * // Example 1 - Default shortcut usage
+ Jsonb jsonb = JsonbBuilder.create();
+
+ // Example 2 - Creating Jsonb instance for a specific provider specified by class name
+ Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl).build();
+
+ // Example 3 - Creating Jsonb instance from a custom provider implementation
+ Jsonb jsonb = JsonbBuilder.newBuilder(new JsonbProvider () {
+                    public JsonbBuilder create() {
+                        return new CustomJsonbBuilder();
+                    }
+                }).build();
+
+ }</pre>
  *
  * <p>
- * All the methods in this class are safe for use by multiple concurrent threads.
+ * <b>Unmarshaling (reading) from JSON</b><br>
+ * <blockquote>
+ * Unmarshaling can de-serialize JSON data that represents either an entire JSON
+ * document or a subtree of a JSON document.
+ * </blockquote>
+ * <p>
+ * Reading (unmarshaling) object content tree from a File:
+ * <blockquote>
+ *    <pre>
+ *     Jsonb jsonb = JsonbBuilder.create();
+ *     Book book = jsonb.fromJson(new File("jsonfile.json"), Book.class);
+ *   </pre>
+ * </blockquote>
  *
- * @author Martin Grebac
+ * <blockquote>
+ * Unmarshaling (fromJson) methods never return null. If the unmarshal process is
+ * unable to unmarshal the JSON content to an object content tree, a fatal error
+ * is reported that terminates processing by throwing JsonbException.
+ * </blockquote>
+ *
+ * <p>
+ * <b>Encoding</b><br>
+ * <blockquote>
+ * By default, encoding of JSON data is detected automatically. Use the
+ * {@link javax.json.bind.JsonbConfiguration JsonbConfiguration} API to change the
+ * input encoding used within the unmarshal operations. Client applications are
+ * expected to supply a valid character encoding as defined in the
+ * <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by Java Platform.
+ * </blockquote>
+ *
+ * <p>
+ * <b>Marshaling (writing) to JSON</b><br>
+ * <blockquote>
+ * <p>
+ * Marshaling writes the representation of a Java object content tree into
+ * JSON data.
+ * </blockquote>
+ * <p>
+ * Writing (marshaling) object content tree to a File:
+ * <blockquote>
+ *    <pre>
+ *     Jsonb jsonb = JsonbBuilder.create();
+ *     jsonb.toJson(object, new File("foo.json");
+ *    </pre>
+ * </blockquote>
+ *
+ * <p>
+ * Writing (marshaling) to a Writer:
+ * <blockquote>
+ *    <pre>
+ *     Jsonb jsonb = JsonbBuilder.create();
+ *     jsonb.toJson(object, new PrintWriter(System.out));
+ *    </pre>
+ * </blockquote>
+ *
+ * <p>
+ * <b>Encoding</b><br>
+ * <blockquote>
+ * By default, UTF-8 encoding is used when writing JSON data.
+ * Use the {@link javax.json.bind.JsonbConfiguration JsonbConfiguration} API to change the
+ * output encoding used within the marshal operations. Client applications are
+ * expected to supply a valid character encoding as defined in the
+ * <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by Java Platform.
+ * </blockquote>
+ *
+ * <p> All the methods in this class are safe for use by multiple concurrent threads.
+ *
+ * @see Jsonb
+ * @see JsonbBuilder
+ * @see java.util.ServiceLoader
+ * @author Eugen Cepoi, Martin Grebac, Przemyslaw Bielicki, Inderjeet Singh
  * @since JSON Binding 1.0
  */
-public final class Jsonb {
-
-     /**
-     * Returns a new instance of JsonbContext class. The client application has to
-     * provide list of classes that the new context object needs to recognize.
-     *
-     * The implementation will not only recognize the provided classes, but it will
-     * also recognize any classes that are directly or indirectly statically referenced
-     * Subclasses of referenced classes, nor {@link javax.json.bind.annotation.JsonbTransient} annotated classes
-     * are recognized.
-     *
-     * @param classes
-     *      List of java classes to be recognized by the new {@link JsonbContext}.
-     *      Can be empty, in which case a default {@link JsonbContext} which only
-     *      recognizes default spec-defined classes will be returned.
-     *
-     * @return JsonbContext
-     *      A new instance of JsonbContext class. Always a non-null valid object.
-     *
-     * @throws javax.json.bind.JsonbException
-     *      If an error was encountered while creating the JsonbContext instance,
-     *      such as (but not limited to) no JSON Binding provider is found, classes
-     *      provide conflicting annotations.
-     *
-     * @throws IllegalArgumentException
-     *      If the parameter contains {@code null}
-     */
-    public static JsonbContext createContext(final Class<?> ... classes) {
-        return JsonbProvider.provider().createContext(classes);
-    }
-
-     /**
-     * Returns a new instance of JsonbContext class configured with a specific
-     * configuration.
-     * The client application has to provide list of classes that the new context
-     * object needs to recognize.
-     *
-     * The implementation will not only recognize the provided classes, but it will
-     * also recognize any classes that are directly or indirectly statically referenced
-     * from provided classes. Subclasses of referenced classes, nor
-     * {@link javax.json.bind.annotation.JsonbTransient} annotated classes are recognized.
-     *
-     * @param configuration
-     *      Contains spec defined and provider specific configuration properties. Can be empty.
-     *
-     * @param classes
-     *      List of java classes to be recognized by the new {@link JsonbContext}.
-     *      Can be empty, in which case a default {@link JsonbContext} which only
-     *      recognizes default spec-defined classes will be returned.
-     *
-     * @return JsonbContext
-     *      A new instance of JsonbContext class. Always a non-null valid object.
-     *
-     * @throws JsonbException
-     *      If an error was encountered while creating the JsonbContext instance,
-     *      such as (but not limited to) no JSON Binding provider is found, classes
-     *      provide conflicting annotations.
-     *
-     * @throws IllegalArgumentException
-     *      If the parameter contains {@code null}
-     */
-    public static JsonbContext createContext(final Map<String, Object> configuration, final Class<?> ... classes) {
-        return JsonbProvider.provider().createContext(configuration, classes);
-    }
+public interface Jsonb {
 
     /**
-     * No instantiation allowed.
-     */
-    private Jsonb() { }
-
-    /**
-     * Reads in a Java object tree from the given JSON input.
+     * Reads in a JSON data from the specified string and return the resulting
+     * content tree.
      *
-     * @param file
-     *      Reads the entire file as JSON.
+     * @param str the string to unmarshal JSON data from
      * @param type
      *      Type of the content tree's root object.
      * @param <T>
      *      Type of the content tree's root object.
-     * @return Newly created root object of the Java object tree, of type type.
+     * @param configuration Optional configuration.
+     *
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshaling.
+     * @throws IllegalArgumentException
+     *      If any of the parameters is null.
      */
-    public static <T> T unmarshal(final File file, final Class<T> type) {
-        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
-        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-        return jsonbUnmarshaller.unmarshal(file, type);
-    }
+    public <T> T fromJson(String str, Class<T> type, JsonbConfiguration... configuration) throws JsonbException;
 
     /**
-     * Reads in a Java object tree from the given JSON string.
+     * Unmarshal JSON data from the specified Reader and return the
+     * resulting content tree.
      *
-     * @param jsonString
-     *      The string is parsed as JSON data.
+     * @param reader The character stream is read as a JSON data. Upon a
+     * successful completion, the stream will be closed by this method.
      * @param type
      *      Type of the content tree's root object.
      * @param <T>
      *      Type of the content tree's root object.
+     * @param configuration Optional configuration.
      *
-     * @return Newly created root object of the Java object tree, of type type.
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshaling.
+     * @throws IllegalArgumentException
+     *      If any of the parameters is null.
      */
-    public static <T> T unmarshal(final String jsonString, final Class<T> type) {
-        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
-        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-        return jsonbUnmarshaller.unmarshal(jsonString, type);
-    }
+    public <T> T fromJson(Reader reader, Class<T> type, JsonbConfiguration... configuration) throws JsonbException;
 
     /**
-     * Reads in a Java object tree from the given Reader as JSON data.
+     * Unmarshal JSON data from the specified InputStream and return the
+     * resulting content tree.
      *
-     * @param reader
-     *      The character stream is read as a JSON data.
-     *      Upon a successful completion, the stream will be closed by this method.
+     * @param stream The stream is read as a JSON data. Upon a
+     * successful completion, the stream will be closed by this method.
      * @param type
      *      Type of the content tree's root object.
      * @param <T>
      *      Type of the content tree's root object.
+     * @param configuration Optional configuration.
      *
-     * @return Newly created root object of the Java object tree, of type type.
-     */
-    public static <T> T unmarshal(final Reader reader, final Class<T> type) {
-        JsonbContext jsonbContext = JsonbProvider.provider().createContext(type);
-        JsonbUnmarshaller jsonbUnmarshaller = jsonbContext.createUnmarshaller();
-        return jsonbUnmarshaller.unmarshal(reader, type);
-    }
-
-    /**
-     * Writes a Java object tree to JSON String.
-     *
-     * @param object
-     *      The Java object to be marshaled into JSON.
-     *      This parameter must not be null.
-     *
-     * @return String
-     *      The JSON data will be returned in the form of String instance.
+     * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
-     *      If the operation fails, such as due to I/O error.
-     *
+     *     If any unexpected error(s) occur(s) while unmarshaling.
      * @throws IllegalArgumentException
-     *      If object is {@code null}
+     *      If any of the parameters is null.
      */
-    public static String marshal(final Object object) {
-        JsonbContext jsonbContext = Jsonb.createContext(object.getClass());
-        JsonbMarshaller jsonMarshaller = jsonbContext.createMarshaller();
-        return jsonMarshaller.marshal(object);
-    }
+    public <T> T fromJson(InputStream stream, Class<T> type, JsonbConfiguration... configuration) throws JsonbException;
 
     /**
-     * Writes a Java object tree to Writer as JSON character stream.
+     * Unmarshal JSON data from the specified file and return the resulting
+     * content tree.
      *
-     * @param object
-     *      The Java object to be marshaled into JSON.
-     *      This parameter must not be null.
+     * @param file the file to unmarshal JSON data from
+     * @param type
+     *      Type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     * @param configuration Optional configuration.
      *
-     * @param writer
-     *      The JSON will be sent as a character stream to the given {@link Writer}.
-     *      Upon a successful completion, the stream will be closed by this method.
+     * @return The newly instantiated root object of the java content tree, of type {@code type}
      *
      * @throws JsonbException
-     *      If the operation fails, such as due to I/O error.
-     *
+     *     If any unexpected error(s) occur(s) during unmarshaling.
      * @throws IllegalArgumentException
-     *      If any of parameters is {@code null}
+     *     If any of the parameters is null.
      */
-    public static void marshal(final Object object, final Writer writer) {
-        JsonbContext jsonbContext = Jsonb.createContext(object.getClass());
-        JsonbMarshaller jsonMarshaller = jsonbContext.createMarshaller();
-        jsonMarshaller.marshal(object, writer);
-    }
+    public <T> T fromJson(File file, Class<T> type, JsonbConfiguration... configuration) throws JsonbException;
 
     /**
-     * Writes a Java object tree to a File in JSON format.
+     * Writes the Java object tree with root object {@code object} to a String
+     * instance as JSON.
      *
-     * @param object
-     *      The Java object to be marshaled into JSON.
-     *      This parameter must not be null.
+     * @param object The root object of the object content tree to be marshaled. Must not be null.
+     * @param configuration Optional configuration.
      *
-     * @param file
-     *      The JSON will be written to the given {@link File}. If the file already
-     *      exists, it will be overwritten.
+     * @return String String instance with marshaled JSON data.
      *
-     * @throws JsonbException
-     *      If the operation fails, such as due to I/O error.
+     * @throws JsonbException If any unexpected problem occurs during the
+     * marshaling, such as e.g. I/O error.
+     * @throws IllegalArgumentException If any of the method parameters is null.
      *
-     * @throws IllegalArgumentException
-     *      If any of parameters is {@code null}
+     * @since JSON Binding 1.0
      */
-    public static void marshal(final Object object, final File file) {
-        JsonbContext jsonbContext = Jsonb.createContext(object.getClass());
-        JsonbMarshaller jsonMarshaller = jsonbContext.createMarshaller();
-        jsonMarshaller.marshal(object, file);
-    }
+    public String toJson(Object object, JsonbConfiguration... configuration) throws JsonbException;
+
+    /**
+     * Marshal the object content tree into a file.
+     *
+     * @param object The object content tree to be marshaled.
+     * @param file File to be written. If this file already exists, it will be
+     * overwritten.
+     * @param configuration Optional configuration.
+     *
+     * @throws JsonbException If the operation fails, such as due to I/O error.
+     * @throws IllegalArgumentException If any of the method parameters is {@code null}.
+     *
+     * @since JSON Binding 1.0
+     */
+    public void toJson(Object object, File file, JsonbConfiguration... configuration) throws JsonbException;
+
+    /**
+     * Marshal the object content tree into a Writer character stream.
+     *
+     * @param object The object content tree to be marshaled.
+     * @param writer The JSON will be sent as a character stream to the given
+     * {@link Writer}. Upon a successful completion, the stream will be closed
+     * by this method.
+     * @param configuration Optional configuration.
+     *
+     * @throws JsonbException If any unexpected problem occurs during the
+     * marshaling.
+     * @throws IllegalArgumentException if any of the method parameters is null.
+     *
+     * @since JSON Binding 1.0
+     */
+    public void toJson(Object object, Writer writer, JsonbConfiguration... configuration) throws JsonbException;
+
+    /**
+     * Marshal the object content tree into output stream.
+     *
+     * @param object The object content tree to be marshaled.
+     * @param stream The JSON will be sent as a byte stream to the given
+     * {@link OutputStream}. Upon a successful completion, the stream will be closed
+     * by this method.
+     * @param configuration Optional configuration.
+     *
+     * @throws JsonbException If any unexpected problem occurs during the
+     * marshaling.
+     * @throws IllegalArgumentException if any of the method parameters is null.
+     *
+     * @since JSON Binding 1.0
+     */
+    public void toJson(Object object, OutputStream stream, JsonbConfiguration... configuration) throws JsonbException;
 
 }

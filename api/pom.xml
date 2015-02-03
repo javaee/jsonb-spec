@@ -277,6 +277,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>2.9.1</version>
                     <configuration>
+                         <failOnError>true</failOnError>
                         <doctitle>JSON-Binding ${project.version} API Specification</doctitle>
                         <bottom>
                             <![CDATA[Copyright &#169; 1996-2015,
@@ -471,6 +472,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

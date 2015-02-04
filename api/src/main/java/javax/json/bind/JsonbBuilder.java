@@ -55,11 +55,11 @@ public interface JsonbBuilder {
     /**
      * Set configuration which will be set to the newly created
      * {@link javax.json.bind.Jsonb Jsonb} instance.
-     * @param configuration {@link javax.json.bind.JsonbConfiguration JsonbConfiguration}
+     * @param configuration {@link javax.json.bind.JsonbConfig JsonbConfig}
      * for {@link javax.json.bind.Jsonb Jsonb} instance.
      * @return This {@code JsonbBuilder} instance.
      */
-    public JsonbBuilder withConfig(JsonbConfiguration configuration);
+    public JsonbBuilder withConfig(JsonbConfig configuration);
 
     /**
      * Configures JSON-P provider to be used for all JSON-P related operations.
@@ -83,7 +83,7 @@ public interface JsonbBuilder {
      * @throws IllegalArgumentException If there's an error processing the set
      * parameters, such as the non-null parameter is assigned null value, or
      * unrecognized property is set in
-     * {@link javax.json.bind.JsonbConfiguration JsonbConfiguration}.
+     * {@link javax.json.bind.JsonbConfig JsonbConfig}.
      */
     public Jsonb build();
 
@@ -96,6 +96,20 @@ public interface JsonbBuilder {
      */
     public static Jsonb create() {
         return JsonbProvider.provider().create().build();
+    }
+
+    /**
+     * Create a new {@link javax.json.bind.Jsonb} instance using the default
+     * {@code JsonbBuilder} implementation provided as returned from
+     * {@link javax.json.bind.spi.JsonbProvider#provider()} method, configured
+     * with provided configuration.
+     *
+     * @param configuration Provided configuration for {@link javax.json.bind.Jsonb} instance.
+     *
+     * @return new {@link javax.json.bind.Jsonb Jsonb} instance.
+     */
+    public static Jsonb create(JsonbConfig configuration) {
+        return JsonbProvider.provider().create().withConfig(configuration).build();
     }
 
     /**

@@ -42,7 +42,7 @@ package org.eclipse.persistence.json.bind;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbConfiguration;
+import javax.json.bind.JsonbConfig;
 
 /**
  *
@@ -51,7 +51,7 @@ import javax.json.bind.JsonbConfiguration;
 public class CustomJsonbBuilder implements JsonbBuilder {
 
     @Override
-    public JsonbBuilder withConfig(JsonbConfiguration configuration) {
+    public JsonbBuilder withConfig(JsonbConfig configuration) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

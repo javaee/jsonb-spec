@@ -43,9 +43,11 @@ package examples.runtime;
 import examples.model.Author;
 import examples.model.Book;
 import examples.model.Language;
+import java.nio.charset.StandardCharsets;
 import javax.json.bind.Jsonb;
 
 import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbConfig;
 import javax.json.bind.spi.JsonbProvider;
 import org.eclipse.persistence.json.bind.CustomJsonbBuilder;
 
@@ -66,7 +68,7 @@ public class Runtime {
         book.author.lastName = "Cimrman";
 
 /**
- * Default use, shortcut methods
+ * Shortcut use
  */
 {
         /**
@@ -111,6 +113,32 @@ public class Runtime {
                 return new CustomJsonbBuilder();
             }
         }).build();
+}
+
+/**
+ * Configuration
+ */
+
+    JsonbConfig config = new JsonbConfig()
+                            .fromJsonEncoding(StandardCharsets.UTF_16.name())
+                            .toJsonFormatting(true);
+
+{
+    // Default configuration
+    Jsonb jsonb = JsonbBuilder.create(config);
+    String json = jsonb.toJson(book);
+}
+{
+    // Allow specific configuration in toJson/fromJson
+    Jsonb jsonb = JsonbBuilder.create();
+    String json = jsonb.toJson(book, config);
+}
+{
+    // Default configuration with specific builder
+    Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl")
+                    .withConfig(config)
+                    .build();
+    jsonb.toJson(book);
 }
 
     }

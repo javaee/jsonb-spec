@@ -43,11 +43,11 @@ package javax.json.bind;
 /**
  * This exception indicates an error encountered while getting or setting property.
  *
- * @see JsonbConfiguration
+ * @see javax.json.bind.JsonbConfig
  * @author Martin Grebac
  * @since JSON Binding 1.0
  */
-public class JsonbConfigurationException extends JsonbException {
+public class JsonbConfigException extends JsonbException {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +59,7 @@ public class JsonbConfigurationException extends JsonbException {
      * @param message the detail message. The detail message is saved for
      *          later retrieval by the {@link #getMessage()} method.
      */
-    public JsonbConfigurationException(final String message) {
+    public JsonbConfigException(final String message) {
         super(message);
     }
 
@@ -76,7 +76,7 @@ public class JsonbConfigurationException extends JsonbException {
      *         permitted, and indicates that the cause is nonexistent or
      *         unknown.)
      */
-    public JsonbConfigurationException(final String message, final Throwable cause) {
+    public JsonbConfigException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

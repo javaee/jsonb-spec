@@ -42,8 +42,8 @@
  * Provides JSON Binding API, which enables binding Java objects from and to
  * JSON documents.
  *
- * Main user entry points to the API are {@link javax.json.bind.JsonbBuilder JsonbBuilder}
- * and {@link javax.json.bind.Jsonb Jsonb} classes.
+ * Main user entry points to the API is {@link javax.json.bind.JsonbBuilder JsonbBuilder}
+ * which builds {@link javax.json.bind.Jsonb Jsonb} instances.
  *
  * @since JSON Binding 1.0
  * @author Martin Grebac

@@ -43,7 +43,12 @@ import javax.json.bind.spi.JsonbProvider;
 import javax.json.spi.JsonProvider;
 
 /**
- * JsonbBuilder for building Jsonb instances.
+ * JsonbBuilder class provides the client's entry point to the JSON Binding
+ * API. It builds {@link javax.json.bind.Jsonb Jsonb} instances based on all
+ * parameters and configuration provided before calling {@code build()} method.
+ *
+ * For most use-cases, only one instance of JsonbBuilder is required within the
+ * application.
  *
  * @see Jsonb
  * @see java.util.ServiceLoader
@@ -55,16 +60,22 @@ public interface JsonbBuilder {
     /**
      * Set configuration which will be set to the newly created
      * {@link javax.json.bind.Jsonb Jsonb} instance.
-     * @param configuration {@link javax.json.bind.JsonbConfig JsonbConfig}
-     * for {@link javax.json.bind.Jsonb Jsonb} instance.
+     *
+     * @param config
+     *      Configuration for {@link javax.json.bind.Jsonb Jsonb} instance.
+     *
      * @return This {@code JsonbBuilder} instance.
      */
-    public JsonbBuilder withConfig(JsonbConfig configuration);
+    public JsonbBuilder withConfig(JsonbConfig config);
 
     /**
-     * Configures JSON-P provider to be used for all JSON-P related operations.
-     * @param jsonpProvider {@link javax.json.spi.JsonProvider JsonProvider} instance
-     * to be used by Jsonb to lookup JSON-P implementation.
+     * Provides a <a href="https://jcp.org/en/jsr/detail?id=353">JSON-P</a> provider
+     * to be used for all <a href="https://jcp.org/en/jsr/detail?id=353">JSON-P</a> related operations.
+     *
+     * @param jsonpProvider
+     *      {@link javax.json.spi.JsonProvider JsonProvider} instance
+     *      to be used by Jsonb to lookup JSON-P implementation.
+     *
      * @return This {@code JsonbBuilder} instance.
      */
     public JsonbBuilder withProvider(JsonProvider jsonpProvider);
@@ -104,12 +115,13 @@ public interface JsonbBuilder {
      * {@link javax.json.bind.spi.JsonbProvider#provider()} method, configured
      * with provided configuration.
      *
-     * @param configuration Provided configuration for {@link javax.json.bind.Jsonb} instance.
+     * @param config
+     *      Provided configuration for {@link javax.json.bind.Jsonb} instance.
      *
      * @return new {@link javax.json.bind.Jsonb Jsonb} instance.
      */
-    public static Jsonb create(JsonbConfig configuration) {
-        return JsonbProvider.provider().create().withConfig(configuration).build();
+    public static Jsonb create(JsonbConfig config) {
+        return JsonbProvider.provider().create().withConfig(config).build();
     }
 
     /**
@@ -127,8 +139,8 @@ public interface JsonbBuilder {
      * {@link javax.json.bind.spi.JsonbProvider#provider(String)}
      * method.
      *
-     * @param providerName provider class name to be looked up by
-     * {@link java.util.ServiceLoader}
+     * @param providerName
+     *      Provider class name to be looked up by {@link java.util.ServiceLoader}.
      *
      * @return new {@code JsonbBuilder} instance.
      */
@@ -140,8 +152,9 @@ public interface JsonbBuilder {
      * Create a new {@code JsonbBuilder} instance as returned by
      * {@code provider#create} call.
      *
-     * @param provider {@link javax.json.spi.JsonProvider JsonProvider} instance
-     * used for creating {@code JsonBuilder instances}
+     * @param provider
+     *      {@link javax.json.spi.JsonProvider JsonProvider} instance
+     *      used for creating {@code JsonBuilder instances}.
      *
      * @return new {@code JsonbBuilder} instance.
      */

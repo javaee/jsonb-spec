@@ -73,7 +73,7 @@ import java.util.Map;
  * </blockquote>
  *
  * @see JsonbConfigException
- * @author Martin Grebac
+ * @author Martin Grebac, Przemyslaw Bielicki, Eugen Cepoi
  * @since JSON Binding 1.0
  */
 public class JsonbConfig {
@@ -106,12 +106,14 @@ public class JsonbConfig {
      * property will result in a JsonbConfigException being thrown.
      * See <a href="#supportedProps"> Supported Properties</a>.
      *
-     * @param name the name of the property to be set. This value can either
-     * be specified using one of the constant fields or a user supplied
-     * string.
-     * @param value the value of the property to be set
+     * @param name
+     *      The name of the property to be set. This value can either
+     *      be specified using one of the constant fields or a user supplied
+     *      string.
+     * @param value
+     *      The value of the property to be set
      *
-     * @return 'this' instance, for fluent support
+     * @return This JsonbConfig instance.
      */
     public final JsonbConfig setProperty(final String name, final Object value) {
         configuration.put(name, value);
@@ -125,9 +127,10 @@ public class JsonbConfig {
      * property will result in a JsonbConfigException being thrown.
      * See <a href="#supportedProps"> Supported Properties</a>.
      *
-     * @param name the name of the property to retrieve
+     * @param name
+     *      The name of the property to retrieve
      *
-     * @return the value of the requested property
+     * @return The value of the requested property
      *
      * @throws JsonbConfigException
      *      when there is an error retrieving the given property or value
@@ -144,10 +147,11 @@ public class JsonbConfig {
      *
      * Configures value of {@code JSONB_TOJSON_FORMATTING} property.
      *
-     * @param formatted True means marshalled data is formatted, false (default)
-     * means no formatting.
+     * @param formatted
+     *      True means marshalled data is formatted, false (default)
+     *      means no formatting.
      *
-     * @return this JsonbConfig instance.
+     * @return This JsonbConfig instance.
      */
     public final JsonbConfig toJsonFormatting(final Boolean formatted) {
         return setProperty(JSONB_TOJSON_FORMATTING, formatted);
@@ -159,11 +163,12 @@ public class JsonbConfig {
      *
      * Configures value of {@code JSONB_TOJSON_ENCODING} property.
      *
-     * @param encoding Valid character encoding as defined in the
-     * <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by
-     * Java Platform.
+     * @param encoding
+     *      Valid character encoding as defined in the
+     *      <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by
+     *      Java Platform.
      *
-     * @return this JsonbConfig instance.
+     * @return This JsonbConfig instance.
      */
     public final JsonbConfig toJsonEncoding(final String encoding) {
         return setProperty(JSONB_TOJSON_ENCODING, encoding);
@@ -176,11 +181,12 @@ public class JsonbConfig {
      *
      * Configures value of {@code JSONB_FROMJSON_ENCODING} property.
      *
-     * @param encoding Valid character encoding as defined in the
-     * <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by
-     * Java Platform.
+     * @param encoding
+     *      Valid character encoding as defined in the
+     *      <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by
+     *      Java Platform.
      *
-     * @return this JsonbConfig instance.
+     * @return This JsonbConfig instance.
      */
     public final JsonbConfig fromJsonEncoding(final String encoding) {
         return setProperty(JSONB_FROMJSON_ENCODING, encoding);

@@ -55,7 +55,7 @@ import static java.lang.annotation.ElementType.TYPE;
  * with its derived classes, as if the class is inlined.
  *
  * <p><b>Usage</b></p>
- * <p> The <tt>@JsonbTransient</tt> annotation can be used with the following
+ * <p> The {@code @JsonbTransient} annotation can be used with the following
  *     program elements:
  * <ul>
  *   <li> a JavaBean property </li>
@@ -63,7 +63,7 @@ import static java.lang.annotation.ElementType.TYPE;
  *   <li> class </li>
  * </ul>
  *
- * <p><tt>@JsonbTransient</tt>is mutually exclusive with all other
+ * <p>{@code @JsonbTransient} is mutually exclusive with all other
  * JSON Binding defined annotations. </p>
  *
  * @author Martin Grebac

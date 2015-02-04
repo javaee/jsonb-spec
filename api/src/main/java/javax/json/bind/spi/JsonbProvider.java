@@ -48,13 +48,12 @@ import javax.json.bind.JsonbException;
 /**
  * Service provider for JSON Binding implementations.
  *
- * Provider implementors must implement all abstract {@link javax.json.bind.Jsonb}
- * methods.
+ * Provider implementors must implement all abstract methods.
  *
  * API clients can obtain instance of default provider by calling:
  * <pre>
  * {@code
- * JsonbProvider provider = JsonbProvider.provider();
+ JsonbProvider provider = JsonbProvider.provider();
  Jsonb jsonb = new Jsonb.JsonbBuilder().
                       .use(provider)
                       .build();
@@ -69,7 +68,7 @@ import javax.json.bind.JsonbException;
  * } catch (JsonbException e) {
  *   // provider not found or could not be instantiated
  * }}</pre>
- * where '<tt>foo.bar.ProviderImpl</tt>' is a vendor implementation class extending
+ * where '{@code foo.bar.ProviderImpl}' is a vendor implementation class extending
  * {@link javax.json.bind.spi.JsonbProvider} and identified to service loader as
  * specified in {@link java.util.ServiceLoader} documentation.
  * <br>
@@ -90,8 +89,10 @@ public abstract class JsonbProvider {
     private static final String DEFAULT_PROVIDER = "org.eclipse.persistence.json.bind.JsonBindingProvider";
 
     /**
-     * Creates a JSON Binding provider object. The provider is loaded using the
-     * {@link java.util.ServiceLoader#load(Class)} method. If there are no available
+     * Creates a JSON Binding provider object by using the
+     * {@link java.util.ServiceLoader#load(Class)} method. The first provider of
+     * {@code JsonbProvider} class from list of providers returned by
+     * {@code ServiceLoader.load} call is returned. If there are no available
      * service providers, this method tries to load the default service provider using
      * {@link Class#forName(String)} method.
      *
@@ -122,18 +123,20 @@ public abstract class JsonbProvider {
     }
 
     /**
-     * Creates a JSON Binding provider object. The provider is loaded using the
-     * {@link java.util.ServiceLoader#load(Class)} method. The first provider of JsonbProvider
-     * class from list of providers returned by ServiceLoader.load call is returned.
-     * If no provider is found, JsonbException is thrown.
+     * Creates a JSON Binding provider object by using the
+     * {@link java.util.ServiceLoader#load(Class)} method, matching {@code providerName}.
+     * The first provider of {@code JsonbProvider} class from list of providers returned by
+     * {@code ServiceLoader.load} call, matching providerName is returned.
+     * If no such provider is found, JsonbException is thrown.
      *
-     * @param providerName class name ({@code class.getName()}) to be chosen from the list of providers
-     *          returned by {@code ServiceLoader.load(JsonbProvider.class)} call.
-     *
-     * @throws IllegalArgumentException if providerName is null.
+     * @param providerName
+     *      Class name ({@code class.getName()}) to be chosen from the list of providers
+     *      returned by {@code ServiceLoader.load(JsonbProvider.class)} call.
      *
      * @throws JsonbException if there is no provider found, or there is a problem
      *         instantiating the provider instance.
+     *
+     * @throws IllegalArgumentException if providerName is null.
      *
      * @see java.util.ServiceLoader
      *
@@ -153,7 +156,7 @@ public abstract class JsonbProvider {
             }
         }
 
-        throw new JsonbException("JSON Binding provider " + DEFAULT_PROVIDER + " not found",
+        throw new JsonbException("JSON Binding provider " + providerName + " not found",
                                  new ClassNotFoundException(providerName));
     }
 
@@ -172,9 +175,6 @@ public abstract class JsonbProvider {
      *
      * @throws JsonbException
      *      If an error was encountered while creating the {@link JsonbBuilder} instance.
-     *
-     * @throws IllegalArgumentException
-     *      If the parameter is {@code null}
      */
     public abstract JsonbBuilder create();
 

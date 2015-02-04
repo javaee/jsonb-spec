@@ -129,11 +129,6 @@ public class Runtime {
     String json = jsonb.toJson(book);
 }
 {
-    // Allow specific configuration in toJson/fromJson
-    Jsonb jsonb = JsonbBuilder.create();
-    String json = jsonb.toJson(book, config);
-}
-{
     // Default configuration with specific builder
     Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl")
                     .withConfig(config)

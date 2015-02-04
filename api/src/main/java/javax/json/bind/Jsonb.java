@@ -47,7 +47,7 @@ import java.io.Writer;
 
 /**
  * <p>
- * {@code Jsonb} provides an abstraction over the JSON binding framework operations:
+ * {@code Jsonb} provides an abstraction over the JSON Binding framework operations:
  *
  * <ul>
  * <li>{@code fromJson}: read JSON input, unmarshal to Java objects content tree
@@ -157,28 +157,6 @@ public interface Jsonb {
     public <T> T fromJson(String str, Class<T> type) throws JsonbException;
 
     /**
-     * Reads in a JSON data from the specified string and return the resulting
-     * content tree.
-     *
-     * @param str
-     *      The string to unmarshal JSON data from.
-     * @param type
-     *      Type of the content tree's root object.
-     * @param <T>
-     *      Type of the content tree's root object.
-     * @param config
-     *      Configuration.
-     *
-     * @return the newly created root object of the java content tree
-     *
-     * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws IllegalArgumentException
-     *     If any of the parameters is null.
-     */
-    public <T> T fromJson(String str, Class<T> type, JsonbConfig config) throws JsonbException;
-
-    /**
      * Unmarshal JSON data from the specified Reader and return the
      * resulting content tree.
      *
@@ -198,29 +176,6 @@ public interface Jsonb {
      *      If any of the parameters is null.
      */
     public <T> T fromJson(Reader reader, Class<T> type) throws JsonbException;
-
-    /**
-     * Unmarshal JSON data from the specified Reader and return the
-     * resulting content tree.
-     *
-     * @param reader
-     *      The character stream is read as a JSON data. Upon a
-     *      successful completion, the stream will be closed by this method.
-     * @param type
-     *      Type of the content tree's root object.
-     * @param <T>
-     *      Type of the content tree's root object.
-     * @param config
-     *      Configuration.
-     *
-     * @return the newly created root object of the java content tree
-     *
-     * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws IllegalArgumentException
-     *      If any of the parameters is null.
-     */
-    public <T> T fromJson(Reader reader, Class<T> type, JsonbConfig config) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified InputStream and return the
@@ -244,29 +199,6 @@ public interface Jsonb {
     public <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
 
     /**
-     * Unmarshal JSON data from the specified InputStream and return the
-     * resulting content tree.
-     *
-     * @param stream
-     *      The stream is read as a JSON data. Upon a
-     *      successful completion, the stream will be closed by this method.
-     * @param type
-     *      Type of the content tree's root object.
-     * @param <T>
-     *      Type of the content tree's root object.
-     * @param config
-     *      Configuration.
-     *
-     * @return the newly created root object of the java content tree
-     *
-     * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws IllegalArgumentException
-     *      If any of the parameters is null.
-     */
-    public <T> T fromJson(InputStream stream, Class<T> type, JsonbConfig config) throws JsonbException;
-
-    /**
      * Unmarshal JSON data from the specified file and return the resulting
      * content tree.
      *
@@ -287,28 +219,6 @@ public interface Jsonb {
     public <T> T fromJson(File file, Class<T> type) throws JsonbException;
 
     /**
-     * Unmarshal JSON data from the specified file and return the resulting
-     * content tree.
-     *
-     * @param file
-     *      The file to unmarshal JSON data from.
-     * @param type
-     *      Type of the content tree's root object.
-     * @param <T>
-     *      Type of the content tree's root object.
-     * @param config
-     *      Configuration.
-     *
-     * @return The newly instantiated root object of the java content tree, of type {@code type}
-     *
-     * @throws JsonbException
-     *     If any unexpected error(s) occur(s) during unmarshalling.
-     * @throws IllegalArgumentException
-     *     If any of the parameters is null.
-     */
-    public <T> T fromJson(File file, Class<T> type, JsonbConfig config) throws JsonbException;
-
-    /**
      * Writes the Java object tree with root object {@code object} to a String
      * instance as JSON.
      *
@@ -326,25 +236,6 @@ public interface Jsonb {
     public String toJson(Object object) throws JsonbException;
 
     /**
-     * Writes the Java object tree with root object {@code object} to a String
-     * instance as JSON.
-     *
-     * @param object
-     *      The root object of the object content tree to be marshaled. Must not be null.
-     * @param config
-     *      Configuration.
-     *
-     * @return String String instance with marshaled JSON data.
-     *
-     * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling, such as I/O error.
-     * @throws IllegalArgumentException If any of the method parameters is null.
-     *
-     * @since JSON Binding 1.0
-     */
-    public String toJson(Object object, JsonbConfig config) throws JsonbException;
-
-    /**
      * Marshal the object content tree into a file.
      *
      * @param object
@@ -359,24 +250,6 @@ public interface Jsonb {
      * @since JSON Binding 1.0
      */
     public void toJson(Object object, File file) throws JsonbException;
-
-    /**
-     * Marshal the object content tree into a file.
-     *
-     * @param object
-     *      The object content tree to be marshaled.
-     * @param file
-     *      File to be written. If this file already exists, it will be
-     *      overwritten.
-     * @param config
-     *      Configuration.
-     *
-     * @throws JsonbException If the operation fails, such as due to I/O error.
-     * @throws IllegalArgumentException If any of the method parameters is {@code null}.
-     *
-     * @since JSON Binding 1.0
-     */
-    public void toJson(Object object, File file, JsonbConfig config) throws JsonbException;
 
     /**
      * Marshal the object content tree into a Writer character stream.
@@ -397,26 +270,6 @@ public interface Jsonb {
     public void toJson(Object object, Writer writer) throws JsonbException;
 
     /**
-     * Marshal the object content tree into a Writer character stream.
-     *
-     * @param object
-     *      The object content tree to be marshaled.
-     * @param writer
-     *      The JSON will be sent as a character stream to the given
-     *      {@link Writer}. Upon a successful completion, the stream will be closed
-     *      by this method.
-     * @param config
-     *      Configuration.
-     *
-     * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling.
-     * @throws IllegalArgumentException If any of the method parameters is null.
-     *
-     * @since JSON Binding 1.0
-     */
-    public void toJson(Object object, Writer writer, JsonbConfig config) throws JsonbException;
-
-    /**
      * Marshal the object content tree into output stream.
      *
      * @param object
@@ -433,25 +286,5 @@ public interface Jsonb {
      * @since JSON Binding 1.0
      */
     public void toJson(Object object, OutputStream stream) throws JsonbException;
-
-    /**
-     * Marshal the object content tree into output stream.
-     *
-     * @param object
-     *      The object content tree to be marshaled.
-     * @param stream
-     *      The JSON will be sent as a byte stream to the given
-     *      {@link OutputStream}. Upon a successful completion, the stream will be closed
-     *      by this method.
-     * @param config
-     *      Configuration.
-     *
-     * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling.
-     * @throws IllegalArgumentException If any of the method parameters is null.
-     *
-     * @since JSON Binding 1.0
-     */
-    public void toJson(Object object, OutputStream stream, JsonbConfig config) throws JsonbException;
 
 }

@@ -54,9 +54,6 @@ import javax.json.bind.JsonbException;
  * <pre>
  * {@code
  JsonbProvider provider = JsonbProvider.provider();
- Jsonb jsonb = new Jsonb.JsonbBuilder().
-                      .use(provider)
-                      .build();
  }}</pre>
  *
  * Specific provider instance lookup:

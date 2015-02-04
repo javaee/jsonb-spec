@@ -140,7 +140,7 @@ public interface JsonbBuilder {
      * method.
      *
      * @param providerName
-     *      Provider class name to be looked up by {@link java.util.ServiceLoader}.
+     *      Provider class name to be looked up by {@link java.util.ServiceLoader ServiceLoader}.
      *
      * @return new {@code JsonbBuilder} instance.
      */

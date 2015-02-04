@@ -49,7 +49,7 @@
  * {@link javax.json.bind.JsonbBuilder JsonbBuilder} creation
  * method(s) in {@link javax.json.bind.spi.JsonbProvider JsonbProvider}.
  *
- * <p>The API locates and loads providers using {@link java.util.ServiceLoader java.util.ServiceLoader}.
+ * <p>The API locates and loads providers using {@link java.util.ServiceLoader ServiceLoader}.
  *
  * @since JSON Binding 1.0
  * @author Martin Grebac

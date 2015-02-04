@@ -43,19 +43,14 @@ import javax.json.bind.spi.JsonbProvider;
 import javax.json.spi.JsonProvider;
 
 /**
- * JsonbBuilder class for creating Jsonb instances.
+ * JsonbBuilder for building Jsonb instances.
  *
  * @see Jsonb
  * @see java.util.ServiceLoader
  * @author Eugen Cepoi, Martin Grebac, Przemyslaw Bielicki
  * @since JSON Binding 1.0
  */
-public abstract class JsonbBuilder {
-
-    /**
-     * Allows custom implementations to extend the {@code JsonbBuilder} class.
-     */
-    protected JsonbBuilder() { }
+public interface JsonbBuilder {
 
     /**
      * Set configuration which will be set to the newly created
@@ -64,7 +59,7 @@ public abstract class JsonbBuilder {
      * for {@link javax.json.bind.Jsonb Jsonb} instance.
      * @return This {@code JsonbBuilder} instance.
      */
-    public abstract JsonbBuilder withConfig(JsonbConfiguration configuration);
+    public JsonbBuilder withConfig(JsonbConfiguration configuration);
 
     /**
      * Configures JSON-P provider to be used for all JSON-P related operations.
@@ -72,7 +67,7 @@ public abstract class JsonbBuilder {
      * to be used by Jsonb to lookup JSON-P implementation.
      * @return This {@code JsonbBuilder} instance.
      */
-    public abstract JsonbBuilder withProvider(JsonProvider jsonpProvider);
+    public JsonbBuilder withProvider(JsonProvider jsonpProvider);
 
     /**
      * Returns a new instance of {@link javax.json.bind.Jsonb Jsonb} based on the
@@ -90,7 +85,7 @@ public abstract class JsonbBuilder {
      * unrecognized property is set in
      * {@link javax.json.bind.JsonbConfiguration JsonbConfiguration}.
      */
-    public abstract Jsonb build();
+    public Jsonb build();
 
     /**
      * Create a new {@link javax.json.bind.Jsonb} instance using the default

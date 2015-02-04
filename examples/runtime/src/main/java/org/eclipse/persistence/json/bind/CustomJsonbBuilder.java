@@ -48,7 +48,7 @@ import javax.json.bind.JsonbConfiguration;
  *
  * @author Martin Grebac
  */
-public class CustomJsonbBuilder extends JsonbBuilder {
+public class CustomJsonbBuilder implements JsonbBuilder {
 
     @Override
     public JsonbBuilder withConfig(JsonbConfiguration configuration) {

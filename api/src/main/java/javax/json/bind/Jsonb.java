@@ -51,7 +51,7 @@ import java.io.Writer;
  *
  * <ul>
  * <li>{@code fromJson}: read JSON input, unmarshal to Java objects content tree
- * <li>{@code toJson}: marshall Java objects content tree from JSON input
+ * <li>{@code toJson}: marshall Java objects content tree to JSON input
  * </ul>
  *
  * <p>
@@ -65,7 +65,7 @@ import java.io.Writer;
  Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl).build();
 
  // Example 3 - Creating Jsonb instance from a custom provider implementation
- Jsonb jsonb = JsonbBuilder.newBuilder(new JsonbProvider () {
+ Jsonb jsonb = new CustomJsonbBuilder().newBuilder(new JsonbProvider () {
                     public JsonbBuilder create() {
                         return new CustomJsonbBuilder();
                     }
@@ -97,11 +97,9 @@ import java.io.Writer;
  * <blockquote>
  * Writing (marshalling) object content tree to a File:<br><br>
  *    <pre>
- *     Jsonb jsonb = JsonbBuilder.create();
  *     jsonb.toJson(object, new File("foo.json");</pre>
  * Writing (marshalling) to a Writer:<br><br>
  *    <pre>
- *     Jsonb jsonb = JsonbBuilder.create();
  *     jsonb.toJson(object, new PrintWriter(System.out));
  *    </pre>
  * </blockquote>

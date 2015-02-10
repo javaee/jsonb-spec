@@ -48,7 +48,6 @@ import javax.json.bind.Jsonb;
 
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
-import javax.json.bind.spi.JsonbProvider;
 import org.eclipse.persistence.json.bind.CustomJsonbBuilder;
 
 /**
@@ -71,6 +70,8 @@ public class Runtime {
  * Shortcut use
  */
 {
+        Jsonb jsonb = JsonbBuilder.create();
+
         /**
          * Write an object content tree using default JSON mapping
             {
@@ -82,12 +83,12 @@ public class Runtime {
               "lang" : "CZECH"
             }
         */
-        String json = JsonbBuilder.create().toJson(book);
+        String json = jsonb.toJson(book);
 
         /**
          * Read JSON document (from above) into an object content tree using default mapping
          */
-        Book b = JsonbBuilder.create().fromJson(json, Book.class);
+        Book b = jsonb.fromJson(json, Book.class);
 }
 
 /**
@@ -107,12 +108,7 @@ public class Runtime {
         JsonbBuilder.newBuilder("foo.bar.ProviderImpl").build();
 
         // Use an explicit implementation of JsonbProvider
-        JsonbBuilder.newBuilder(new JsonbProvider() {
-            @Override
-            public JsonbBuilder create() {
-                return new CustomJsonbBuilder();
-            }
-        }).build();
+        Jsonb jsonb = new CustomJsonbBuilder().build();
 }
 
 /**

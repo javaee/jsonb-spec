@@ -65,11 +65,7 @@ import java.io.Writer;
  Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl).build();
 
  // Example 3 - Creating Jsonb instance from a custom provider implementation
- Jsonb jsonb = new CustomJsonbBuilder().newBuilder(new JsonbProvider () {
-                    public JsonbBuilder create() {
-                        return new CustomJsonbBuilder();
-                    }
-                }).build();
+ Jsonb jsonb = new CustomJsonbBuilder().build();
  }</pre>
  *
  * <b>Unmarshalling (reading) from JSON</b><br>

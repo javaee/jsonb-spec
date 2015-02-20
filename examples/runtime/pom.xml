@@ -63,6 +63,11 @@
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
+        </dependency>
     </dependencies>
     
 </project>

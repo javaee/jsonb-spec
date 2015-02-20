@@ -390,17 +390,16 @@ public class DefaultMapping {
         assertEquals("[[{\"0\":0},{\"0\":1}],[{\"1\":0},{\"1\":1}]]", jsonb.toJson(mapMultiArray));
     }
 
-    EnumSet<Language> languageEnumSet;
-    EnumMap<Language, String> languageEnumMap;
-
     public static void fromJson_Enums(Jsonb jsonb) throws Exception {
 
-        Language language = jsonb.fromJson("[\"Slovak\"]", Language.class);
+        EnumSet<Language> languageEnumSet = EnumSet.of(Language.Czech);
+        EnumMap<Language, String> languageEnumMap = new EnumMap<>(Language.class);
 
-        //handling of generics will be discussed separately
-        EnumSet<Language> languageEnumSet1 = (EnumSet<Language>)jsonb.fromJson("[\"Slovak\", \"English\"]", DefaultMapping.class.getField("languageEnumSet").getType());
+        //TODO: handling of generics will be discussed separately
+        EnumSet<Language> languageEnumSet1 = (EnumSet<Language>)jsonb.fromJson("[\"Slovak\", \"English\"]", languageEnumSet.getClass());
 
-        EnumMap<Language, String> languageEnumMap1 = (EnumMap<Language, String>)jsonb.fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]", DefaultMapping.class.getField("languageEnumMap").getType());
+        //TODO: handling of generics will be discussed separately
+        EnumMap<Language, String> languageEnumMap1 = (EnumMap<Language, String>)jsonb.fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]", languageEnumMap.getClass());
     }
 
     public static void toJson_Enums(Jsonb jsonb) {
@@ -657,7 +656,7 @@ public class DefaultMapping {
 
     private static void fromJson_Inheritance(Jsonb jsonb) {
         //we need public constructor
-        Dog animal = jsonb.fromJson("{\"age\":5, \"dog\":{\"name\":\"Rex\"}}", Dog.class);
+        Dog animal = jsonb.fromJson("{\"age\":5, \"name\":\"Rex\"}", Dog.class);
     }
 
     public static void toJson_Inheritance(Jsonb jsonb) {

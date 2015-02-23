@@ -24,3 +24,8 @@ profile
 /spec/Makefile.fls
 /spec/spec.synctex.gz
 /spec/spec.xwm
+
+# eclipse noise
+.settings/
+.classpath
+.project

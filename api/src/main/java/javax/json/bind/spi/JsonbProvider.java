@@ -72,7 +72,7 @@ import javax.json.bind.JsonbException;
  * All the methods in this class are allowed to be called by multiple concurrent
  * threads.
  *
- * @author Martin Grebac
+ * @author Martin Grebac, Hendrik Saly
  * @see javax.json.bind.Jsonb
  * @see java.util.ServiceLoader
  * @since JSON Binding 1.0
@@ -148,7 +148,7 @@ public abstract class JsonbProvider {
         Iterator<JsonbProvider> it = loader.iterator();
         while (it.hasNext()) {
             JsonbProvider provider = it.next();
-            if (provider.getClass().getName().equals(provider.getClass().getName())) {
+            if (providerName.equals(provider.getClass().getName())) {
                 return provider;
             }
         }

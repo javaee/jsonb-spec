@@ -46,7 +46,7 @@
     <parent>
         <groupId>javax.json.bind</groupId>
         <artifactId>javax.json.bind-examples</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

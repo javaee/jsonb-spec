@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -136,7 +136,8 @@ public class JsonbConfig {
      * @throws JsonbConfigException
      *      when there is an error retrieving the given property or value
      *      property name
-     * @throws IllegalArgumentException if the name parameter is null.
+     * @throws NullPointerException
+     *      If the name parameter is {@code null}.
      */
     public final Object getProperty(final String name) throws JsonbConfigException {
         return configuration.get(name);

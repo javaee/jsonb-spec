@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -133,7 +133,7 @@ public abstract class JsonbProvider {
      * @throws JsonbException if there is no provider found, or there is a problem
      *         instantiating the provider instance.
      *
-     * @throws IllegalArgumentException if providerName is null.
+     * @throws NullPointerException if providerName is {@code null}.
      *
      * @see java.util.ServiceLoader
      *
@@ -142,7 +142,7 @@ public abstract class JsonbProvider {
     @SuppressWarnings("UseSpecificCatch")
     public static JsonbProvider provider(final String providerName) {
         if (providerName == null) {
-            throw new IllegalArgumentException();
+            throw new NullPointerException();
         }
         ServiceLoader<JsonbProvider> loader = ServiceLoader.load(JsonbProvider.class);
         Iterator<JsonbProvider> it = loader.iterator();

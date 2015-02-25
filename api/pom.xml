@@ -10,7 +10,7 @@
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    http://glassfish.java.net/public/CDDL+GPL_1_1.html
+    https://glassfish.java.net/public/CDDL+GPL_1_1.html
     or packager/legal/LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
@@ -40,6 +40,7 @@
     holder.
 
 -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -180,6 +181,20 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>3.0.0</version>
+                    <configuration>
+                        <effort>Max</effort>
+                        <threshold>Low</threshold>
+                        <xmlOutput>true</xmlOutput>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>analyze-compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -394,13 +409,15 @@
                         <outputDirectory>${project.build.directory}/checkstyle</outputDirectory>
                         <outputFile>${project.build.directory}/checkstyle/checkstyle-result.xml</outputFile>
                         <configLocation>${basedir}/../etc/config/checkstyle.xml</configLocation>
+                        <failOnViolation>true</failOnViolation>
+                        <failsOnError>true</failsOnError>
                     </configuration>
                     <executions>
                         <execution>
                             <goals>
-                                <goal>checkstyle</goal>
+                                <goal>check</goal>
                             </goals>
-                            <phase>validate</phase>
+                            <phase>compile</phase>
                         </execution>
                     </executions>
                 </plugin>
@@ -409,7 +426,7 @@
                     <artifactId>glassfish-copyright-maven-plugin</artifactId>
                     <version>1.39</version>
                     <configuration>
-                        <excludeFile>${basedir}/../etc/config/copyright-exclude</excludeFile>
+                        <excludeFile>${project.build.directory}/../etc/config/copyright-exclude</excludeFile>
                         <!--svn|mercurial|git - defaults to svn-->
                         <scm>git</scm>
                         <!-- turn on/off debugging -->
@@ -417,13 +434,21 @@
                         <!-- skip files not under SCM-->
                         <scmOnly>true</scmOnly>
                         <!-- turn off warnings -->
-                        <warn>true</warn>
+                        <warn>false</warn>
                         <!-- for use with repair -->
                         <update>false</update>
                         <!-- check that year is correct -->
                         <ignoreYear>false</ignoreYear>
-                        <templateFile>${basedir}/../etc/config/copyright.txt</templateFile>
+                        <templateFile>${project.build.directory}/../etc/config/copyright.txt</templateFile>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -467,6 +492,10 @@
             <plugin>
                 <groupId>org.glassfish.build</groupId>
                 <artifactId>spec-version-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

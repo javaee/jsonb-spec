@@ -8,7 +8,7 @@
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * https://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
@@ -145,8 +145,8 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws IllegalArgumentException
-     *      If any of the parameters is null.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
      */
     public <T> T fromJson(String str, Class<T> type) throws JsonbException;
 
@@ -166,8 +166,8 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws IllegalArgumentException
-     *      If any of the parameters is null.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
      */
     public <T> T fromJson(Reader reader, Class<T> type) throws JsonbException;
 
@@ -187,8 +187,8 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws IllegalArgumentException
-     *      If any of the parameters is null.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
      */
     public <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
 
@@ -207,8 +207,8 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) during unmarshalling.
-     * @throws IllegalArgumentException
-     *     If any of the parameters is null.
+     * @throws NullPointerException
+     *     If any of the parameters is {@code null}.
      */
     public <T> T fromJson(File file, Class<T> type) throws JsonbException;
 
@@ -223,7 +223,8 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling, such as I/O error.
-     * @throws IllegalArgumentException If any of the method parameters is null.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
      */
@@ -239,7 +240,8 @@ public interface Jsonb {
      *      overwritten.
      *
      * @throws JsonbException If the operation fails, such as due to I/O error.
-     * @throws IllegalArgumentException If any of the method parameters is {@code null}.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
      */
@@ -257,7 +259,8 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling.
-     * @throws IllegalArgumentException If any of the method parameters is null.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
      */
@@ -275,7 +278,8 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling.
-     * @throws IllegalArgumentException If any of the method parameters is null.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
      */

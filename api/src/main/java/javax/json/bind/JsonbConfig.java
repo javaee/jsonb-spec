@@ -115,6 +115,9 @@ public class JsonbConfig {
      *      The value of the property to be set
      *
      * @return This JsonbConfig instance.
+     *
+     * @throws JsonbConfigException
+     *      when there is an error setting the given property/value
      */
     public final JsonbConfig setProperty(final String name, final Object value) throws JsonbConfigException {
         configuration.put(name, value);

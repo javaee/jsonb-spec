@@ -148,7 +148,7 @@ public interface Jsonb {
      * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
-    public <T> T fromJson(String str, Class<T> type) throws JsonbException;
+    <T> T fromJson(String str, Class<T> type) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified Reader and return the
@@ -169,7 +169,7 @@ public interface Jsonb {
      * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
-    public <T> T fromJson(Reader reader, Class<T> type) throws JsonbException;
+    <T> T fromJson(Reader reader, Class<T> type) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified InputStream and return the
@@ -190,7 +190,7 @@ public interface Jsonb {
      * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
-    public <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
+    <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified file and return the resulting
@@ -210,7 +210,7 @@ public interface Jsonb {
      * @throws NullPointerException
      *     If any of the parameters is {@code null}.
      */
-    public <T> T fromJson(File file, Class<T> type) throws JsonbException;
+    <T> T fromJson(File file, Class<T> type) throws JsonbException;
 
     /**
      * Writes the Java object tree with root object {@code object} to a String
@@ -219,7 +219,7 @@ public interface Jsonb {
      * @param object
      *      The root object of the object content tree to be marshaled. Must not be null.
      *
-     * @return String String instance with marshaled JSON data.
+     * @return String instance with marshaled JSON data.
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling, such as I/O error.
@@ -228,7 +228,7 @@ public interface Jsonb {
      *
      * @since JSON Binding 1.0
      */
-    public String toJson(Object object) throws JsonbException;
+    String toJson(Object object) throws JsonbException;
 
     /**
      * Marshal the object content tree into a file.
@@ -245,7 +245,7 @@ public interface Jsonb {
      *
      * @since JSON Binding 1.0
      */
-    public void toJson(Object object, File file) throws JsonbException;
+    void toJson(Object object, File file) throws JsonbException;
 
     /**
      * Marshal the object content tree into a Writer character stream.
@@ -264,7 +264,7 @@ public interface Jsonb {
      *
      * @since JSON Binding 1.0
      */
-    public void toJson(Object object, Writer writer) throws JsonbException;
+    void toJson(Object object, Writer writer) throws JsonbException;
 
     /**
      * Marshal the object content tree into output stream.
@@ -283,6 +283,6 @@ public interface Jsonb {
      *
      * @since JSON Binding 1.0
      */
-    public void toJson(Object object, OutputStream stream) throws JsonbException;
+    void toJson(Object object, OutputStream stream) throws JsonbException;
 
 }

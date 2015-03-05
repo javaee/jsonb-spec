@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+import static examples.mapping.Utils.*;
+
 /**
  * @author Martin Vojtek
  */
@@ -31,10 +33,6 @@ public class DefaultMapping {
         //arrays ->
         //toJson: null -> null element in the json array
         //fromJson: null element in the json array -> null element in the list
-
-        //dates handling will be discussed separately
-
-        //use of generics will be discussed separately
 
         //access to fields
         //by default we are using getters/setters methods
@@ -66,6 +64,22 @@ public class DefaultMapping {
         toJson_Inheritance(jsonb);
 
         toJson_Anonymous_Class(jsonb);
+
+        fromJson_Instantiation(jsonb);
+
+        toJson_defaultNames(jsonb);
+        fromJson_defaultNames(jsonb);
+
+        toJson_attributesOrdering(jsonb);
+
+        toJson_nullValues(jsonb);
+        fromJson_nullValues(jsonb);
+
+        toJson_modifiers(jsonb);
+        fromJson_modifiers(jsonb);
+
+        toJson_optional(jsonb);
+        fromJson_optional(jsonb);
     }
 
     public static void fromJson_Primitives(Jsonb jsonb) {
@@ -200,6 +214,10 @@ public class DefaultMapping {
         //Map
         Map<String, Object> map = (LinkedHashMap<String,Object>)jsonb.fromJson("{\"name\":\"unknown object\"}", Object.class);
 
+        //mapping for number  -> BigDecimal
+        Map<String, Object> mapWithBigDecimal = (Map<String, Object>)jsonb.fromJson("{\"value\":5}", Object.class);
+        assert(mapWithBigDecimal.get("value") instanceof BigDecimal);
+
         //Collection
         Collection<Object> collection = (ArrayList<Object>)jsonb.fromJson("[{\"value\":\"first\"}, {\"value\":\"second\"}]", Object.class);
 
@@ -211,9 +229,6 @@ public class DefaultMapping {
 
         //JsonArray
         JsonArray jsonArray = jsonb.fromJson("[{\"value\":\"first\"},{\"value\":\"second\"}]", JsonArray.class);
-
-        //mapping for number with no fraction -> Integer, Long or BigInteger (smallest_applicable)
-        //mapping for number with fraction -> Double or BigDecimal TODO: specify criteria when convert to BigDecimal
     }
 
     public static void toJson_Structures(Jsonb jsonb) {
@@ -275,6 +290,12 @@ public class DefaultMapping {
         //concrete implementation of Collection
         ArrayList<Object> arrayList = jsonb.fromJson("[\"first\",\"second\"]", ArrayList.class);
 
+        //deque
+        Deque<String> dequeList = jsonb.fromJson("[\"first\",\"second\"]", Deque.class);
+        assert(dequeList.size() == 2);
+        assertEquals("first", dequeList.getFirst());
+        assertEquals("second", dequeList.getLast());
+
         //JSON Binding supports default unmarshal of the following interfaces
         //syntax: interface -> default implementation
 
@@ -305,6 +326,13 @@ public class DefaultMapping {
         assertEquals("{\"1\":1,\"2\":2,\"3\":3}", jsonb.toJson(map));
 
         //any implementation of Collection and Map is serializable
+
+        //deque
+        Deque<String> deque = new ArrayDeque<>();
+        deque.add("first");
+        deque.add("second");
+
+        assertEquals("[\"first\",\"second\"]", jsonb.toJson(deque));
     }
 
     public static void fromJson_Arrays(Jsonb jsonb) {
@@ -390,16 +418,14 @@ public class DefaultMapping {
         assertEquals("[[{\"0\":0},{\"0\":1}],[{\"1\":0},{\"1\":1}]]", jsonb.toJson(mapMultiArray));
     }
 
+    public EnumSet<Language> languageEnumSet = EnumSet.of(Language.Czech);
+    public EnumMap<Language, String> languageEnumMap = new EnumMap<>(Language.class);
+
     public static void fromJson_Enums(Jsonb jsonb) throws Exception {
 
-        EnumSet<Language> languageEnumSet = EnumSet.of(Language.Czech);
-        EnumMap<Language, String> languageEnumMap = new EnumMap<>(Language.class);
+        EnumSet<Language> languageEnumSet = fromJson("[\"Slovak\", \"English\"]", DefaultMapping.class.getField("languageEnumSet").getGenericType());
 
-        //TODO: handling of generics will be discussed separately
-        EnumSet<Language> languageEnumSet1 = (EnumSet<Language>)jsonb.fromJson("[\"Slovak\", \"English\"]", languageEnumSet.getClass());
-
-        //TODO: handling of generics will be discussed separately
-        EnumMap<Language, String> languageEnumMap1 = (EnumMap<Language, String>)jsonb.fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]", languageEnumMap.getClass());
+        EnumMap<Language, String> languageEnumMap = fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]", DefaultMapping.class.getField("languageEnumMap").getGenericType());
     }
 
     public static void toJson_Enums(Jsonb jsonb) {
@@ -735,13 +761,294 @@ public class DefaultMapping {
         assertEquals("[\"https://www.jcp.org/en/jsr/detail?id=367#3\"]", jsonb.toJson(uri));
     }
 
-    private static void assertEquals(Object... objects) {
-        if (null == objects || objects.length < 2 || null == objects[0]) {
-            throw new IllegalArgumentException("bad parameters");
-        }
-        for (int i = 0; i < objects.length-1; i++) {
-            assert(objects[i].equals(objects[i+1]));
+    static class POJOWithoutDefaultArgConstructor {
+        public String id;
+
+        public POJOWithoutDefaultArgConstructor(String id) {
+            this.id = id;
         }
     }
+
+    static class POJOWithPrivateConstructor {
+        public String id;
+
+        private POJOWithPrivateConstructor() {
+        }
+    }
+
+    public static void fromJson_Instantiation(Jsonb jsonb) {
+
+        //public or protected constructor must be present
+
+        try {
+            POJOWithoutDefaultArgConstructor pojo = jsonb.fromJson("{\"id\":\"1\"}", POJOWithoutDefaultArgConstructor.class);
+            assert(false);
+        } catch (JsonbException e) {}
+
+        try {
+            jsonb.fromJson("{\"id\":\"1\"}", POJOWithPrivateConstructor.class);
+            assert(false);
+        } catch (JsonbException e) {}
+    }
+
+    public static void toJson_defaultNames(Jsonb jsonb) {
+        DefaultTestNames defaultTestNames = new DefaultTestNames();
+        String result = jsonb.toJson(defaultTestNames);
+        assertEquals("{" +
+                "\"_12ac\":\"_12ac\"," +
+                "\"_23_45_a\":\"_23_45_a\"," +
+                "\"_Ab\":\"_Ab\"," +
+                "\"_AB\":\"_AB\"," +
+                "\"_ABc\":\"_ABc\"," +
+                "\"a\":\"a\"," +
+                "\"A\":\"A\"," +
+                "\"a_bC\":\"a_bC\"," +
+                "\"A_Bc\":\"A_Bc\"," +
+                "\"ABC\":\"ABC\"," +
+                "\"abc\":\"abc\"," +
+                "\"DdB_ee\":\"DdB_ee\"," +
+                "\"okNot_Ok\":\"okNot_Ok\"," +
+                "\"okNot_ok\":\"okNot_ok\"," +
+                "\"okNotOk\":\"okNotOk\"" +
+                "}", result);
+    }
+
+    public static void fromJson_defaultNames(Jsonb jsonb) {
+        DefaultNames defaultNames = jsonb.fromJson("{\"defaultName\":\"newName\"}", DefaultNames.class);
+        assertEquals("newName", defaultNames.defaultName);
+
+        try {
+            jsonb.fromJson("{\"defaultNAME\":\"newName\"}", DefaultNames.class);
+            assert(false);
+        } catch (JsonbException e) {}
+    }
+
+    static class DefaultNames {
+        public String defaultName;
+
+        public DefaultNames() {}
+    }
+
+    static class DefaultTestNames {
+        public String a = "a";
+        public String A = "A";
+        public String ABC = "ABC";
+        public String abc = "abc";
+        public String a_bC = "a_bC";
+        public String A_Bc = "A_Bc";
+        public String _12ac = "_12ac";
+        public String _Ab = "_Ab";
+        public String _AB = "_AB";
+        public String _ABc = "_ABc";
+        public String okNotOk = "okNotOk";
+        public String okNot_Ok = "okNot_Ok";
+        public String okNot_ok = "okNot_ok";
+        public String DdB_ee = "DdB_ee";
+        public String _23_45_a = "_23_45_a";
+    }
+
+    public static void toJson_attributesOrdering(Jsonb jsonb) {
+        //lexicographical order
+        AttributesOrderingClass attributesOrderingClass = new AttributesOrderingClass();
+        attributesOrderingClass.aField = "text";
+        attributesOrderingClass.cField = "text";
+        attributesOrderingClass.bField = "text";
+
+        assertEquals("{\"aField\":\"text\",\"bField\":\"text\",\"cField\":\"text\"}", jsonb.toJson(attributesOrderingClass));
+    }
+
+    public static void toJson_nullValues(Jsonb jsonb) {
+        //array
+        List<String> stringList = new ArrayList<>();
+        stringList.add("value1");
+        stringList.add(null);
+        stringList.add("value3");
+
+        assertEquals("[\"value1\",null,\"value3\"]", jsonb.toJson(stringList));
+
+        //java object
+        POJO pojo = new POJO();
+        pojo.id = 1;
+        pojo.name = null;
+
+        assertEquals("{\"id\":1}", jsonb.toJson(pojo));
+    }
+
+    public static void fromJson_nullValues(Jsonb jsonb) {
+        //array
+        ArrayList<Object> stringList = jsonb.fromJson("[\"value1\",null,\"value3\"]", ArrayList.class);
+        assert(stringList.size() == 3);
+        Iterator<Object> iterator = stringList.iterator();
+        assertEquals("value1", iterator.next());
+        assert(null == iterator.next());
+        assertEquals("value3", iterator.next());
+
+        //java object
+        POJOWithInitialValue pojoWithInitialValue = jsonb.fromJson("{\"name\":\"newName\"}", POJOWithInitialValue.class);
+        assert(pojoWithInitialValue.id.intValue() == 4);
+        assertEquals("newName", pojoWithInitialValue.name);
+
+        POJOWithInitialValue pojoWithNullValue = jsonb.fromJson("{\"name\":\"newName\",\"id\":null}", POJOWithInitialValue.class);
+        assert(pojoWithInitialValue.id == null);
+        assertEquals("newName", pojoWithInitialValue.name);
+    }
+
+    public static void toJson_modifiers(Jsonb jsonb) {
+        ModifiersClass modifiersClass = new ModifiersClass();
+        assertEquals("{\"finalField\":\"finalValue\",\"regularField\":\"regularValue\"}", jsonb.toJson(modifiersClass));
+    }
+
+    public static void fromJson_modifiers(Jsonb jsonb) {
+        try {
+            ModifiersClass modifiersClass = jsonb.fromJson("{\"finalField\":\"finalValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
+            assert(false);
+        } catch (JsonbException e) {
+            //unmarshal of final field is not supported
+        }
+
+        try {
+            ModifiersClass modifiersClass = jsonb.fromJson("{\"staticField\":\"staticValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
+            assert(false);
+        } catch (JsonbException e) {
+            //unmarshal of static field is not supported
+        }
+
+        try {
+            ModifiersClass modifiersClass = jsonb.fromJson("{\"transientField\":\"transientValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
+            assert(false);
+        } catch (JsonbException e) {
+            //unmarshal of transient field is not supported
+        }
+
+        try {
+            ModifiersClass modifiersClass = jsonb.fromJson("{\"unknownField\":\"unknownValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
+            assert(false);
+        } catch (JsonbException e) {
+            //unmarshal of unknown field is not supported
+        }
+    }
+
+    public static void toJson_optional(Jsonb jsonb) {
+
+        //Optional
+        assertEquals("[\"strValue\"]", jsonb.toJson(Optional.of("strValue")));
+
+        assertEquals("[null]", jsonb.toJson(Optional.ofNullable(null)));
+
+        assertEquals("[null]", jsonb.toJson(Optional.empty()));
+
+        assertEquals("{\"optionalField\":null}", jsonb.toJson(new OptionalClass()));
+
+        OptionalClass optionalClass = new OptionalClass();
+        optionalClass.optionalField = Optional.of("value");
+
+        assertEquals("{\"optionalField\",\"value\"}", optionalClass);
+
+        OptionalClass nullOptionalClass = new OptionalClass();
+        nullOptionalClass.optionalField = Optional.ofNullable(null);
+
+        assertEquals("{\"optionalField\":null}", jsonb.toJson(nullOptionalClass));
+
+        OptionalClass nullOptionalField = new OptionalClass();
+        nullOptionalField.optionalField = null;
+
+        assertEquals("{}", jsonb.toJson(nullOptionalField));
+
+        //OptionalInt
+        assertEquals("[1]", jsonb.toJson(OptionalInt.of(1)));
+        assertEquals("[null]", jsonb.toJson(OptionalInt.empty()));
+
+        //OptionalLong
+        assertEquals("[123]", jsonb.toJson(OptionalLong.of(123)));
+        assertEquals("[null]", jsonb.toJson(OptionalLong.empty()));
+
+        //OptionalDouble
+        assertEquals("[1.2]", jsonb.toJson(OptionalDouble.of(1.2)));
+        assertEquals("[null]", jsonb.toJson(OptionalDouble.empty()));
+    }
+
+    public static void fromJson_optional(Jsonb jsonb) {
+        //Optional
+        Optional<String> stringValue = jsonb.fromJson("[\"optionalString\"]", Optional.class);
+        assert(stringValue.isPresent());
+        assertEquals("optionalString", stringValue.get());
+
+        Optional<String> nullStringValue = jsonb.fromJson("[null]", Optional.class);
+        assert(!nullStringValue.isPresent());
+
+        OptionalClass optionalClass = jsonb.fromJson("{\"optionalField\":\"value\"}", OptionalClass.class);
+        assert(optionalClass.optionalField.isPresent());
+        assertEquals("value", optionalClass.optionalField.get());
+
+        OptionalClass emptyOptionalClass = jsonb.fromJson("{}", OptionalClass.class);
+        assert(!emptyOptionalClass.optionalField.isPresent());
+
+        OptionalClass nullOptionalClass = jsonb.fromJson("{\"optionalField\":null}", OptionalClass.class);
+        assert(nullOptionalClass.optionalField == null);
+
+        //OptionalInt
+        OptionalInt optionalInt = jsonb.fromJson("[1]", OptionalInt.class);
+        assert(optionalInt.isPresent());
+        assert(optionalInt.getAsInt() == 1);
+
+        OptionalInt emptyOptionalInt = jsonb.fromJson("[null]", OptionalInt.class);
+        assert(!emptyOptionalInt.isPresent());
+
+        //OptionalLong
+        OptionalLong optionalLong = jsonb.fromJson("[123]", OptionalLong.class);
+        assert(optionalLong.isPresent());
+        assert(optionalLong.getAsLong() == 123L);
+
+        OptionalLong emptyOptionalLong = jsonb.fromJson("[null]", OptionalLong.class);
+        assert(!emptyOptionalLong.isPresent());
+
+        //OptionalDouble
+        OptionalDouble optionalDouble = jsonb.fromJson("[1.2]", OptionalDouble.class);
+        assert(optionalDouble.isPresent());
+        assert(optionalDouble.getAsDouble() == 1.2);
+
+        OptionalDouble emptyOptionalDouble = jsonb.fromJson("[null]", OptionalDouble.class);
+        assert(!emptyOptionalDouble.isPresent());
+
+        //invalid
+        try {
+            jsonb.fromJson("[]", OptionalInt.class);
+            assert(false);
+        } catch (JsonbException e) {
+            //empty field cannot be converted to OptionalInt
+        }
+    }
+
+    static class OptionalClass {
+        public Optional<String> optionalField = Optional.empty();
+
+        public OptionalClass() {}
+    }
+
+    static class ModifiersClass {
+        public final String finalField = "finalValue";
+        public static String staticField = "staticValue";
+        public transient String transientField = "transientValue";
+        public String regularField = "regularValue";
+
+        public ModifiersClass() {}
+    }
+
+    static class POJOWithInitialValue {
+        public Integer id = 4;
+        public String name;
+
+        public POJOWithInitialValue() {}
+    }
+
+    static class AttributesOrderingClass {
+        public String aField;
+        public String cField;
+        public String bField;
+
+        public AttributesOrderingClass() {}
+    }
+
+
 
 }

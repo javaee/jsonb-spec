@@ -3,7 +3,6 @@ package examples.mapping;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbException;
-import java.math.BigDecimal;
 import java.util.*;
 
 import static examples.mapping.Utils.*;
@@ -107,6 +106,13 @@ public class DefaultMappingGenerics {
         assertEquals("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}", jsonb.toJson(boundedGenericClass));
     }
 
+    public MyGenericClass<String, Integer> myGenericClassField = new MyGenericClass<>();
+    public MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClassField = new MyCyclicGenericClass<CyclicSubClass>();
+    public MyGenericClass<MyGenericClass<String, String>, Integer> multiLevelGenericClassField = new MyGenericClass<>();
+    public BoundedGenericClass<HashSet<Integer>, Circle> boundedGenericClass = new BoundedGenericClass<>();
+    public BoundedGenericClass<HashSet<Double>, Circle> otherBoundedGenericClass = new BoundedGenericClass<>();
+
+
     public static void fromJson_generics(Jsonb jsonb) throws Exception {
         DefaultMapping defaultMapping = new DefaultMapping();
 
@@ -134,7 +140,7 @@ public class DefaultMappingGenerics {
         MyGenericClass multiLevelGeneric = jsonb.fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}", MyGenericClass.class);
 
         assert(multiLevelGeneric.field1 instanceof LinkedHashMap);
-        assert(multiLevelGeneric.field2 instanceof BigDecimal);
+        assert(multiLevelGeneric.field2 instanceof Integer);
 
         //unmarshal with runtime type
         MyGenericClass<MyGenericClass<String, String>, Integer> myGenericClass = fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}",

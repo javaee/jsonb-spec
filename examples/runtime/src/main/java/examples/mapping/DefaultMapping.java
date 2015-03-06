@@ -84,49 +84,52 @@ public class DefaultMapping {
 
     public static void fromJson_Primitives(Jsonb jsonb) {
         //String
-        String str = jsonb.fromJson("[\"some_string\"]", String.class);
+        String str = jsonb.fromJson("\"some_string\"", String.class);
+
+        //String escaping
+        String escapedString = jsonb.fromJson(" \\\" \\\\ \\/ \\b \\f \\n \\r \\t \\u0039", String.class);
+        assertEquals(" \" \\ / \b \f \n \r \t 9", escapedString);
 
         //Character
-        Character ch = jsonb.fromJson("[\"\uFFFF\"]", Character.class);
+        Character ch = jsonb.fromJson("\"\uFFFF\"", Character.class);
 
         //Byte
-        Byte byte1 = jsonb.fromJson("[1]", Byte.class);
+        Byte byte1 = jsonb.fromJson("1", Byte.class);
 
         //Short
-        Short short1 = jsonb.fromJson("[1]", Short.class);
+        Short short1 = jsonb.fromJson("1", Short.class);
 
         //Integer
-        Integer int1 = jsonb.fromJson("[1]", Integer.class);
+        Integer int1 = jsonb.fromJson("1", Integer.class);
 
         //Long
-        Long long1 = jsonb.fromJson("[1]", Long.class);
+        Long long1 = jsonb.fromJson("1", Long.class);
 
         //Float
-        Float float1 = jsonb.fromJson("[1.2]", Float.class);
+        Float float1 = jsonb.fromJson("1.2", Float.class);
 
         //Double
-        Double double1 = jsonb.fromJson("[1.2]", Double.class);
+        Double double1 = jsonb.fromJson("1.2", Double.class);
 
         //BigInteger
-        BigInteger bigInteger = jsonb.fromJson("[1]", BigInteger.class);
+        BigInteger bigInteger = jsonb.fromJson("1", BigInteger.class);
 
         //BigDecimal
-        BigDecimal bigDecimal = jsonb.fromJson("[1.2]", BigDecimal.class);
+        BigDecimal bigDecimal = jsonb.fromJson("1.2", BigDecimal.class);
 
         //Number
-        Number number = jsonb.fromJson("[1.2]", Number.class);
+        Number number = (BigDecimal)jsonb.fromJson("1.2", Number.class);
 
         //Boolean
-        Boolean trueValue = jsonb.fromJson("[true]", Boolean.class);
+        Boolean trueValue = jsonb.fromJson("true", Boolean.class);
 
         //Boolean
-        Boolean falseValue = jsonb.fromJson("[false]", Boolean.class);
+        Boolean falseValue = jsonb.fromJson("false", Boolean.class);
 
         //null
-        Object nullValue = jsonb.fromJson("[null]", Object.class);
+        Object nullValue = jsonb.fromJson("null", Object.class);
 
-        assert(nullValue instanceof Collection && ((Collection) nullValue).size() == 1
-                && ((Collection) nullValue).iterator().next() == null);
+        assert(nullValue == null);
     }
 
     public static void exceptions(Jsonb jsonb) {
@@ -135,7 +138,7 @@ public class DefaultMapping {
 
         //incompatible types
         try {
-            jsonb.fromJson("[not_a_number]", Integer.class);
+            jsonb.fromJson("not_a_number", Integer.class);
             assert(false);
         } catch (JsonbException e) {}
 
@@ -167,46 +170,49 @@ public class DefaultMapping {
     public static void toJson_Primitives(Jsonb jsonb) {
 
         //String
-        assertEquals("[\"some_string\"]", jsonb.toJson("some_string"));
+        assertEquals("\"some_string\"", jsonb.toJson("some_string"));
+
+        //escaped String
+        assertEquals("\" \\\\ \\\" / \\b \\f \\n \\r \\t 9\"", jsonb.toJson(" \\ \" / \b \f \n \r \t \u0039"));
 
         //Character
-        assertEquals("[\"\uFFFF\"]", jsonb.toJson('\uFFFF'));
+        assertEquals("\"\uFFFF\"", jsonb.toJson('\uFFFF'));
 
         //Byte
-        assertEquals("[1]", jsonb.toJson((byte)1));
+        assertEquals("1", jsonb.toJson((byte)1));
 
         //Short
-        assertEquals("[1]", jsonb.toJson((short)1));
+        assertEquals("1", jsonb.toJson((short)1));
 
         //Integer
-        assertEquals("[1]", jsonb.toJson(1));
+        assertEquals("1", jsonb.toJson(1));
 
         //Long
-        assertEquals("[5]", jsonb.toJson(5L));
+        assertEquals("5", jsonb.toJson(5L));
 
         //Float
-        assertEquals("[1.2]", jsonb.toJson(1.2f));
+        assertEquals("1.2", jsonb.toJson(1.2f));
 
         //Double
-        assertEquals("[1.2]", jsonb.toJson(1.2));
+        assertEquals("1.2", jsonb.toJson(1.2));
 
         //BigInteger
-        assertEquals("[1]", jsonb.toJson(new BigInteger("1")));
+        assertEquals("1", jsonb.toJson(new BigInteger("1")));
 
         //BigDecimal
-        assertEquals("[1.2]", jsonb.toJson(new BigDecimal("1.2")));
+        assertEquals("1.2", jsonb.toJson(new BigDecimal("1.2")));
 
         //Number
-        assertEquals("[1.2]", jsonb.toJson((java.lang.Number)1.2));
+        assertEquals("1.2", jsonb.toJson((java.lang.Number)1.2));
 
         //Boolean true
-        assertEquals("[true]", jsonb.toJson(true));
+        assertEquals("true", jsonb.toJson(true));
 
         //Boolean false
-        assertEquals("[false]", jsonb.toJson(false));
+        assertEquals("false", jsonb.toJson(false));
 
         //null
-        assertEquals("[null]", jsonb.toJson(null));
+        assertEquals("null", jsonb.toJson(null));
     }
 
     public static void fromJson_Structures(Jsonb jsonb) {
@@ -214,9 +220,11 @@ public class DefaultMapping {
         //Map
         Map<String, Object> map = (LinkedHashMap<String,Object>)jsonb.fromJson("{\"name\":\"unknown object\"}", Object.class);
 
-        //mapping for number  -> BigDecimal
-        Map<String, Object> mapWithBigDecimal = (Map<String, Object>)jsonb.fromJson("{\"value\":5}", Object.class);
-        assert(mapWithBigDecimal.get("value") instanceof BigDecimal);
+        //mapping for number  -> Integer, Long, BigDecimal
+        Map<String, Object> mapWithBigDecimal = (Map<String, Object>)jsonb.fromJson("{\"intValue\":5,\"longValue\":17179869184,\"otherValue\":1.2}", Object.class);
+        assert(mapWithBigDecimal.get("intValue") instanceof Integer);
+        assert(mapWithBigDecimal.get("longValue") instanceof Long);
+        assert(mapWithBigDecimal.get("otherValue") instanceof BigDecimal);
 
         //Collection
         Collection<Object> collection = (ArrayList<Object>)jsonb.fromJson("[{\"value\":\"first\"}, {\"value\":\"second\"}]", Object.class);
@@ -229,6 +237,9 @@ public class DefaultMapping {
 
         //JsonArray
         JsonArray jsonArray = jsonb.fromJson("[{\"value\":\"first\"},{\"value\":\"second\"}]", JsonArray.class);
+
+        //JsonValue
+        JsonValue jsonValue = jsonb.fromJson("1", JsonValue.class);
     }
 
     public static void toJson_Structures(Jsonb jsonb) {
@@ -250,19 +261,21 @@ public class DefaultMapping {
         //JsonStructure
         assertEquals("[{\"name\":\"home\",\"city\":\"Prague\"},{\"name\":\"home\",\"city\":\"Prague\"}]", jsonb.toJson((JsonStructure)jsonArray));
 
+        //JsonValue
+        assertEquals("true", jsonb.toJson(JsonValue.TRUE));
 
+        //Map
         Map<String, Object> commonMap = new LinkedHashMap<>();
         commonMap.put("first", 1);
         commonMap.put("second", 2);
 
-        //Map
         assertEquals("{\"first\":1,\"second\":2}", jsonb.toJson(commonMap));
 
+        //Collection
         Collection<Object> commonList = new ArrayList<>();
         commonList.add(1);
         commonList.add(2);
 
-        //Collection
         assertEquals("[1,2]", jsonb.toJson(commonList));
     }
 
@@ -432,11 +445,11 @@ public class DefaultMapping {
 
         Language language = Language.Slovak;
 
-        assertEquals("[\"Slovak\"]", jsonb.toJson(language));
+        assertEquals("\"Slovak\"", jsonb.toJson(language));
 
         EnumSet<Language> languageEnumSet = EnumSet.of(Language.Czech, Language.Slovak);
 
-        assertEquals("[\"Czech\",\"Slovak\"]", jsonb.toJson(languageEnumSet));
+        assertEquals("\"Czech\",\"Slovak\"", jsonb.toJson(languageEnumSet));
 
         EnumMap<Language, String> languageEnumMap = new EnumMap<>(Language.class);
         languageEnumMap.put(Language.Czech, "cz");
@@ -745,20 +758,20 @@ public class DefaultMapping {
     }
 
     public static void fromJson_URL_URI(Jsonb jsonb) {
-        java.net.URL url = jsonb.fromJson("[\"https://www.jcp.org/en/jsr/detail?id=367#3\"]", java.net.URL.class);
+        java.net.URL url = jsonb.fromJson("\"https://www.jcp.org/en/jsr/detail?id=367#3\"", java.net.URL.class);
 
-        java.net.URI uri = jsonb.fromJson("[\"mailto:users@jsonb-spec.java.net\"]", java.net.URI.class);
+        java.net.URI uri = jsonb.fromJson("\"mailto:users@jsonb-spec.java.net\"", java.net.URI.class);
     }
 
     public static void toJson_URL_URI(Jsonb jsonb) throws Exception {
 
         java.net.URL url = new java.net.URL("https://www.jcp.org/en/jsr/detail?id=367#3");
 
-        assertEquals("[\"https://www.jcp.org/en/jsr/detail?id=367#3\"]", jsonb.toJson(url));
+        assertEquals("\"https://www.jcp.org/en/jsr/detail?id=367#3\"", jsonb.toJson(url));
 
         java.net.URI uri = new java.net.URI("mailto:users@jsonb-spec.java.net");
 
-        assertEquals("[\"https://www.jcp.org/en/jsr/detail?id=367#3\"]", jsonb.toJson(uri));
+        assertEquals("\"https://www.jcp.org/en/jsr/detail?id=367#3\"", jsonb.toJson(uri));
     }
 
     static class POJOWithoutDefaultArgConstructor {
@@ -931,11 +944,11 @@ public class DefaultMapping {
     public static void toJson_optional(Jsonb jsonb) {
 
         //Optional
-        assertEquals("[\"strValue\"]", jsonb.toJson(Optional.of("strValue")));
+        assertEquals("\"strValue\"", jsonb.toJson(Optional.of("strValue")));
 
-        assertEquals("[null]", jsonb.toJson(Optional.ofNullable(null)));
+        assertEquals("null", jsonb.toJson(Optional.ofNullable(null)));
 
-        assertEquals("[null]", jsonb.toJson(Optional.empty()));
+        assertEquals("null", jsonb.toJson(Optional.empty()));
 
         assertEquals("{\"optionalField\":null}", jsonb.toJson(new OptionalClass()));
 
@@ -955,25 +968,25 @@ public class DefaultMapping {
         assertEquals("{}", jsonb.toJson(nullOptionalField));
 
         //OptionalInt
-        assertEquals("[1]", jsonb.toJson(OptionalInt.of(1)));
-        assertEquals("[null]", jsonb.toJson(OptionalInt.empty()));
+        assertEquals("1", jsonb.toJson(OptionalInt.of(1)));
+        assertEquals("null", jsonb.toJson(OptionalInt.empty()));
 
         //OptionalLong
-        assertEquals("[123]", jsonb.toJson(OptionalLong.of(123)));
-        assertEquals("[null]", jsonb.toJson(OptionalLong.empty()));
+        assertEquals("123", jsonb.toJson(OptionalLong.of(123)));
+        assertEquals("null", jsonb.toJson(OptionalLong.empty()));
 
         //OptionalDouble
-        assertEquals("[1.2]", jsonb.toJson(OptionalDouble.of(1.2)));
-        assertEquals("[null]", jsonb.toJson(OptionalDouble.empty()));
+        assertEquals("1.2", jsonb.toJson(OptionalDouble.of(1.2)));
+        assertEquals("null", jsonb.toJson(OptionalDouble.empty()));
     }
 
     public static void fromJson_optional(Jsonb jsonb) {
         //Optional
-        Optional<String> stringValue = jsonb.fromJson("[\"optionalString\"]", Optional.class);
+        Optional<String> stringValue = jsonb.fromJson("\"optionalString\"", Optional.class);
         assert(stringValue.isPresent());
         assertEquals("optionalString", stringValue.get());
 
-        Optional<String> nullStringValue = jsonb.fromJson("[null]", Optional.class);
+        Optional<String> nullStringValue = jsonb.fromJson("null", Optional.class);
         assert(!nullStringValue.isPresent());
 
         OptionalClass optionalClass = jsonb.fromJson("{\"optionalField\":\"value\"}", OptionalClass.class);
@@ -987,27 +1000,27 @@ public class DefaultMapping {
         assert(nullOptionalClass.optionalField == null);
 
         //OptionalInt
-        OptionalInt optionalInt = jsonb.fromJson("[1]", OptionalInt.class);
+        OptionalInt optionalInt = jsonb.fromJson("1", OptionalInt.class);
         assert(optionalInt.isPresent());
         assert(optionalInt.getAsInt() == 1);
 
-        OptionalInt emptyOptionalInt = jsonb.fromJson("[null]", OptionalInt.class);
+        OptionalInt emptyOptionalInt = jsonb.fromJson("null", OptionalInt.class);
         assert(!emptyOptionalInt.isPresent());
 
         //OptionalLong
-        OptionalLong optionalLong = jsonb.fromJson("[123]", OptionalLong.class);
+        OptionalLong optionalLong = jsonb.fromJson("123", OptionalLong.class);
         assert(optionalLong.isPresent());
         assert(optionalLong.getAsLong() == 123L);
 
-        OptionalLong emptyOptionalLong = jsonb.fromJson("[null]", OptionalLong.class);
+        OptionalLong emptyOptionalLong = jsonb.fromJson("null", OptionalLong.class);
         assert(!emptyOptionalLong.isPresent());
 
         //OptionalDouble
-        OptionalDouble optionalDouble = jsonb.fromJson("[1.2]", OptionalDouble.class);
+        OptionalDouble optionalDouble = jsonb.fromJson("1.2", OptionalDouble.class);
         assert(optionalDouble.isPresent());
         assert(optionalDouble.getAsDouble() == 1.2);
 
-        OptionalDouble emptyOptionalDouble = jsonb.fromJson("[null]", OptionalDouble.class);
+        OptionalDouble emptyOptionalDouble = jsonb.fromJson("null", OptionalDouble.class);
         assert(!emptyOptionalDouble.isPresent());
 
         //invalid

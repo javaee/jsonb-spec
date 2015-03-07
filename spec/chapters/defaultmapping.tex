@@ -1,7 +1,131 @@
 \chapter{Default Mapping}
 \label{defaultmapping}
 
-This section defines the default binding mapping (representation) of Java components and classes within Java programming language to JSON documents. The default mapping defined here can be further customized as specified in Chapter \ref{customization} - \nameref{customization}.
+This section defines the default binding (representation) of Java components and classes within Java programming language to JSON documents. The default binding defined here can be further customized as specified in Chapter \ref{customization} - \nameref{customization}.
+
+\section{General}
+\label{sec:general}
+JSON Binding implementations ('implementations' in further text) MUST support binding of JSON documents as defined in RFC 7159 JSON Grammar. Marshalled JSON output MUST conform to the RFC 7159 JSON Grammar and be encoded in UTF-8 encoding as defined in Section 8.1 (Character Encoding) of RFC 7159. [JSB-\ref{sec:general}-1] 
+Implementations MUST support unmarshalling of documents conforming to RFC 7159 JSON Grammar. [JSB-\ref{sec:general}-2] In addition, implementations SHOULD NOT allow unmarshalling of RFC 7159 non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:general}-3] Detection of UTF encoding of unmarshalled document is done as defined in the Section 3 (Encoding) of RFC 4627. [JSB-\ref{sec:general}-4] Implementations SHOULD ignore presence of UTF BOM and not treat it as an error.[JSB-\ref{sec:general}-5]
+
+\section{Errors}
+\label{sec:errors}
+Implementations SHOULD NOT allow unmarshalling of RFC 7159 non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:errors}-1] Implementation should report error also if the unmarshalled value is not convertable into the expected type. [JSB-\ref{sec:errors}-2]
+
+\section{Basic Java Types}
+\label{sec:basic}
+Implementations MUST support binding of the following basic Java classes and their corresponding primitive types: [JSB-\ref{sec:basic}-1]
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item java.lang.String
+\item java.lang.Character
+\item java.lang.Byte
+\item java.lang.Short
+\item java.lang.Integer
+\item java.lang.Long
+\item java.lang.Float
+\item java.lang.Double
+\item java.lang.Boolean
+\end{list}
+
+\subsection{java.lang.String, Character}
+\label{subsec:string}
+Instances of type java.lang.String and java.lang.Character are marshalled to JSON String values as defined within RFC 7159 Section 7 (Strings) in UTF-8 encoding without byte order mark. [JSB-\ref{subsec:string}-1] Implementations SHOULD support unmarshaling of JSON text in other (than UTF-8) UTF encodings into java.lang.String instances.[JSB-\ref{subsec:string}-2]
+
+\subsection{java.lang.Byte, Short, Integer, Long, Float, Double}
+\label{subsec:number}
+Instances of type java.lang.Byte, Short, Integer, Long, Float, Double and their corresponding primitive types are marshalled to JSON Number with conversion defined in specification for their corresponding toString method [JSB-\ref{subsec:number}-1]. Unmarshalling of JSON value into java.lang.Byte, Short, Integer, Long, Float, Double instance or corresponding primitive type is done with conversion as defined in the specification for their corresponding
+parse\${Type} method, such as java.lang.Byte.parseByte for Byte. [JSB-\ref{subsec:number}-2]
+
+\subsection{java.lang.Boolean}
+\label{subsec:boolean}
+Instances of type java.lang.Boolean and its corresponding boolean primitive type are marshalled to JSON value with conversion defined in specification for java.lang.Boolean.toString method [JSB-\ref{subsec:boolean}-1]. Unmarshalling of JSON value into java.lang.Boolean instance or boolean primitive type is done with conversion as defined in specification for java.lang.Boolean.parseBoolean method. [JSB-\ref{subsec:boolean}-2]
+
+\subsection{java.lang.Number}
+\label{subsec:abstractnumber}
+Instances of type java.lang.Number (if their more concrete type is not defined elsewhere in this chapter) are marshalled to JSON string by retrieving double value returned from java.lang.Number.doubleValue() method and converting the value to JSON Number as defined in \fullref{subsec:number}. [JSB-\ref{subsec:abstractnumber}-1].\\
+Unmarshalling of JSON value into Java type java.lang.Number should return instance of java.math.BigDecimal by using conversion as defined in the specification for constructor of java.math.BigDecimal with java.lang.String. [JSB-\ref{subsec:abstractnumber}-2]
+
+\section{Specific Standard Java SE Types}
+\label{sec:specific}
+Implementations MUST support binding of the following standard Java SE classes: [JSB-\ref{sec:specific}-1]
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item java.math.BigInteger
+\item java.math.BigDecimal
+\item java.net.URL
+\item java.net.URI
+\item java.util.Optional
+\item java.util.OptionalInt
+\item java.util.OptionalLong
+\item java.util.OptionalDouble
+\end{list}
+
+\subsection{java.math.BigInteger, BigDecimal}
+\label{subsec:bignumber}
+Instances of type java.math.BigInteger, BigDecimal are marshalled to JSON Number with conversion defined in specification for their toString method [JSB-\ref{subsec:bignumber}-1]. Unmarshalling of JSON value into java.math.BigInteger, BigDecimal instance is done with conversion as defined in the specification for constructor of java.math.BigInteger, BigDecimal with java.lang.String. [JSB-\ref{subsec:bignumber}-2]
+
+\subsection{java.net.URL, URI}
+\label{subsec:url}
+Instances of type java.net.URL, URI are marshalled to JSON String value with conversion defined in specification for their toString method [JSB-\ref{subsec:url}-1]. Unmarshalling of JSON value into java.net.URL, URI instance is done with conversion as defined in the specification for constructor of java.net.URL, URI with java.lang.String input. [JSB-\ref{subsec:url}-2]
+
+\subsection{java.util.Optional, OptionalInt, OptionalLong, OptionalDouble}
+\label{subsec:optional}
+Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to JSON value by retrieving their contained instance and converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] Empty optional instances marshalled as object instance properties are ignored in marshalling. [JSB-\ref{subsec:optional}-2] Empty optional instances marshalled as JSON array elements are marshalled as null value [JSB-\ref{subsec:optional}-3]. Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain null value. [JSB-\ref{subsec:url}-4] Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:url}-5]
+
+\section{Enum}
+\label{sec:enum}
+Enum instances are marshalled to JSON String value with conversion defined in specification for their toString method [JSB-\ref{sec:enum}-1]. Unmarshalling of JSON value into enum instance is done by calling enum's valueOf(String) method. [JSB-\ref{sec:enum}-2]
+
+\section{Interfaces}
+\label{sec:interfaces}
+Implementations MUST support unmarshalling of specific interfaces defined in \fullref{sec:collections} and \fullref{subsec:abstractnumber}. [JSB-\ref{sec:interfaces}-1] Unmarshalling to other interfaces is not supported and implementations SHOULD report error in such case. [JSB-\ref{sec:interfaces}-2] If class property is defined with an interface, and not concrete type, mapping for marshalling the property is resolved based on its runtime type.[JSB-\ref{sec:interfaces}-3]
+
+\section{Collections}
+\label{sec:collections}
+Implementations MUST support binding of the following collection interfaces, classes and their implementations. [JSB-\ref{sec:collections}-1] Implementations of interfaces below MUST provide accessible default constructor.[JSB-\ref{sec:collections}-2] JSON Binding implementations MUST report unmarshalling error if default constructor is not present or is not in accessible scope. [JSB-\ref{sec:collections}-3]
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item java.util.Collection
+\item java.util.Map
+\item java.util.Set
+\item java.util.HashSet
+\item java.util.NavigableSet
+\item java.util.SortedSet
+\item java.util.TreeSet
+\item java.util.LinkedHashSet
+\item java.util.TreeHashSet
+\item java.util.HashMap
+\item java.util.NavigableMap
+\item java.util.SortedMap
+\item java.util.TreeMap
+\item java.util.LinkedHashMap
+\item java.util.TreeHashMap
+\item java.util.List
+\item java.util.ArrayList
+\item java.util.LinkedList
+\item java.util.Deque
+\item java.util.ArrayDeque
+\item java.util.Queue
+\item java.util.PriorityQueue
+\item java.util.EnumSet
+\item java.util.EnumMap
+\end{list}
+For interfaces defined above, following table defines default implementation types. Default implementation type for a class field or property with interface defined type is used as concrete runtime type to unmarshall JSON values into this property. [JSB-\ref{sec:collections}-4]
+
+\begin{tabularx}{\textwidth}{ |X|X| }
+\hline
+Interface & Default implementation type \\ 
+\hline
+java.util.Collection & java.util.ArrayList \\
+java.util.Set & java.util.HashSet \\
+java.util.NavigableSet & java.util.TreeSet \\
+java.util.SortedSet & java.util.TreeSet \\
+java.util.Map & java.util.HashMap \\
+java.util.SortedMap & java.util.TreeMap \\
+java.util.NavigableMap & java.util.TreeMap \\
+java.util.Deque & java.util.ArrayDeque \\
+java.util.Queue & java.util.ArrayDeque \\
+\hline
+\end{tabularx}
 
 \section{Names and identifiers}
 

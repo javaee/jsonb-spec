@@ -13,6 +13,8 @@
 \usepackage{amssymb}
 \usepackage{float}
 
+\setlength{\emergencystretch}{3em}
+
 \usepackage[pdftex,
   pdftitle={JSON-B: Java API for JSON Binding},
   pdfauthor={Martin Grebac, Oracle},
@@ -76,6 +78,8 @@
 
 \newcommand{\footnoteremember}[2]{\footnote{#2}\newcounter{#1}\setcounter{#1}{\value{footnote}}}
 \newcommand{\footnoterecall}[1]{\footnotemark[\value{#1}]}
+
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}} % One single link
 
 \include{chapters/intro}
 \include{chapters/runtime}

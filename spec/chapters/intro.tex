@@ -1,6 +1,6 @@
 \chapter{Introduction}
 
-This specification defines binding API between Java objects and JSON \cite{json} documents. Readers are assumed to be familiar with JSON; for more information about JSON, see:
+This specification defines binding API between Java objects and JSON \cite{rfc7159} documents. Readers are assumed to be familiar with JSON; for more information about JSON, see:
 
 \begin{itemize}
 \item Architectural Styles and the Design of Network-based Software Architectures\cite{rest}
@@ -52,7 +52,7 @@ Support binding (marshalling and unmarshalling) for all RFC 7159 compatible JSON
 JSON related specifications will be surveyed to determine their relationship to JSON-Binding.
 
 \item[Consistency] 
-Maintain consistency with JAXB (Java API for XML Binding) and other JavaEE and SE APIs.
+Maintain consistency with JAXB (Java API for XML Binding) and other JavaEE and SE APIs where appropriate.
 
 \item[Convention] 
 Define default mapping of Java classes and instances to JSON document counterparts.
@@ -68,9 +68,11 @@ In many usecases, only a subset of JSON Document is required to be mapped to a J
 
 \item[Integration]
 Define or enable integration with following Java EE technology standards:
- JSR 353 - Java API for JSON Processing 1.1
- JSR 349, ... - Bean Validation (BV) 1.1 (2.0)
- JSR 370 - JavaTM API for RESTful Web Services (JAX-RS) 2.1
+\begin{list}{$-$}{\parsep 0em \labelwidth 0em}
+\item JSR 374 - Java API for JSON Processing (JSON-P) 1.1
+\item JSR 349 - Bean Validation (BV) 1.1
+\item JSR 370 - JavaTM API for RESTful Web Services (JAX-RS) 2.1
+\end{list}
   
 \end{description}
 
@@ -120,8 +122,8 @@ This is a note.
 \label{terminology}
 
 \begin{description}
-\item[Databinding] Process which defines representation of information in an JSON document as an object instance, and vice versa.
-\item[Unmarshalling] Process of reading a JSON document and construction a tree of content objects, 
+\item[Databinding] Process which defines representation of information in a JSON document as an object instance, and vice versa.
+\item[Unmarshalling] Process of reading a JSON document and constructing a tree of content objects, 
 where each object corresponds to part of JSON document, thus the content tree reflects the document's content.
 \item[Marshalling] Inverse process to unmarshalling. Process of traversing content object tree and writing a JSON document that reflects the tree's content.
 
@@ -146,6 +148,7 @@ The following are the present expert group members:
 \item Otavio Santana (Individual Member)
 \item Rick Curtis (IBM)
 \item Alexander Salvanos (Individual Member)
+\item Romain Manni-Bucau (Tomitribe)
 \end{list}
 
 \section{Acknowledgements}

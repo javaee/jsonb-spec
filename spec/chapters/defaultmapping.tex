@@ -5,12 +5,12 @@ This section defines the default binding (representation) of Java components and
 
 \section{General}
 \label{sec:general}
-JSON Binding implementations ('implementations' in further text) MUST support binding of JSON documents as defined in RFC 7159 JSON Grammar. Marshalled JSON output MUST conform to the RFC 7159 JSON Grammar and be encoded in UTF-8 encoding as defined in Section 8.1 (Character Encoding) of RFC 7159. [JSB-\ref{sec:general}-1] 
-Implementations MUST support unmarshalling of documents conforming to RFC 7159 JSON Grammar. [JSB-\ref{sec:general}-2] In addition, implementations SHOULD NOT allow unmarshalling of RFC 7159 non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:general}-3] Detection of UTF encoding of unmarshalled document is done as defined in the Section 3 (Encoding) of RFC 4627. [JSB-\ref{sec:general}-4] Implementations SHOULD ignore presence of UTF BOM and not treat it as an error.[JSB-\ref{sec:general}-5]
+JSON Binding implementations ('implementations' in further text) MUST support binding of JSON documents as defined in RFC 7159 JSON Grammar \cite{rfc7159}. Marshalled JSON output MUST conform to the RFC 7159 JSON Grammar \cite{rfc7159} and be encoded in UTF-8 encoding as defined in Section 8.1 (Character Encoding) of RFC 7159 \cite{rfc7159}. [JSB-\ref{sec:general}-1] 
+Implementations MUST support unmarshalling of documents conforming to RFC 7159 JSON Grammar \cite{rfc7159}. [JSB-\ref{sec:general}-2] In addition, implementations SHOULD NOT allow unmarshalling of RFC 7159 \cite{rfc7159} non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:general}-3] Detection of UTF encoding of unmarshalled document is done as defined in the Section 3 (Encoding) of RFC 4627 \cite{rfc4627}. [JSB-\ref{sec:general}-4] Implementations SHOULD ignore presence of UTF byte order mark (BOM) and not treat it as an error.[JSB-\ref{sec:general}-5]
 
 \section{Errors}
 \label{sec:errors}
-Implementations SHOULD NOT allow unmarshalling of RFC 7159 non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:errors}-1] Implementation should report error also if the unmarshalled value is not convertable into the expected type. [JSB-\ref{sec:errors}-2]
+Implementations SHOULD NOT allow unmarshalling of RFC 7159 \cite{rfc7159} non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:errors}-1] Implementation should report error also during unmarshalling operation, if it is not possible to represent JSON document value in the expected Java type. [JSB-\ref{sec:errors}-2]
 
 \section{Basic Java Types}
 \label{sec:basic}
@@ -29,7 +29,7 @@ Implementations MUST support binding of the following basic Java classes and the
 
 \subsection{java.lang.String, Character}
 \label{subsec:string}
-Instances of type java.lang.String and java.lang.Character are marshalled to JSON String values as defined within RFC 7159 Section 7 (Strings) in UTF-8 encoding without byte order mark. [JSB-\ref{subsec:string}-1] Implementations SHOULD support unmarshaling of JSON text in other (than UTF-8) UTF encodings into java.lang.String instances.[JSB-\ref{subsec:string}-2]
+Instances of type java.lang.String and java.lang.Character are marshalled to JSON String values as defined within RFC 7159 Section 7 (Strings) \cite{rfc7159} in UTF-8 encoding without byte order mark. [JSB-\ref{subsec:string}-1] Implementations SHOULD support unmarshaling of JSON text in other (than UTF-8) UTF encodings into java.lang.String instances.[JSB-\ref{subsec:string}-2]
 
 \subsection{java.lang.Byte, Short, Integer, Long, Float, Double}
 \label{subsec:number}
@@ -71,13 +71,52 @@ Instances of type java.net.URL, URI are marshalled to JSON String value with con
 \label{subsec:optional}
 Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to JSON value by retrieving their contained instance and converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] Empty optional instances marshalled as object instance properties are ignored in marshalling. [JSB-\ref{subsec:optional}-2] Empty optional instances marshalled as JSON array elements are marshalled as null value [JSB-\ref{subsec:optional}-3]. Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain null value. [JSB-\ref{subsec:url}-4] Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:url}-5]
 
+\section{Untyped mapping}
+\label{sec:untyped}
+For unspecified output type of unmarshal operation, as well as where output type is specified as Object.class, implementations should unmarshal JSON document using Java runtime types specified in table below: [JSB-\ref{sec:untyped}-1]
+
+\begin{tabularx}{\textwidth}{ |X|X| }
+\hline
+JSON value & Java type \\ 
+\hline
+object & java.util.LinkedHashMap \textless String,Object \textgreater\\
+array & java.util.ArrayList \textless Object \textgreater \\
+string & java.lang.String \\
+number & java.math.Integer|Long|BigDecimal \\
+true, false & java.lang.Boolean \\
+null & null \\
+\hline
+\end{tabularx}
+
+JSON number values are unmarshalled into smallest of types Integer, Long, BigDecimal which can hold the value represented by number without loss of value or precision.[JSB-\ref{sec:untyped}-2]
+
+\section{Java Class}
+\label{sec:class}
+TODO - define class marshalling/unmarshalling algorithm.
+
+\subsection{Default scope}
+\label{subsec:scopedefault}
+
+\subsection{Field access strategy}
+\label{subsec:fieldstrategy}
+For unmarshalling operation for a Java property, if a matching setter method exists, the method is called to set the value of the property, otherwise direct field assignment is used. [JSB-\ref{subsec:fieldstrategy}-1] For marshalling operation, if a matching getter method exists, the method is called to obtain value of the property, otherwise the value is obtained directly from the field. [JSB-\ref{subsec:fieldstrategy}-2]
+
+\subsection{Nested Classes}
+\label{subsec:nestedclass}
+
+\subsection{Static Nested Classes}
+\label{subsec:staticnested}
+
+\subsection{Anonymous Classes}
+\label{subsec:anonymous}
+
 \section{Enum}
 \label{sec:enum}
 Enum instances are marshalled to JSON String value with conversion defined in specification for their toString method [JSB-\ref{sec:enum}-1]. Unmarshalling of JSON value into enum instance is done by calling enum's valueOf(String) method. [JSB-\ref{sec:enum}-2]
 
 \section{Interfaces}
 \label{sec:interfaces}
-Implementations MUST support unmarshalling of specific interfaces defined in \fullref{sec:collections} and \fullref{subsec:abstractnumber}. [JSB-\ref{sec:interfaces}-1] Unmarshalling to other interfaces is not supported and implementations SHOULD report error in such case. [JSB-\ref{sec:interfaces}-2] If class property is defined with an interface, and not concrete type, mapping for marshalling the property is resolved based on its runtime type.[JSB-\ref{sec:interfaces}-3]
+Implementations MUST support unmarshalling of specific interfaces defined in  \fullref{sec:collections}, and \fullref{subsec:abstractnumber}. [JSB-\ref{sec:interfaces}-1] Unmarshalling to other interfaces is not supported and implementations SHOULD report error in such case. [JSB-\ref{sec:interfaces}-2] If class property is defined with an interface, and not concrete type, mapping for marshalling the property is resolved based on its runtime type.[JSB-\ref{sec:interfaces}-3]
 
 \section{Collections}
 \label{sec:collections}
@@ -109,7 +148,7 @@ Implementations MUST support binding of the following collection interfaces, cla
 \item java.util.EnumSet
 \item java.util.EnumMap
 \end{list}
-For interfaces defined above, following table defines default implementation types. Default implementation type for a class field or property with interface defined type is used as concrete runtime type to unmarshall JSON values into this property. [JSB-\ref{sec:collections}-4]
+For interfaces defined above, following table defines default implementation types. Default implementation type for a class, field or property with interface type is the exact type used at runtime to unmarshall JSON values into the field or property. [JSB-\ref{sec:collections}-4]
 
 \begin{tabularx}{\textwidth}{ |X|X| }
 \hline
@@ -127,8 +166,24 @@ java.util.Queue & java.util.ArrayDeque \\
 \hline
 \end{tabularx}
 
+\section{Arrays}
+\label{sec:arrays}
+JSON Binding implementations MUST support binding of Java arrays of all supported Java types from this chapter into/from JSON array structures as defined in Section 5 of RFC 7159 \cite{rfc7159}. [JSB-\ref{sec:arrays}-1] Arrays of primitive types and multi-dimensional arrays MUST be supported. [JSB-\ref{sec:untyped}-2]
+
+\section{Null value handling}
+\label{sec:null}
+
+\subsection{Null Java field}
+\label{subsec:nullfield}
+The result of marshalling java field with null value is absence of the property in resulting JSON document. [JSB-\ref{subsec:nullfield}-1]
+Unmarshalling operation of a property absent in JSON document MUST not set the value of the field, setter (if available) MUST not be called, thus original value of the field MUST be preserved. [JSB-\ref{subsec:nullfield}-2]
+
+\subsection{Null Array Values}
+\label{subsec:nullarray}
+The result of unmarshalling n-ary array represented in JSON document is n-ary Java array. [JSB-\ref{subsec:nullarray}-1]. Null value in JSON array is represented by null values in Java array. [JSB-\ref{subsec:nullarray}-2]
+Marshalling operation on Java array with null value at index i must output null value at index i of the array in resulting JSON document. [JSB-\ref{subsec:nullarray}-3]
+
 \section{Names and identifiers}
-
-\section{Java Package}
-
-\section{Java Class}
+\label{sec:naming}
+According to RFC 7159 Section 7 \cite{rfc7159}, every Java identifier name can be transformed using identity function into a valid JSON String. Identity function should be used for transforming Java identifier names into name Strings in JSON document. [JSB-\ref{sec:naming}-1]
+For unmarshal operations defined in \fullref{sec:untyped} section, identity function is used to transform JSON name strings into Java String instances in the resulting map Map<String, Object>. [JSB-\ref{sec:naming}-2] Identity function is used also for other unmarshalling operations. [JSB-\ref{sec:naming}-3] If a Java identifier with corresponding name does not exist or is not accessible, the implementations MUST report error. [JSB-\ref{sec:naming}-4] Naming and error reporting strategies can be further customized in \fullref{customization}.

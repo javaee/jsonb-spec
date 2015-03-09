@@ -87,7 +87,7 @@ public class DefaultMapping {
         String str = jsonb.fromJson("\"some_string\"", String.class);
 
         //String escaping
-        String escapedString = jsonb.fromJson(" \\\" \\\\ \\/ \\b \\f \\n \\r \\t \\u0039", String.class);
+        String escapedString = jsonb.fromJson("\" \\\" \\\\ \\/ \\b \\f \\n \\r \\t \\u0039\"", String.class);
         assertEquals(" \" \\ / \b \f \n \r \t 9", escapedString);
 
         //Character

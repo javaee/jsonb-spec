@@ -71,6 +71,81 @@ Instances of type java.net.URL, URI are marshalled to JSON String value with con
 \label{subsec:optional}
 Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to JSON value by retrieving their contained instance and converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] Empty optional instances marshalled as object instance properties are ignored in marshalling. [JSB-\ref{subsec:optional}-2] Empty optional instances marshalled as JSON array elements are marshalled as null value [JSB-\ref{subsec:optional}-3]. Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain null value. [JSB-\ref{subsec:url}-4] Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:url}-5]
 
+\section{Dates}
+\label{sec:dates}
+Implementations MUST support binding of the following standard Java date/time classes: 
+[JSB-\ref{sec:dates}-1]
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item java.util.Date
+\item java.util.Calendar
+\item java.util.GregorianCalendar
+\item java.util.TimeZone
+\item java.util.SimpleTimeZone
+\item java.time.Instant
+\item java.time.Duration
+\item java.time.Period
+\item java.time.LocalDate
+\item java.time.LocalTime
+\item java.time.LocalDateTime
+\item java.time.ZonedDateTime
+\item java.time.ZoneId
+\item java.time.ZoneOffset
+\item java.time.OffsetDateTime
+\item java.time.OffsetTime
+\end{list}
+
+If not specified otherwise in this section, GMT standard time zone and offset specified from UTC Greenwich is used. [JSB-\ref{sec:dates}-2] 
+If not specified otherwise, date time format for marshalling and unmarshalling is ISO 8601 without offset, as specified in java.time.format.DateTimeFormatter.ISO\verb|_|DATE. [JSB-\ref{sec:dates}-3] 
+Implementations MUST report error if the datetime string in JSON document does not correspond to the expected datetime format. [JSB-\ref{sec:dates}-4]
+
+\subsection{java.util.Date, Calendar, GregorianCalendar}
+\label{subsec:datecalendar}
+Marshalling format of java.util.Date, Calendar, GregorianCalendar instances with no time information is ISO\verb|_|DATE. [JSB-\ref{subsec:datecalendar}-1]. If time information is present, the format is ISO\verb|_|DATE\verb|_|TIME [JSB-\ref{subsec:datecalendar}-2].
+
+Implementations MUST support unmarshalling of both ISO\verb|_|DATE and ISO\verb|_|DATE\verb|_|TIME into java.util.Date, Calendar, GregorianCalendar instances. [JSB-\ref{subsec:datecalendar}-3] For properties and fields specified as java.util.Calendar type, instance of java.util.GregorianCalendar SHOULD be returned. [JSB-\ref{subsec:datecalendar}-4]
+
+\subsection{java.util.TimeZone, SimpleTimeZone}
+\label{subsec:dateTimezone}
+
+Implementations MUST support unmarshalling of any time zone format specified in java.util.TimeZone into field or property of type java.util.TimeZone, SimpleTimezone. [JSB-\ref{subsec:dateTimezone}-1] Implementations MUST report error for deprecated three-letter time zone IDs as specified in java.util.Timezone. [JSB-\ref{subsec:dateTimezone}-2] For properties and fields specified as java.util.TimeZone, instance of java.util.SimpleTimeZone SHOULD be returned. [JSB-\ref{subsec:dateTimezone}-3]
+Marshalling format of java.util.TimeZone, SimpleTimeZone is NormalizedCustomID as specified in java.util.TimeZone. [JSB-\ref{subsec:dateTimezone}-4]
+
+\subsection{java.time.*}
+\label{subsec:time}
+
+Marshalling output for java.time.Instant instance is ISO\verb|_|INSTANT format, as specified in java.time.format.DateTimeFormatter. [JSB-\ref{subsec:time}-1]
+Implementations MUST support unmarshalling of ISO\verb|_|INSTANT format from JSON string to a java.time.Instant instance. [JSB-\ref{subsec:time}-2]
+
+Analogically, for other java.time.* classes, following mapping table matches Java types and corresponding formats: [JSB-\ref{subsec:time}-3]
+
+\begin{tabularx}{\textwidth}{ |X|X| }
+\hline
+Java Type & Format \\ 
+\hline
+java.time.Instant & ISO\verb|_|INSTANT\\
+java.time.LocalDate & ISO\verb|_|LOCAL\verb|_|DATE\\
+java.time.LocalTime & ISO\verb|_|LOCAL\verb|_|TIME\\
+java.time.LocalDateTime & ISO\verb|_|LOCAL\verb|_|DATE\verb|_|TIME\\
+java.time.ZonedDateTime & ISO\verb|_|ZONED\verb|_|DATE\verb|_|TIME\\
+java.time.OffsetDateTime & ISO\verb|_|OFFSET\verb|_|DATE\verb|_|TIME\\
+java.time.OffsetTime & ISO\verb|_|OFFSET\verb|_|TIME\\
+\hline
+\end{tabularx}
+
+Implementations MUST support unmarshalling of any time zone ID format specified in java.time.ZoneId into field or property of type java.time.ZoneId. [JSB-\ref{subsec:time}-4]
+Marshalling format of java.time.ZoneId is normalized zone ID as specified in java.time.ZoneId. [JSB-\ref{subsec:time}-5]
+
+Implementations MUST support unmarshalling of any time zone ID format specified in java.time.ZoneOffset into field or property of type java.time.ZoneOffset. [JSB-\ref{subsec:time}-6]
+Marshalling format of java.time.ZoneOffset is normalized zone ID as specified in java.time.ZoneOffset. [JSB-\ref{subsec:time}-7]
+
+Implementations MUST support unmarshalling of any duration format specified in java.time.Duration into field or property of type java.time.Duration. [JSB-\ref{subsec:time}-8] This is super-set of ISO 8601 duration format.
+Marshalling format of java.time.Duration is ISO 8601 seconds based representation, such as
+\verb|PT8H6M12.345S|. [JSB-\ref{subsec:time}-9]
+
+Implementations MUST support unmarshalling of any period format specified in java.time.Period into field or property of type java.time.Period. [JSB-\ref{subsec:time}-10] This is super-set of ISO 8601 period format.
+Marshalling format of java.time.Period is ISO 8601 period representation. [JSB-\ref{subsec:time}-11] Zero length period is represented as zero days \verb|'P0D'|. [JSB-\ref{subsec:time}-12]
+
+
 \section{Untyped mapping}
 \label{sec:untyped}
 For unspecified output type of unmarshal operation, as well as where output type is specified as Object.class, implementations should unmarshal JSON document using Java runtime types specified in table below: [JSB-\ref{sec:untyped}-1]

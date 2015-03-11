@@ -279,11 +279,11 @@ For unmarshal operations defined in \fullref{sec:untyped} section, identity func
 \label{sec:generics}
 JSON Binding implementations MUST support binding of generic types. [JSB-\ref{sec:generics}-1] Due to type erasure, there are situations when it is not possible to obtain generic type information.
 
-There are two ways in JSON Binding how to obtain generic type information. [JSB-\ref{sec:generics}-2] If there is a class file available (in the following text referred as static type information), it is possible to obtain generic type information (effectively generic type declaration) from Signature attribute (if this information is present). [JSB-\ref{sec:generics}-3]The second option is to provide generic type information at runtime. [JSB-\ref{sec:generics}-4] To provide generic type information at runtime, an argument of java.lang.reflect.Type MUST be passed to Jsonb::toJson or to Jsonb::fromJson method. [JSB-\ref{sec:generics}-5]
+There are two ways for JSON Binding implementations to obtain generic type information. If there is a class file available (in the following text referred as static type information), it is possible to obtain generic type information (effectively generic type declaration) from Signature attribute (if this information is present). [JSB-\ref{sec:generics}-2] The second option is to provide generic type information at runtime. To provide generic type information at runtime, an argument of java.lang.reflect.Type MUST be passed to Jsonb::toJson or to Jsonb::fromJson method. [JSB-\ref{sec:generics}-3]
 
 \subsection{Type resolution algorithm}
 \label{sec:type_resolution_algorithm}
-There are several distinct kinds of information JSON Binding may have about the given type of field/class/interface: [JSB-\ref{sec:type_resolution_algorithm}-1]
+There are several levels of information JSON Binding implementations may obtain about the type of field/class/interface: [JSB-\ref{sec:type_resolution_algorithm}-1]
 
 \begin{enumerate}
 	\item runtime type provided via java.lang.reflect.Type parameter passed to Jsonb::toJson or Jsonb::fromJson method
@@ -293,11 +293,11 @@ There are several distinct kinds of information JSON Binding may have about the 
 \end{enumerate}
 
 If there is no information about the type, JSON Binding implementation MUST treat this type as java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-2]
-If only raw type of given field/class/interface is known, then this type MUST be treated like raw type. [JSB-\ref{sec:type_resolution_algorithm}-3] For example, if there is only information that given field/class/interface is of type java.util.ArrayList, than this type MUST be treated as java.util.ArrayList\(<\)Object\(>\). [JSB-\ref{sec:type_resolution_algorithm}-4]
+If only raw type of given field/class/interface is known, then the type MUST be treated like raw type. [JSB-\ref{sec:type_resolution_algorithm}-3] For example, if the only available information is that given field/class/interface is of type java.util.ArrayList, than the type MUST be treated as java.util.ArrayList\(<\)Object\(>\).
 
-JSON Binding implementations MUST use the most specific type derived from the information available. [JSB-\ref{sec:type_resolution_algorithm}-5]
+JSON Binding implementations MUST use the most specific type derived from the information available. [JSB-\ref{sec:type_resolution_algorithm}-4]
 
-Let's consider situation when there is only static type information of given field/class/interface known, and there is no runtime type information. Let's GenericClass\(<T_1,\dotsc,T_n>\) be part of generic type declaration, where GenericClass is name of the generic type and \(T_1,\dotsc,T_n\) are type parameters. For every \(T_i\), where i in \(1,\dotsc,n\), there are 3 possible options: [JSB-\ref{sec:type_resolution_algorithm}-6]
+Let's consider situation where there is only static type information of a given field/class/interface known, and there is no runtime type information available. Let GenericClass\(<T_1,\dotsc,T_n>\) be part of generic type declaration, where GenericClass is name of the generic type and \(T_1,\dotsc,T_n\) are type parameters. For every \(T_i\), where i in \(1,\dotsc,n\), there are 3 possible options: [JSB-\ref{sec:type_resolution_algorithm}-5]
 
 \begin{enumerate}
 	\item \(T_i\) is concrete parameter type
@@ -305,23 +305,23 @@ Let's consider situation when there is only static type information of given fie
 	\item \(T_i\) is wildcard parameter type without bounds
 \end{enumerate}
 
-In the first case, the most specific parameter type MUST be given concrete parameter type \(T_i\). [JSB-\ref{sec:type_resolution_algorithm}-7]
+In case 1, the most specific parameter type MUST be given concrete parameter type \(T_i\). [JSB-\ref{sec:type_resolution_algorithm}-6]
 
-For bounded parameter type, let's have bounds \(B_1,\dotsc,B_m\). If m = 1, then the most specific parameter type MUST be derived from the given bound \(B_1\). [JSB-\ref{sec:type_resolution_algorithm}-8] If \(B_1\) is class or interface, the most specific parameter type MUST be given class or interface. [JSB-\ref{sec:type_resolution_algorithm}-9] Otherwise the most specific parameter type SHOULD be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-10]
+For bounded parameter type, using bounds \(B_1,\dotsc,B_m\). If m = 1, then the most specific parameter type MUST be derived from the given bound \(B_1\). [JSB-\ref{sec:type_resolution_algorithm}-7] If \(B_1\) is class or interface, the most specific parameter type MUST be the class or interface. [JSB-\ref{sec:type_resolution_algorithm}-8] Otherwise, the most specific parameter type SHOULD be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-9]
 
-If multiple bounds are specified, the first step is to resolve every bound separately. Let's define result of such resolution as \(S_1,\dotsc,S_m\) specific parameter types. If \(S_1,\dotsc,S_m\) are java.lang.Object, then the bounded parameter type \(T_i\) MUST be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-11] If there is exactly one \(S_k\), where \(1<=k<=m\) is different than java.lang.Object, then the most specific parameter type for this bounded parameter type \(T_i\) MUST be \(S_k\). [JSB-\ref{sec:type_resolution_algorithm}-12] If exists \(S_{k1},S_{k2}\), where \(1<=k1<=k2<=m\), then the most specific parameter type is \(S_{k1}\). [JSB-\ref{sec:type_resolution_algorithm}-13]
+If multiple bounds are specified, the first step is to resolve every bound separately. Let's define result of such resolution as \(S_1,\dotsc,S_m\) specific parameter types. If \(S_1,\dotsc,S_m\) are java.lang.Object, then the bounded parameter type \(T_i\) MUST be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-10] 
+If there is exactly one \(S_k\), where \(1<=k<=m\) is different than java.lang.Object, then the most specific parameter type for this bounded parameter type \(T_i\) MUST be \(S_k\). [JSB-\ref{sec:type_resolution_algorithm}-11] If there exists \(S_{k1},S_{k2}\), where \(1<=k1<=k2<=m\), then the most specific parameter type is \(S_{k1}\). [JSB-\ref{sec:type_resolution_algorithm}-12]
 
-For wildcard parameter type without bounds, then the most specific parameter type MUST be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-14]
+For wildcard parameter type without bounds, the most specific parameter type MUST be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-13]
 
-Any unresolved type parameter MUST be treated as java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-15]
+Any unresolved type parameter MUST be treated as java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-14]
 
-If runtime type is provided via java.lang.reflect.Type parameter passed to Jsonb::toJson or Jsonb::fromJson method, than this type overrides static type declaration wherever applicable. [JSB-\ref{sec:type_resolution_algorithm}-16]
+If runtime type is provided via java.lang.reflect.Type parameter passed to Jsonb::toJson or Jsonb::fromJson method, than that runtime type overrides static type declaration wherever applicable. [JSB-\ref{sec:type_resolution_algorithm}-15]
 
-There are situations, when it is necessary to use combination of runtime and static type information. [JSB-\ref{sec:type_resolution_algorithm}-17]
-
+There are situations when it is necessary to use combination of runtime and static type information. 
 \begin{figure}[hbtp]
 \caption{Example Type resolution}
-\label{ex1}
+\label{ex2}
 \begin{listing}{1}
 public class MyGenericType<T,U> {
     public T field1;
@@ -329,4 +329,4 @@ public class MyGenericType<T,U> {
 }\end{listing}
 \end{figure}
 
-To resolve type of field1, we need runtime type of MyGenericType and static type of field1.
+To resolve type of field1, runtime type of MyGenericType and static type of field1 is required.

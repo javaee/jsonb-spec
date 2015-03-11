@@ -42,7 +42,7 @@ Instances of type java.lang.Boolean and its corresponding boolean primitive type
 
 \subsection{java.lang.Number}
 \label{subsec:abstractnumber}
-Instances of type java.lang.Number (if their more concrete type is not defined elsewhere in this chapter) are marshalled to JSON string by retrieving double value returned from java.lang.Number.doubleValue() method and converting the value to JSON Number as defined in \fullref{subsec:number}. [JSB-\ref{subsec:abstractnumber}-1].\\
+Instances of type java.lang.Number (if their more concrete type is not defined elsewhere in this chapter) are marshalled to JSON string by retrieving double value returned from java.lang.Number.doubleValue() method and converting the value to JSON Number as defined in \fullref{subsec:number}. [JSB-\ref{subsec:abstractnumber}-1]. \\
 Unmarshalling of JSON value into Java type java.lang.Number should return instance of java.math.BigDecimal by using conversion as defined in the specification for constructor of java.math.BigDecimal with java.lang.String. [JSB-\ref{subsec:abstractnumber}-2]
 
 \section{Specific Standard Java SE Types}
@@ -167,23 +167,31 @@ JSON number values are unmarshalled into smallest of types Integer, Long, BigDec
 
 \section{Java Class}
 \label{sec:class}
-TODO - define class marshalling/unmarshalling algorithm.
+Any instance passed to unmarshalling operation MUST have public or protected no-argument constructor. [JSB-\ref{sec:class}-1] This limitation does not apply to marshalling operations. [JSB-\ref{sec:class}-2]
 
-\subsection{Default scope}
-\label{subsec:scopedefault}
-
-\subsection{Field access strategy}
+\subsection{Scope and Field access strategy}
 \label{subsec:fieldstrategy}
 For unmarshalling operation for a Java property, if a matching setter method exists, the method is called to set the value of the property, otherwise direct field assignment is used. [JSB-\ref{subsec:fieldstrategy}-1] For marshalling operation, if a matching getter method exists, the method is called to obtain value of the property, otherwise the value is obtained directly from the field. [JSB-\ref{subsec:fieldstrategy}-2]
 
+JSON Binding implementations MUST NOT unmarshal into transient, final or static fields and report error if JSON document contains values corresponding to such fields. [JSB-\ref{subsec:fieldstrategy}-3]
+
+Implementations MUST support marshalling of final fields. [JSB-\ref{subsec:fieldstrategy}-4] Transient and static fields MUST be ignored during marshalling operation. [JSB-\ref{subsec:fieldstrategy}-5]
+
 \subsection{Nested Classes}
 \label{subsec:nestedclass}
+Implementations MUST support binding of public and protected nested classes. [JSB-\ref{subsec:nestedclass}-1] For unmarshalling operations, both nested and encapsulating class  MUST fulfil same instantiation requirement as specified in \fullref{subsec:fieldstrategy}. [JSB-\ref{subsec:nestedclass}-2]
 
 \subsection{Static Nested Classes}
 \label{subsec:staticnested}
+Implementations MUST support binding of public and protected static nested classes. [JSB-\ref{subsec:staticnested}-1] For unmarshalling operations, the nested class MUST fulfil same instantiation requirement as specified in \fullref{subsec:fieldstrategy}. [JSB-\ref{subsec:staticnested}-2]
 
 \subsection{Anonymous Classes}
 \label{subsec:anonymous}
+Unmarshalling into anonymous classes is not supported, marshalling of anonymous classes is supported by default object mapping. [JSB-\ref{subsec:nestedclass}-1]
+
+\section{Polymorphic Types}
+\label{sec:polymorph}
+Unmarshalling into polymorphic types is not supported by default mapping. [JSB-\ref{sec:polymorph}-1]
 
 \section{Enum}
 \label{sec:enum}
@@ -245,6 +253,10 @@ java.util.Queue & java.util.ArrayDeque \\
 \label{sec:arrays}
 JSON Binding implementations MUST support binding of Java arrays of all supported Java types from this chapter into/from JSON array structures as defined in Section 5 of RFC 7159 \cite{rfc7159}. [JSB-\ref{sec:arrays}-1] Arrays of primitive types and multi-dimensional arrays MUST be supported. [JSB-\ref{sec:untyped}-2]
 
+\section{Attribute order}
+\label{sec:attributes}
+For marshalling operation the implementations MAY, but are NOT REQUIRED to preserve order of declared fields into resulting JSON document. [JSB-\ref{sec:attributes}-1] However, the attribute order MUST be deterministic within given implementation - any two marshalling operations within same JSON Binding implementation on the same object instance MUST output the same JSON document. [JSB-\ref{sec:attributes}-2]
+
 \section{Null value handling}
 \label{sec:null}
 
@@ -261,7 +273,7 @@ Marshalling operation on Java array with null value at index i must output null 
 \section{Names and identifiers}
 \label{sec:naming}
 According to RFC 7159 Section 7 \cite{rfc7159}, every Java identifier name can be transformed using identity function into a valid JSON String. Identity function should be used for transforming Java identifier names into name Strings in JSON document. [JSB-\ref{sec:naming}-1]
-For unmarshal operations defined in \fullref{sec:untyped} section, identity function is used to transform JSON name strings into Java String instances in the resulting map Map<String, Object>. [JSB-\ref{sec:naming}-2] Identity function is used also for other unmarshalling operations. [JSB-\ref{sec:naming}-3] If a Java identifier with corresponding name does not exist or is not accessible, the implementations MUST report error. [JSB-\ref{sec:naming}-4] Naming and error reporting strategies can be further customized in \fullref{customization}.
+For unmarshal operations defined in \fullref{sec:untyped} section, identity function is used to transform JSON name strings into Java String instances in the resulting map Map\textless String, Object\textgreater. [JSB-\ref{sec:naming}-2] Identity function is used also for other unmarshalling operations. [JSB-\ref{sec:naming}-3] If a Java identifier with corresponding name does not exist or is not accessible, the implementations MUST report error. [JSB-\ref{sec:naming}-4] Naming and error reporting strategies can be further customized in \fullref{customization}.
 
 \section{Generics}
 \label{sec:generics}

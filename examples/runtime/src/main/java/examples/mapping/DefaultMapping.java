@@ -331,7 +331,7 @@ public class DefaultMapping {
 
         assertEquals("[1,2,3]", jsonb.toJson(collection));
 
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new LinkedHashMap<>();
         map.put("1",1);
         map.put("2",2);
         map.put("3",3);

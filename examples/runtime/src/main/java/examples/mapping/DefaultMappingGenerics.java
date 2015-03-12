@@ -27,7 +27,7 @@ public class DefaultMappingGenerics {
 
         assertEquals("{\"field1\":\"value1\",\"field2\":3}", jsonb.toJson(myGenericClassField));
 
-        //cyclic generic class
+        //cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
         MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = new MyCyclicGenericClass<>();
         CyclicSubClass cyclicSubClass = new CyclicSubClass();
         cyclicSubClass.subField = "subFieldValue";
@@ -119,6 +119,7 @@ public class DefaultMappingGenerics {
         MyGenericClass<String, Integer> myGenericInstance = fromJson("{\"field1\":\"value1\", \"field2\":1}",
                 DefaultMapping.class.getField("myGenericClassField").getGenericType());
 
+        //cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
         MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = fromJson("{\"field1\":{\"subField\":\"subFieldValue\"}}",
                 DefaultMapping.class.getField("myCyclicGenericClassField").getGenericType());
 

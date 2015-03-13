@@ -330,3 +330,20 @@ public class MyGenericType<T,U> {
 \end{figure}
 
 To resolve type of field1, runtime type of MyGenericType and static type of field1 is required.
+
+\section{JSON Processing integration}
+\label{sec:jsonp_integration}
+JSON Binding implementations MUST support binding of the following JSON Processing types. [JSB-\ref{sec:jsonp_integration}-1]
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item javax.json.JsonObject
+\item javax.json.JsonArray
+\item javax.json.JsonStructure
+\item javax.json.JsonValue
+\item javax.json.JsonPointer
+\item javax.json.JsonString
+\item javax.json.JsonNumber
+\end{list}
+
+Marshalling of supported javax.json.* objects/interfaces/fields MUST have the same result as marshalling these objects with javax.json.JsonWriter. [JSB-\ref{sec:jsonp_integration}-2]
+Unmarshalling into supported javax.json.* objects/interfaces/fields MUST have the same result as unmarshalling into such objects with javax.json.JsonReader. [JSB-\ref{sec:jsonp_integration}-3]

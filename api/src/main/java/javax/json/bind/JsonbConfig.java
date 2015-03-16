@@ -74,6 +74,9 @@ import java.util.Optional;
  * </dl>
  * </blockquote>
  *
+ * This object is not thread safe. Implementations are expected to make a defensive copy
+ * of the object before applying the configuration.
+ *
  * @see JsonbConfigException
  * @author Martin Grebac, Przemyslaw Bielicki, Eugen Cepoi, Hendrik Saly
  * @since JSON Binding 1.0

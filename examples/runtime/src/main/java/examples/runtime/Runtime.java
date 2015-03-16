@@ -116,8 +116,8 @@ public class Runtime {
  */
 
     JsonbConfig config = new JsonbConfig()
-                            .fromJsonEncoding(StandardCharsets.UTF_16.name())
-                            .toJsonFormatting(true);
+                            .withEncoding(StandardCharsets.UTF_16.name())
+                            .withFormatting(true);
 
 {
     // Default configuration

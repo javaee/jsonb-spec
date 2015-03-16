@@ -39,10 +39,8 @@
  */
 package javax.json.bind;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.io.Writer;
 
 /**
@@ -154,9 +152,8 @@ public interface Jsonb {
      * Unmarshal JSON data from the specified Reader and return the
      * resulting content tree.
      *
-     * @param reader
-     *      The character stream is read as a JSON data. Upon a
-     *      successful completion, the stream will be closed by this method.
+     * @param readable
+     *      The character stream is read as a JSON data.
      * @param type
      *      Type of the content tree's root object.
      * @param <T>
@@ -169,7 +166,7 @@ public interface Jsonb {
      * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
-    <T> T fromJson(Reader reader, Class<T> type) throws JsonbException;
+    <T> T fromJson(Readable readable, Class<T> type) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified InputStream and return the
@@ -193,26 +190,6 @@ public interface Jsonb {
     <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
 
     /**
-     * Unmarshal JSON data from the specified file and return the resulting
-     * content tree.
-     *
-     * @param file
-     *      The file to unmarshal JSON data from.
-     * @param type
-     *      Type of the content tree's root object.
-     * @param <T>
-     *      Type of the content tree's root object.
-     *
-     * @return The newly instantiated root object of the java content tree, of type {@code type}
-     *
-     * @throws JsonbException
-     *     If any unexpected error(s) occur(s) during unmarshalling.
-     * @throws NullPointerException
-     *     If any of the parameters is {@code null}.
-     */
-    <T> T fromJson(File file, Class<T> type) throws JsonbException;
-
-    /**
      * Writes the Java object tree with root object {@code object} to a String
      * instance as JSON.
      *
@@ -231,23 +208,6 @@ public interface Jsonb {
     String toJson(Object object) throws JsonbException;
 
     /**
-     * Marshal the object content tree into a file.
-     *
-     * @param object
-     *      The object content tree to be marshaled.
-     * @param file
-     *      File to be written. If this file already exists, it will be
-     *      overwritten.
-     *
-     * @throws JsonbException If the operation fails, such as due to I/O error.
-     * @throws NullPointerException
-     *      If any of the parameters is {@code null}.
-     *
-     * @since JSON Binding 1.0
-     */
-    void toJson(Object object, File file) throws JsonbException;
-
-    /**
      * Marshal the object content tree into a Writer character stream.
      *
      * @param object
@@ -264,7 +224,7 @@ public interface Jsonb {
      *
      * @since JSON Binding 1.0
      */
-    void toJson(Object object, Writer writer) throws JsonbException;
+    void toJson(Object object, Appendable appendable) throws JsonbException;
 
     /**
      * Marshal the object content tree into output stream.

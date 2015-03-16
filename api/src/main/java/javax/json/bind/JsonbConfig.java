@@ -42,6 +42,7 @@ package javax.json.bind;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -85,20 +86,17 @@ public class JsonbConfig {
      * Property used to specify whether or not the marshaled
      * JSON data is formatted with linefeeds and indentation.
      */
-    public static final String JSONB_TO_JSON_FORMATTING = "jsonb.to.json.formatting";
+    public static final String JSONB_FORMATTING = "jsonb.formatting";
 
     /**
      * The Jsonb marshalling {@code toJson()} methods will default to this property
      * for encoding of output JSON data. Default value is 'UTF-8'.
-     */
-    public static final String JSONB_TO_JSON_ENCODING = "jsonb.to.json.encoding";
-
-    /**
+     *
      * The Jsonb unmarshalling {@code fromJson()} methods will default to this
      * property encoding of input JSON data if the encoding cannot be detected
      * automatically.
      */
-    public static final String JSONB_FROM_JSON_ENCODING = "jsonb.from.json.encoding";
+    public static final String JSONB_ENCODING = "jsonb.encoding";
 
     /**
      * Set the particular configuration property to a new value. The method can
@@ -136,14 +134,10 @@ public class JsonbConfig {
      *
      * @return The value of the requested property
      *
-     * @throws JsonbConfigException
-     *      when there is an error retrieving the given property or value
-     *      property name
-     * @throws NullPointerException
-     *      If the name parameter is {@code null}.
+     * @throws IllegalArgumentException if the name parameter is null.
      */
-    public final Object getProperty(final String name) throws JsonbConfigException {
-        return configuration.get(name);
+    public final Optional<Object> getProperty(final String name) {
+        return Optional.ofNullable(configuration.get(name));
     }
 
     /**
@@ -167,15 +161,16 @@ public class JsonbConfig {
      *
      * @return This JsonbConfig instance.
      */
-    public final JsonbConfig toJsonFormatting(final Boolean formatted) {
-        return setProperty(JSONB_TO_JSON_FORMATTING, formatted);
+    public final JsonbConfig withFormatting(final Boolean formatted) {
+        return setProperty(JSONB_FORMATTING, formatted);
     }
 
     /**
-     * The Jsonb marshalling {@code toJson()} methods will default to this property
-     * for encoding of output JSON data. Default value is 'UTF-8'.
+     * The binding operations will default to this property
+     * for encoding of JSON data. For input data (fromJson), selected encoding is used if
+     * the encoding cannot be detected automatically. Default value is 'UTF-8'.
      *
-     * Configures value of {@code JSONB_TO_JSON_ENCODING} property.
+     * Configures value of {@code JSONB_ENCODING} property.
      *
      * @param encoding
      *      Valid character encoding as defined in the
@@ -184,26 +179,8 @@ public class JsonbConfig {
      *
      * @return This JsonbConfig instance.
      */
-    public final JsonbConfig toJsonEncoding(final String encoding) {
-        return setProperty(JSONB_TO_JSON_ENCODING, encoding);
-    }
-
-    /**
-     * The Jsonb unmarshalling {@code fromJson()} methods will default to this
-     * property encoding of input JSON data if the encoding cannot be detected
-     * automatically.
-     *
-     * Configures value of {@code JSONB_FROM_JSON_ENCODING} property.
-     *
-     * @param encoding
-     *      Valid character encoding as defined in the
-     *      <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by
-     *      Java Platform.
-     *
-     * @return This JsonbConfig instance.
-     */
-    public final JsonbConfig fromJsonEncoding(final String encoding) {
-        return setProperty(JSONB_FROM_JSON_ENCODING, encoding);
+    public final JsonbConfig withEncoding(final String encoding) {
+        return setProperty(JSONB_ENCODING, encoding);
     }
 
 }

@@ -102,13 +102,13 @@ Implementations MUST report error if the datetime string in JSON document does n
 \label{subsec:datecalendar}
 Marshalling format of java.util.Date, Calendar, GregorianCalendar instances with no time information is ISO\verb|_|DATE. [JSB-\ref{subsec:datecalendar}-1]. If time information is present, the format is ISO\verb|_|DATE\verb|_|TIME [JSB-\ref{subsec:datecalendar}-2].
 
-Implementations MUST support unmarshalling of both ISO\verb|_|DATE and ISO\verb|_|DATE\verb|_|TIME into java.util.Date, Calendar, GregorianCalendar instances. [JSB-\ref{subsec:datecalendar}-3] For properties and fields specified as java.util.Calendar type, instance of java.util.GregorianCalendar SHOULD be returned. [JSB-\ref{subsec:datecalendar}-4]
+Implementations MUST support unmarshalling of both ISO\verb|_|DATE and ISO\verb|_|DATE\verb|_|TIME into java.util.Date, Calendar, GregorianCalendar instances. [JSB-\ref{subsec:datecalendar}-3]
 
 \subsection{java.util.TimeZone, SimpleTimeZone}
 \label{subsec:dateTimezone}
 
-Implementations MUST support unmarshalling of any time zone format specified in java.util.TimeZone into field or property of type java.util.TimeZone, SimpleTimezone. [JSB-\ref{subsec:dateTimezone}-1] Implementations MUST report error for deprecated three-letter time zone IDs as specified in java.util.Timezone. [JSB-\ref{subsec:dateTimezone}-2] For properties and fields specified as java.util.TimeZone, instance of java.util.SimpleTimeZone SHOULD be returned. [JSB-\ref{subsec:dateTimezone}-3]
-Marshalling format of java.util.TimeZone, SimpleTimeZone is NormalizedCustomID as specified in java.util.TimeZone. [JSB-\ref{subsec:dateTimezone}-4]
+Implementations MUST support unmarshalling of any time zone format specified in java.util.TimeZone into field or property of type java.util.TimeZone, SimpleTimezone. [JSB-\ref{subsec:dateTimezone}-1] Implementations MUST report error for deprecated three-letter time zone IDs as specified in java.util.Timezone. [JSB-\ref{subsec:dateTimezone}-2]
+Marshalling format of java.util.TimeZone, SimpleTimeZone is NormalizedCustomID as specified in java.util.TimeZone. [JSB-\ref{subsec:dateTimezone}-3]
 
 \subsection{java.time.*}
 \label{subsec:time}
@@ -154,8 +154,8 @@ For unspecified output type of unmarshal operation, as well as where output type
 \hline
 JSON value & Java type \\ 
 \hline
-object & java.util.LinkedHashMap \textless String,Object \textgreater\\
-array & java.util.ArrayList \textless Object \textgreater \\
+object & java.util.Map \textless String,Object \textgreater\\
+array & java.util.List \textless Object \textgreater \\
 string & java.lang.String \\
 number & java.math.Integer|Long|BigDecimal \\
 true, false & java.lang.Boolean \\
@@ -163,7 +163,9 @@ null & null \\
 \hline
 \end{tabularx}
 
-JSON number values are unmarshalled into smallest of types Integer, Long, BigDecimal which can hold the value represented by number without loss of value or precision.[JSB-\ref{sec:untyped}-2]
+JSON object values are unmarshalled into implementation of java.util.Map \textless String, Object \textgreater with predictable iteration order.[JSB-\ref{sec:untyped}-2]
+
+JSON number values are unmarshalled into smallest of types Integer, Long, BigDecimal which can hold the value represented by number without loss of value or precision.[JSB-\ref{sec:untyped}-3]
 
 \section{Java Class}
 \label{sec:class}
@@ -231,23 +233,6 @@ Implementations MUST support binding of the following collection interfaces, cla
 \item java.util.EnumSet
 \item java.util.EnumMap
 \end{list}
-For interfaces defined above, following table defines default implementation types. Default implementation type for a class, field or property with interface type is the exact type used at runtime to unmarshall JSON values into the field or property. [JSB-\ref{sec:collections}-4]
-
-\begin{tabularx}{\textwidth}{ |X|X| }
-\hline
-Interface & Default implementation type \\ 
-\hline
-java.util.Collection & java.util.ArrayList \\
-java.util.Set & java.util.HashSet \\
-java.util.NavigableSet & java.util.TreeSet \\
-java.util.SortedSet & java.util.TreeSet \\
-java.util.Map & java.util.HashMap \\
-java.util.SortedMap & java.util.TreeMap \\
-java.util.NavigableMap & java.util.TreeMap \\
-java.util.Deque & java.util.ArrayDeque \\
-java.util.Queue & java.util.ArrayDeque \\
-\hline
-\end{tabularx}
 
 \section{Arrays}
 \label{sec:arrays}

@@ -119,7 +119,7 @@ public class JsonbConfig {
      *
      * @throws IllegalArgumentException if the name parameter is null.
      */
-    public final JsonbConfig setProperty(final String name, final Object value) throws JsonbConfigException {
+    public final JsonbConfig setProperty(final String name, final Object value) {
         configuration.put(name, value);
         return this;
     }

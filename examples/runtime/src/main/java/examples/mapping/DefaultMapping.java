@@ -156,13 +156,13 @@ public class DefaultMapping {
 
         //overflow - Value out of range
         try {
-            jsonb.fromJson("["+new Integer(Byte.MAX_VALUE + 1)+"]", Byte.class);
+            jsonb.fromJson(""+new Integer(Byte.MAX_VALUE + 1)+"", Byte.class);
             assert(false);
         } catch (JsonbException e) {}
 
         //underflow - Value out of range
         try {
-            jsonb.fromJson("["+new Integer(Byte.MIN_VALUE - 1)+"]", Byte.class);
+            jsonb.fromJson(""+new Integer(Byte.MIN_VALUE - 1)+"", Byte.class);
             assert(false);
         } catch (JsonbException e) {}
     }
@@ -218,7 +218,7 @@ public class DefaultMapping {
     public static void fromJson_Structures(Jsonb jsonb) {
 
         //Map
-        Map<String, Object> map = (LinkedHashMap<String,Object>)jsonb.fromJson("{\"name\":\"unknown object\"}", Object.class);
+        Map<String, Object> map = (Map<String,Object>)jsonb.fromJson("{\"name\":\"unknown object\"}", Object.class);
 
         //mapping for number  -> Integer, Long, BigDecimal
         Map<String, Object> mapWithBigDecimal = (Map<String, Object>)jsonb.fromJson("{\"intValue\":5,\"longValue\":17179869184,\"otherValue\":1.2}", Object.class);
@@ -227,7 +227,7 @@ public class DefaultMapping {
         assert(mapWithBigDecimal.get("otherValue") instanceof BigDecimal);
 
         //Collection
-        Collection<Object> collection = (ArrayList<Object>)jsonb.fromJson("[{\"value\":\"first\"}, {\"value\":\"second\"}]", Object.class);
+        Collection<Object> collection = (Collection<Object>)jsonb.fromJson("[{\"value\":\"first\"}, {\"value\":\"second\"}]", Object.class);
 
         //JsonStructure
         JsonStructure jsonStructure = jsonb.fromJson("{\"name\":\"unknown object\"}", JsonStructure.class);

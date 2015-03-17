@@ -240,7 +240,10 @@ JSON Binding implementations MUST support binding of Java arrays of all supporte
 
 \section{Attribute order}
 \label{sec:attributes}
-For marshalling operation the implementations MAY, but are NOT REQUIRED to preserve order of declared fields into resulting JSON document. [JSB-\ref{sec:attributes}-1] However, the attribute order MUST be deterministic within given implementation - any two marshalling operations within same JSON Binding implementation on the same object instance MUST output the same JSON document. [JSB-\ref{sec:attributes}-2]
+
+Declared fields MUST be marshalled in lexicographical order into resulting JSON document. In case of inheritance, declared fields of super class MUST be marshalled before declared fields of child class. [JSB-\ref{sec:attributes}-1]
+
+When unmarshalling JSON document, declared fields MUST be set in the order of attributes present in the JSON document. [JSB-\ref{sec:attributes}-2]
 
 \section{Null value handling}
 \label{sec:null}

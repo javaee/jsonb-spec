@@ -868,6 +868,22 @@ public class DefaultMapping {
         attributesOrderingClass.bField = "text";
 
         assertEquals("{\"aField\":\"text\",\"bField\":\"text\",\"cField\":\"text\"}", jsonb.toJson(attributesOrderingClass));
+
+        AttributesOrderingWithInheritance attributesOrderingWithInheritance = new AttributesOrderingWithInheritance();
+        attributesOrderingWithInheritance.aField = "aField";
+        attributesOrderingWithInheritance.cField = "cField";
+        attributesOrderingWithInheritance.bField = "bField";
+        attributesOrderingWithInheritance.aa = "aa";
+        attributesOrderingWithInheritance.cc = "cc";
+        attributesOrderingWithInheritance.bb = "bb";
+
+        assertEquals("{\"aField\":\"aField\",\"bField\":\"bField\",\"cField\":\"cField\",\"aa\":\"aa\",\"bb\":\"bb\",\"cc\":\"cc\"}",
+                jsonb.toJson(attributesOrderingWithInheritance));
+
+        AttributesOrderingWithCounterClass attributesOrderingWithCounterClass = jsonb.fromJson("{\"second\":\"a\",\"third\":\"b\",\"first\":\"c\"}", AttributesOrderingWithCounterClass.class);
+        assertEquals("a0", attributesOrderingWithCounterClass.second);
+        assertEquals("b1", attributesOrderingWithCounterClass.third);
+        assertEquals("c2", attributesOrderingWithCounterClass.first);
     }
 
     public static void toJson_nullValues(Jsonb jsonb) {
@@ -1062,6 +1078,48 @@ public class DefaultMapping {
         public AttributesOrderingClass() {}
     }
 
+    static class AttributesOrderingWithInheritance extends AttributesOrderingClass {
+        public String aa;
+        public String cc;
+        public String bb;
 
+        public AttributesOrderingWithInheritance() {}
+    }
+
+    static class AttributesOrderingWithCounterClass {
+        private transient int counter = 0;
+
+        private String first = "first";
+
+        private String second = "second";
+
+        private String third = "third";
+
+        public AttributesOrderingWithCounterClass() {}
+
+        public String getFirst() {
+            return first;
+        }
+
+        public void setFirst(String first) {
+            this.first = first+(counter++);
+        }
+
+        public String getSecond() {
+            return second;
+        }
+
+        public void setSecond(String second) {
+            this.second = second+(counter++);
+        }
+
+        public String getThird() {
+            return third;
+        }
+
+        public void setThird(String third) {
+            this.third = third+(counter++);
+        }
+    }
 
 }

@@ -4,9 +4,11 @@ import javax.json.*;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbException;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.List;
 
 import static examples.mapping.Utils.*;
 
@@ -482,6 +484,9 @@ public class DefaultMapping {
         assert(pojoWithMixedFieldAccess.name.equals("new_name"));
         assert(pojoWithMixedFieldAccess.active);
         assert(pojoWithMixedFieldAccess.valid);
+
+        //composite class
+        CompositePOJO compositePOJO = jsonb.fromJson("{\"compositeId\":\"13\",\"inner\":{\"id\":4,\"name\":\"innerPOJO\"},\"stringArray\":[\"first\",\"second\"],\"stringList\":[\"one\":\"two\"]}", CompositePOJO.class);
     }
 
     public static void toJson_POJOs(Jsonb jsonb) {
@@ -524,7 +529,62 @@ public class DefaultMapping {
 
         POJOWithMixedFieldAccess pojoWithMixedFieldAccess = new POJOWithMixedFieldAccess();
 
-        assertEquals("{\"id\":2,\"name\":\"pojoName\",\"active\":true,\"valid\":false}", jsonb.toJson(pojoWithMixedFieldAccess));
+        assertEquals("{\"active\":true,\"id\":2,\"name\":\"pojoName\",\"valid\":false}", jsonb.toJson(pojoWithMixedFieldAccess));
+
+        //composite class
+        CompositePOJO compositePOJO = new CompositePOJO();
+        compositePOJO.setCompositeId(13);
+        compositePOJO.setStringArray(new String[]{"first", "second"});
+        compositePOJO.setStringList(Arrays.asList("one", "two"));
+        POJO innerPOJO = new POJO();
+        innerPOJO.setId(4);
+        innerPOJO.setName("innerPOJO");
+        compositePOJO.setInner(innerPOJO);
+
+        assertEquals("{\"compositeId\":\"13\",\"inner\":{\"id\":4,\"name\":\"innerPOJO\"},\"stringArray\":[\"first\",\"second\"],\"stringList\":[\"one\":\"two\"]}",
+                jsonb.toJson(compositePOJO));
+
+    }
+
+    static class CompositePOJO {
+        private Integer compositeId;
+        private POJO inner;
+        private List<String> stringList;
+        private String[] stringArray;
+
+        public CompositePOJO() {}
+
+        public Integer getCompositeId() {
+            return compositeId;
+        }
+
+        public void setCompositeId(Integer compositeId) {
+            this.compositeId = compositeId;
+        }
+
+        public POJO getInner() {
+            return inner;
+        }
+
+        public void setInner(POJO inner) {
+            this.inner = inner;
+        }
+
+        public List<String> getStringList() {
+            return stringList;
+        }
+
+        public void setStringList(List<String> stringList) {
+            this.stringList = stringList;
+        }
+
+        public String[] getStringArray() {
+            return stringArray;
+        }
+
+        public void setStringArray(String[] stringArray) {
+            this.stringArray = stringArray;
+        }
     }
 
     private static class POJO {
@@ -971,7 +1031,7 @@ public class DefaultMapping {
         OptionalClass optionalClass = new OptionalClass();
         optionalClass.optionalField = Optional.of("value");
 
-        assertEquals("{\"optionalField\",\"value\"}", optionalClass);
+        assertEquals("{\"optionalField\":\"value\"}", optionalClass);
 
         OptionalClass nullOptionalClass = new OptionalClass();
         nullOptionalClass.optionalField = Optional.ofNullable(null);

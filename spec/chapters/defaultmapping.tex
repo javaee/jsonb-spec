@@ -173,11 +173,15 @@ Any instance passed to unmarshalling operation MUST have public or protected no-
 
 \subsection{Scope and Field access strategy}
 \label{subsec:fieldstrategy}
-For unmarshalling operation for a Java property, if a matching setter method exists, the method is called to set the value of the property, otherwise direct field assignment is used. [JSB-\ref{subsec:fieldstrategy}-1] For marshalling operation, if a matching getter method exists, the method is called to obtain value of the property, otherwise the value is obtained directly from the field. [JSB-\ref{subsec:fieldstrategy}-2]
+For unmarshalling operation for a Java property, if a matching public setter method exists, the method is called to set the value of the property. If a matching setter method with private, protected, or defaulted to package-only access exists, then this field is ignored. If no matching setter method exists and the field is public, direct field assignment is used. [JSB-\ref{subsec:fieldstrategy}-1]
 
-JSON Binding implementations MUST NOT unmarshal into transient, final or static fields and report error if JSON document contains values corresponding to such fields. [JSB-\ref{subsec:fieldstrategy}-3]
+For marshalling operation, if a matching public getter method exists, the method is called to obtain value of the property. If a matching getter method with private, protected, or defaulted to package-only access exists, then this field is ignored. If no matching getter method exists and the field is public, the value is obtained directly from the field. [JSB-\ref{subsec:fieldstrategy}-2]
+
+JSON Binding implementations MUST NOT unmarshal into transient, final or static fields and MUST ignore name/value pairs corresponding to such fields. [JSB-\ref{subsec:fieldstrategy}-3]
 
 Implementations MUST support marshalling of final fields. [JSB-\ref{subsec:fieldstrategy}-4] Transient and static fields MUST be ignored during marshalling operation. [JSB-\ref{subsec:fieldstrategy}-5]
+
+If JSON document contains name/value pair not corresponding to field or setter method, this name/value pair MUST be ignored. [JSB-\ref{subsec:fieldstrategy}-6]
 
 \subsection{Nested Classes}
 \label{subsec:nestedclass}

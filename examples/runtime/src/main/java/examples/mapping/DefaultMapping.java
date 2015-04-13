@@ -37,8 +37,9 @@ public class DefaultMapping {
         //fromJson: null element in the json array -> null element in the list
 
         //access to fields
-        //by default we are using getters/setters methods
-        //if getter/setter method is not found, use field
+        //by default we are using public getters/setters methods
+        //if getter/setter method is not found, use public field
+        //if field is not found, but getter/setter method is present, use getter/setter method
 
         Jsonb jsonb = JsonbBuilder.create();
         fromJson_Primitives(jsonb);
@@ -82,6 +83,9 @@ public class DefaultMapping {
 
         toJson_optional(jsonb);
         fromJson_optional(jsonb);
+
+        toJson_accessors(jsonb);
+        fromJson_accessors(jsonb);
     }
 
     public static void fromJson_Primitives(Jsonb jsonb) {
@@ -803,7 +807,7 @@ public class DefaultMapping {
     public static void toJson_Anonymous_Class(Jsonb jsonb) {
         //same mechanism as POJOs with inheritance
 
-        assertEquals("{\"id\":1,\"name\":\"pojoName\"}", new POJO() {
+        assertEquals("{\"id\":1,\"name\":\"pojoName\"}", jsonb.toJson(new POJO() {
             @Override
             public Integer getId() {
                 return 1;
@@ -813,7 +817,7 @@ public class DefaultMapping {
             public String getName() {
                 return "pojoName";
             }
-        });
+        }));
 
     }
 
@@ -831,7 +835,7 @@ public class DefaultMapping {
 
         java.net.URI uri = new java.net.URI("mailto:users@jsonb-spec.java.net");
 
-        assertEquals("\"https://www.jcp.org/en/jsr/detail?id=367#3\"", jsonb.toJson(uri));
+        assertEquals("\"mailto:users@jsonb-spec.java.net\"", jsonb.toJson(uri));
     }
 
     static class POJOWithoutDefaultArgConstructor {
@@ -988,33 +992,24 @@ public class DefaultMapping {
     }
 
     public static void fromJson_modifiers(Jsonb jsonb) {
-        try {
-            ModifiersClass modifiersClass = jsonb.fromJson("{\"finalField\":\"finalValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
-            assert(false);
-        } catch (JsonbException e) {
-            //unmarshal of final field is not supported
-        }
+        //unmarshal of final field is ignored
+        ModifiersClass modifiersClass = jsonb.fromJson("{\"finalField\":\"newFinalValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
+        assertEquals("finalField", modifiersClass.finalField);
+        assertEquals("newRegularValue", modifiersClass.regularField);
 
-        try {
-            ModifiersClass modifiersClass = jsonb.fromJson("{\"staticField\":\"staticValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
-            assert(false);
-        } catch (JsonbException e) {
-            //unmarshal of static field is not supported
-        }
+        //unmarshal of static field is ignored
+        modifiersClass = jsonb.fromJson("{\"staticField\":\"newStaticValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
+        assertEquals("staticValue", modifiersClass.staticField);
+        assertEquals("newRegularValue", modifiersClass.regularField);
 
-        try {
-            ModifiersClass modifiersClass = jsonb.fromJson("{\"transientField\":\"transientValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
-            assert(false);
-        } catch (JsonbException e) {
-            //unmarshal of transient field is not supported
-        }
+        //unmarshal of transient field is ignored
+        modifiersClass = jsonb.fromJson("{\"transientField\":\"newTransientValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
+        assertEquals("transientField", modifiersClass.transientField);
+        assertEquals("newRegularValue", modifiersClass.regularField);
 
-        try {
-            ModifiersClass modifiersClass = jsonb.fromJson("{\"unknownField\":\"unknownValue\",\"regularField\":\"regularValue\"}", ModifiersClass.class);
-            assert(false);
-        } catch (JsonbException e) {
-            //unmarshal of unknown field is not supported
-        }
+        //unmarshal of unknown field is ignored
+        modifiersClass = jsonb.fromJson("{\"unknownField\":\"newUnknownValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
+        assertEquals("newRegularValue", modifiersClass.regularField);
     }
 
     public static void toJson_optional(Jsonb jsonb) {
@@ -1031,7 +1026,7 @@ public class DefaultMapping {
         OptionalClass optionalClass = new OptionalClass();
         optionalClass.optionalField = Optional.of("value");
 
-        assertEquals("{\"optionalField\":\"value\"}", optionalClass);
+        assertEquals("{\"optionalField\":\"value\"}", jsonb.toJson(optionalClass));
 
         OptionalClass nullOptionalClass = new OptionalClass();
         nullOptionalClass.optionalField = Optional.ofNullable(null);
@@ -1098,13 +1093,70 @@ public class DefaultMapping {
 
         OptionalDouble emptyOptionalDouble = jsonb.fromJson("null", OptionalDouble.class);
         assert(!emptyOptionalDouble.isPresent());
+    }
 
-        //invalid
-        try {
-            jsonb.fromJson("[]", OptionalInt.class);
-            assert(false);
-        } catch (JsonbException e) {
-            //empty field cannot be converted to OptionalInt
+    public static void toJson_accessors(Jsonb jsonb) {
+
+        AccessorsClass accessorsClass = new AccessorsClass();
+        accessorsClass.setPrivateFieldWithPrivateAccessors(1);
+        accessorsClass.setPrivateFieldWithPublicAccessors(2);
+        accessorsClass.publicField = 3;
+
+        assertEquals("{\"privateFieldWithPublicAccessors\":2,\"publicField\":3,\"valueWithoutField\":1}", jsonb.toJson(accessorsClass));
+    }
+
+    public static void fromJson_accessors(Jsonb jsonb) {
+        AccessorsClass accessorsClass = jsonb.fromJson("{\"privateFieldWithPrivateAccessors\":5,\"valueWithoutField\":7,"+
+                        "\"unknownValue\":11,\"transientValue\":9,\"privateFieldWithPublicAccessors\":4,\"publicField\":9" +
+                        ",\"protectedField\"8,\"defaultField\":13,\"privateField\":17}",
+                AccessorsClass.class);
+
+        assertEquals(0, accessorsClass.privateFieldWithPrivateAccessors);
+        assertEquals(7, accessorsClass.transientValue);
+        assertEquals(4, accessorsClass.privateFieldWithPublicAccessors);
+        assertEquals(9, accessorsClass.publicField);
+        assertEquals(0, accessorsClass.privateField);
+        assertEquals(0, accessorsClass.defaultField);
+        assertEquals(0, accessorsClass.protectedField);
+    }
+
+    static class AccessorsClass {
+        private Integer privateField;
+
+        protected Integer protectedField;
+
+        Integer defaultField;
+
+        public Integer publicField;
+
+        public transient Integer transientValue;
+
+        private Integer privateFieldWithPrivateAccessors;
+
+        private Integer privateFieldWithPublicAccessors;
+
+        private Integer getPrivateFieldWithPrivateAccessors() {
+            return privateFieldWithPrivateAccessors;
+        }
+
+        private void setPrivateFieldWithPrivateAccessors(Integer privateFieldWithPrivateAccessors) {
+            this.privateFieldWithPrivateAccessors = privateFieldWithPrivateAccessors;
+        }
+
+        public Integer getPrivateFieldWithPublicAccessors() {
+            return privateFieldWithPublicAccessors;
+        }
+
+        public void setPrivateFieldWithPublicAccessors(Integer privateFieldWithPublicAccessors) {
+            this.privateFieldWithPublicAccessors = privateFieldWithPublicAccessors;
+        }
+
+        public Integer getValueWithoutField() {
+            return 1;
+        }
+
+        public void setValueWithoutField(Integer valueWithoutField) {
+            transientValue = valueWithoutField;
         }
     }
 

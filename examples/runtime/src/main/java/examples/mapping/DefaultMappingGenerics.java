@@ -38,7 +38,7 @@ public class DefaultMappingGenerics {
         //functional interface
         FunctionalInterface<String> myFunction = () -> {return "value1";};
 
-        assertEquals("{}", jsonb.toJson(myFunction));
+        assertEquals("{\"value\":\"value1\"}", jsonb.toJson(myFunction));
 
         myFunction = new FunctionalInterface<String>() {
 
@@ -104,7 +104,14 @@ public class DefaultMappingGenerics {
         boundedGenericClass.boundedSet = intSet;
 
         assertEquals("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}", jsonb.toJson(boundedGenericClass));
+
+        List<java.util.Optional<String>> expected = Arrays.asList(Optional.empty(), Optional.ofNullable("first"), Optional.of("second"));
+
+        String json = toJson(expected, DefaultMappingGenerics.class.getField("listOfOptionalStringField").getGenericType());
+        assertEquals("[null,\"first\",\"second\"]",json);
     }
+
+    public List<Optional<String>> listOfOptionalStringField = new ArrayList<>();
 
     public MyGenericClass<String, Integer> myGenericClassField = new MyGenericClass<>();
     public MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClassField = new MyCyclicGenericClass<CyclicSubClass>();
@@ -117,11 +124,11 @@ public class DefaultMappingGenerics {
         DefaultMapping defaultMapping = new DefaultMapping();
 
         MyGenericClass<String, Integer> myGenericInstance = fromJson("{\"field1\":\"value1\", \"field2\":1}",
-                DefaultMapping.class.getField("myGenericClassField").getGenericType());
+                DefaultMappingGenerics.class.getField("myGenericClassField").getGenericType());
 
         //cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
         MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = fromJson("{\"field1\":{\"subField\":\"subFieldValue\"}}",
-                DefaultMapping.class.getField("myCyclicGenericClassField").getGenericType());
+                DefaultMappingGenerics.class.getField("myCyclicGenericClassField").getGenericType());
 
         //unmarshal into (generic) interface is by default unsupported (with the exception of concrete interfaces
         // defined elsewhere in default mapping, e.g. java.lang.Number)
@@ -145,16 +152,16 @@ public class DefaultMappingGenerics {
 
         //unmarshal with runtime type
         MyGenericClass<MyGenericClass<String, String>, Integer> myGenericClass = fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}",
-                DefaultMapping.class.getField("multiLevelGenericClassField").getGenericType());
+                DefaultMappingGenerics.class.getField("multiLevelGenericClassField").getGenericType());
 
         //bounded generics
         BoundedGenericClass<HashSet<Integer>, Circle> boundedGeneric = fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
-                DefaultMapping.class.getField("boundedGenericClass").getGenericType());
+                DefaultMappingGenerics.class.getField("boundedGenericClass").getGenericType());
 
         //exception incompatible types
         try {
             BoundedGenericClass<HashSet<Integer>, Circle> otherGeneric = fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
-                    DefaultMapping.class.getField("otherBoundedGenericClass").getGenericType());
+                    DefaultMappingGenerics.class.getField("otherBoundedGenericClass").getGenericType());
             HashSet<Integer> intSet = otherGeneric.boundedSet;
             Integer intValue = intSet.iterator().next();
             System.out.println("intValue="+intValue);

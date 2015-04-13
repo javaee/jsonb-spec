@@ -23,4 +23,8 @@ public class Utils {
         }
     }
 
+    public static String toJson(Object object, Type runtimeType) throws JsonbException {
+        return null;
+    }
+
 }

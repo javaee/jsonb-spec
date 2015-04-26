@@ -41,7 +41,6 @@ package javax.json.bind;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Writer;
 
 /**
  * <p>
@@ -212,10 +211,9 @@ public interface Jsonb {
      *
      * @param object
      *      The object content tree to be marshaled.
-     * @param writer
+     * @param appendable
      *      The JSON will be sent as a character stream to the given
-     *      {@link Writer}. Upon a successful completion, the stream will be closed
-     *      by this method.
+     *      {@link Appendable}.
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling.

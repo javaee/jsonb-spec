@@ -38,13 +38,35 @@
  * holder.
  */
 
+package javax.json.bind.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * <p>
- * Defines annotations for customizing the mapping between Java program elements
- * and JSON documents.
+ *     Allows customization of field (or JavaBean property) name.
+ *     This name is used either in serialization or in deserialization.
  * </p>
  *
- * @since JSON Binding 1.0
- * @author Martin Grebac
+ * <p><b>Usage</b></p>
+ * <p> The {@code @JsonbProperty} annotation can be used with the following
+ *     program elements:
+ * <ul>
+ *   <li> a JavaBean property </li>
+ *   <li> field </li>
+ * </ul>
  */
-package javax.json.bind.annotation;
+@JsonbAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.FIELD})
+public @interface JsonbProperty {
+
+    /**
+     *
+     * Customized name of the field (or JavaBean property).
+     */
+    String value();
+}

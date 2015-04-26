@@ -38,13 +38,48 @@
  * holder.
  */
 
+package javax.json.bind.event;
+
 /**
  * <p>
- * Defines annotations for customizing the mapping between Java program elements
- * and JSON documents.
+ * A basic event handler interface for processing events.
  * </p>
  *
- * @since JSON Binding 1.0
- * @author Martin Grebac
+ * <p>
+ * If an application needs to implement customized event handling, it must implement
+ * this interface and then register it with {@link javax.json.bind.JsonbConfig}.
+ * </p>
+ *
+ * <p>
+ * If the {@code handleEvent} method throws an unchecked runtime exception, the JAXB Provider
+ * must treat that as if the method returned false, effectively terminating whatever
+ * operation was in progress at the time.
+ * </p>
+ *
+ * <p>
+ * Modifying the Java content tree within your event handler is undefined
+ * by the specification and may result in unexpected behaviour.
+ * </p>
+ *
+ * <p>
+ * Failing to return false from the handleEvent method after encountering a fatal error
+ * is undefined by the specification and may result in unexpected behavior.
+ * </p>
  */
-package javax.json.bind.annotation;
+public interface JsonbEventHandler {
+    /** <p>The {@code handleEvent} method is invoked by the
+     * JSON-B provider, if a problem (or some situation) was found. The events
+     * {@link JsonbEventLocator} may be
+     * used to locate the source of the problem.</p>
+     *
+     * @param event The event being reported to the JSON-B user.
+     * @return True as an indicator that the JSON-B provider should
+     *   attempt to continue its current operation. This will not always work.
+     *   In particular, you cannot expect that the operation
+     *   continues, if a fatal error was reported. False to
+     *   indicate that the JSON-B provider should terminate the
+     *   operation and through an appropriate exception.
+     * @throws IllegalArgumentException The parameter is null.
+     */
+    public boolean handleEvent(JsonbEvent event);
+}

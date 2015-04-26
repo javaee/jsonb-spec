@@ -38,13 +38,29 @@
  * holder.
  */
 
+package javax.json.bind.config;
+
 /**
  * <p>
- * Defines annotations for customizing the mapping between Java program elements
- * and JSON documents.
+ *  Provides mechanism how to define customized order when serializing properties.
  * </p>
  *
- * @since JSON Binding 1.0
- * @author Martin Grebac
+ * <p>
+ *  This policy can be set via {@link javax.json.bind.JsonbConfig}.
+ * </p>
  */
-package javax.json.bind.annotation;
+public interface PropertyOrderStrategy {
+
+    /**
+     *  Returns ordererd array of names of properties.
+     *
+     * @param clazz
+     *      Class to serialize.
+     *
+     * @param propertyNames
+     *      Names of properties to serialize.
+     *
+     * @return Returns ordered array of names of properties.
+     */
+    String[] getPropertiesOrder(Class clazz, String[] propertyNames);
+}

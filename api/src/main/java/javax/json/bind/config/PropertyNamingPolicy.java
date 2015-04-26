@@ -38,13 +38,47 @@
  * holder.
  */
 
+package javax.json.bind.config;
+
 /**
  * <p>
- * Defines annotations for customizing the mapping between Java program elements
- * and JSON documents.
+ *     Specifies available property naming policies.
  * </p>
  *
- * @since JSON Binding 1.0
- * @author Martin Grebac
+ * <p>
+ *     This policy can be set via {@link javax.json.bind.JsonbConfig}.
+ * </p>
+ *
+ * @see javax.json.bind.JsonbConfig
  */
-package javax.json.bind.annotation;
+public enum PropertyNamingPolicy {
+    /**
+     * Using this policy, the property name is unchanged.
+     */
+    IDENTITY,
+    /**
+     * Using this policy, the property name is transformed to lower case with dashes.
+     * The dashes are on the positions of different case boundaries in the original field name (camel case).
+     */
+    LOWER_CASE_WITH_DASHES,
+    /**
+     * Using this policy, the property name is transformed to lower case with underscores.
+     * The underscores are on the positions of different case boundaries in the original field name (camel case).
+     */
+    LOWER_CASE_WITH_UNDERSCORES,
+    /**
+     * Using this policy, the first character will be capitalized.
+     */
+    UPPER_CAMEL_CASE,
+    /**
+     * Using this policy, the first character will be capitalized and the words
+     * will be separated by spaces.
+     */
+    UPPER_CAMEL_CASE_WITH_SPACES,
+    /**
+     * Using this policy, the serialization will be same as identity.
+     * Deserialization will be case insensitive. E.g. property in JSON with name
+     * PropertyNAME, will be mapped to field propertyName.
+     */
+    CASE_INSENSITIVE
+}

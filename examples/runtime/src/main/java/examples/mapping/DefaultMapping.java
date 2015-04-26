@@ -4,7 +4,6 @@ import javax.json.*;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbException;
-import java.awt.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -442,9 +441,9 @@ public class DefaultMapping {
 
     public static void fromJson_Enums(Jsonb jsonb) throws Exception {
 
-        EnumSet<Language> languageEnumSet = fromJson("[\"Slovak\", \"English\"]", DefaultMapping.class.getField("languageEnumSet").getGenericType());
+        EnumSet<Language> languageEnumSet = jsonb.fromJson("[\"Slovak\", \"English\"]", DefaultMapping.class.getField("languageEnumSet").getGenericType());
 
-        EnumMap<Language, String> languageEnumMap = fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]", DefaultMapping.class.getField("languageEnumMap").getGenericType());
+        EnumMap<Language, String> languageEnumMap = jsonb.fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]", DefaultMapping.class.getField("languageEnumMap").getGenericType());
     }
 
     public static void toJson_Enums(Jsonb jsonb) {

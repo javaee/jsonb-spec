@@ -1,4 +1,90 @@
 \chapter{Customizing Mapping}
 \label{customization}
 
-\jsonb\ TBD
+This section defines ways how to customize the default behavior. There are several ways how to customize default behavior. The default behavior can be customized annotating given field (or JavaBean property), or by providing implementation for particular strategy, e.g. PropertyOrderStrategy. JSON Binding provider MUST support both these options.
+
+\section{Customizing Property Names}
+\label{sec:custom_property_names}
+
+There are two standard ways how to customize serialization of field (or JavaBean property) to JSON document. The same applies to deserialization. The first way is to annotate field (or JavaBean property) with javax.json.bind.annotation.JsonbProperty annotation. The second option is to set javax.json.bind.config.PropertyNamingPolicy.
+
+\subsection{javax.json.bind.annotation.JsonbProperty}
+\label{subsec:JsonbProperty}
+
+According to default mapping ref{sec:naming}, property names are serialized unchanged to JSON document (identity transformation). To provide custom name for given field (or JavaBean property), javax.json.bind.annotation.JsonbProperty may be used. JsonbProperty annotation may be specified on field, getter or setter method. If specified on field, custom name is used both for serialization and deserialization. If javax.json.bind.annotation.JsonbProperty is specified on getter method, it is used only for serialization. If javax.json.bind.annotation.JsonbProperty is specified on setter method, it is used only for deserialization. It is possible to specify different values for getter and setter method for javax.json.bind.annotation.JsonbProperty annotation. In such case the different custom name will be used for serialization and deserialization. [JSB-\ref{subsec:JsonbProperty}-1]
+
+\subsection{javax.json.bind.config.PropertyNamingPolicy}
+\label{subsec:PropertyNamingPolicy}
+
+Enum javax.json.bind.config.PropertyNamingPolicy provides the most common property naming strategies.
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item IDENTITY
+\item LOWER\_CASE\_WITH\_DASHES
+\item LOWER\_CASE\_WITH\_UNDERSCORES
+\item UPPER\_CAMEL\_CASE
+\item UPPER\_CAMEL\_CASE\_WITH\_SPACES
+\item CASE\_INSENSITIVE
+\end{list}
+
+The detailed description of property naming strategies can be found in javadoc.
+
+The way to set custom property naming policy is to use javax.json.bin.JsonbConfig::setPropertyNamingPolicy method. [JSB-\ref{subsec:JsonbProperty}-1]
+
+\section{Customizing Property Order}
+\label{sec:custom_property_order}
+
+To customize order of serialized properties, JSON Binding provides javax.json.bind.config.PropertyOrderStrategy interface.
+
+The way to set custom property order is to use javax.json.bin.JsonbConfig::setPropertyOrderStrategy method. [JSB-\ref{sec:custom_property_order}-1]
+
+\section{Customizing Null Handling}
+\label{sec:custom_null_handling}
+
+There are two ways how to change default null handling. The first option is to anotate given object (field, JavaBean property, type or package) with javax.json.bind.annotation.JsonbNillable annotation. The second option is to provide config wide (via javax.json.bin.JsonbConfig::setNullSerializationPolicy method) configuration.
+
+\subsection{javax.json.bind.annotation.JsonbNillable}
+\label{subsec:JsonbNillable}
+
+To customize the result of serializing field (or JavaBean property) with null value, JSON Binding provides javax.json.bind.annotation.JsonbNillable annotation.
+
+When given object (field, JavaBean property, type or package) is annotated with javax.json.bind.annotation.JsonbNillable annotation, the result of null value will be presence of associated property in JSON document with explicit null value. [JSB-\ref{subsec:JsonbNillable}-1]
+
+JSON Binding implementations MUST implement override of annotations according to target of the annotation (FIELD, METHOD, TYPE, PACKAGE). Type level annotation overrides behavior set at the package level. Method or field level annotation overrides behavior set at the type level. [JSB-\ref{subsec:JsonbNillable}-2]
+
+\subsection{javax.json.bind.config.NullSerializationPolicy}
+\label{subsec:NullSerializationPolicy}
+
+Enum javax.json.bind.config.NullSerializationPolicy provides two most common null serialization strategies.
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item SKIP
+\item SERIALIZE\_NULL
+\end{list}
+
+The detailed description of null serialization strategies can be found in javadoc.
+
+The way to set custom null serialization policy is to use javax.json.bin.JsonbConfig::setNullSerializationPolicy method. [JSB-\ref{subsec:NullSerializationPolicy}-1]
+
+\section{Customizing Exception Handling}
+\label{sec:custom_exception_handling}
+
+To allow for multiple deserialization (or serialization or other) errors to be processed in one pass, each error is mapped to an error event. An error event relates the error or warning encountered to the location of the text or object(s) involved with the error. The stream of potential error events can be communicated to the application through a registered event handler at the time the error is encountered.
+
+The default exception strategy is to fail fast. To customize this exception strategy, JSON Binding provides javax.json.bin.JsonbConfig::setEventHandler method with one parameter of javax.json.bind.event.JsonbEventHandler.
+
+\subsection{javax.json.bind.event.JsonbEventHandler}
+\label{subsec:JsonbEventHandler}
+
+To customize exception handling behavior, implementation of javax.json.bind.event.JsonbEventHandler must be provided to javax.json.bin.JsonbConfig configuration. JsonbEventHandler contains handleEvent method with javax.json.bind.event.JsonbEvent parameter. JsonbEvent has associated severity.
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item INFO
+\item WARNING
+\item ERROR
+\item FATAL\_ERROR
+\end{list}
+
+The detailed description of severity levels can be found in javadoc. Events with severity level different than FATAL\_ERROR are recoverable and can be effectively ignored by returning false from handleEvent method.
+
+The location of event is provided (if available) by javax.json.bind.event.JsonbEventLocator which can be obtained from JsonbEvent::getLocator method.

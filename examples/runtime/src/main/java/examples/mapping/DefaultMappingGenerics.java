@@ -107,7 +107,7 @@ public class DefaultMappingGenerics {
 
         List<java.util.Optional<String>> expected = Arrays.asList(Optional.empty(), Optional.ofNullable("first"), Optional.of("second"));
 
-        String json = toJson(expected, DefaultMappingGenerics.class.getField("listOfOptionalStringField").getGenericType());
+        String json = jsonb.toJson(expected, DefaultMappingGenerics.class.getField("listOfOptionalStringField").getGenericType());
         assertEquals("[null,\"first\",\"second\"]",json);
     }
 
@@ -123,11 +123,11 @@ public class DefaultMappingGenerics {
     public static void fromJson_generics(Jsonb jsonb) throws Exception {
         DefaultMapping defaultMapping = new DefaultMapping();
 
-        MyGenericClass<String, Integer> myGenericInstance = fromJson("{\"field1\":\"value1\", \"field2\":1}",
+        MyGenericClass<String, Integer> myGenericInstance = jsonb.fromJson("{\"field1\":\"value1\", \"field2\":1}",
                 DefaultMappingGenerics.class.getField("myGenericClassField").getGenericType());
 
         //cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
-        MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = fromJson("{\"field1\":{\"subField\":\"subFieldValue\"}}",
+        MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = jsonb.fromJson("{\"field1\":{\"subField\":\"subFieldValue\"}}",
                 DefaultMappingGenerics.class.getField("myCyclicGenericClassField").getGenericType());
 
         //unmarshal into (generic) interface is by default unsupported (with the exception of concrete interfaces
@@ -151,16 +151,16 @@ public class DefaultMappingGenerics {
         assert(multiLevelGeneric.field2 instanceof Integer);
 
         //unmarshal with runtime type
-        MyGenericClass<MyGenericClass<String, String>, Integer> myGenericClass = fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}",
+        MyGenericClass<MyGenericClass<String, String>, Integer> myGenericClass = jsonb.fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}",
                 DefaultMappingGenerics.class.getField("multiLevelGenericClassField").getGenericType());
 
         //bounded generics
-        BoundedGenericClass<HashSet<Integer>, Circle> boundedGeneric = fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
+        BoundedGenericClass<HashSet<Integer>, Circle> boundedGeneric = jsonb.fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
                 DefaultMappingGenerics.class.getField("boundedGenericClass").getGenericType());
 
         //exception incompatible types
         try {
-            BoundedGenericClass<HashSet<Integer>, Circle> otherGeneric = fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
+            BoundedGenericClass<HashSet<Integer>, Circle> otherGeneric = jsonb.fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
                     DefaultMappingGenerics.class.getField("otherBoundedGenericClass").getGenericType());
             HashSet<Integer> intSet = otherGeneric.boundedSet;
             Integer intValue = intSet.iterator().next();

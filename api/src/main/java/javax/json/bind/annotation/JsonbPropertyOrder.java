@@ -38,13 +38,30 @@
  * holder.
  */
 
+package javax.json.bind.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * <p>
- * Defines annotations for customizing the mapping between Java program elements
- * and JSON documents.
+ *     Specifies order in which fields (or JavaBean properties) will be serialized.
  * </p>
  *
- * @since JSON Binding 1.0
- * @author Martin Grebac
+ * <p>
+ *     Partial mapping can also be specified. In that case, the order of properties
+ *     not specified in partial mapping is not defined and thus not guaranteed.
+ * </p>
  */
-package javax.json.bind.annotation;
+@JsonbAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface JsonbPropertyOrder {
+
+    /**
+     * Order in which fields (or JavaBean properties) will be serialized.
+     */
+    String[] value();
+}

@@ -38,13 +38,27 @@
  * holder.
  */
 
+package javax.json.bind.config;
+
 /**
  * <p>
- * Defines annotations for customizing the mapping between Java program elements
- * and JSON documents.
+ *     Defines available null serialization policies.
  * </p>
  *
- * @since JSON Binding 1.0
- * @author Martin Grebac
+ * <p>
+ *     This policy can be set via {@link javax.json.bind.JsonbConfig}.
+ * </p>
+ *
+ * @see javax.json.bind.JsonbConfig
  */
-package javax.json.bind.annotation;
+public enum NullSerializationPolicy {
+    /**
+     * Using this policy, the property with null value will not be serialized.
+     * This is the default policy.
+     */
+    SKIP,
+    /**
+     * Using this policy, the property with null value is serialized as null value.
+     */
+    SERIALIZE_NULL
+}

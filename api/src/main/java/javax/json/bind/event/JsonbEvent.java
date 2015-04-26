@@ -38,13 +38,61 @@
  * holder.
  */
 
+package javax.json.bind.event;
+
 /**
  * <p>
- * Defines annotations for customizing the mapping between Java program elements
- * and JSON documents.
+ *     This event represents that some error/warning or some condition
+ *     was encountered during serialization or deserialization.
  * </p>
- *
- * @since JSON Binding 1.0
- * @author Martin Grebac
  */
-package javax.json.bind.annotation;
+public interface JsonbEvent {
+
+    /**
+     * Represents informational/expected event.
+     */
+    public static final int INFO = -1;
+
+    /**
+     * Represents unexpected condition.
+     */
+    public static final int WARNING = 0;
+
+    /**
+     * Represents the error which is recoverable.
+     */
+    public static final int ERROR = 1;
+
+    /**
+     * Represents the error which is not recoverable.
+     */
+    public static final int FATAL_ERROR = 2;
+
+    /**
+     * @return Returns the events severity.
+     */
+    public int getSeverity();
+
+    /**
+     * @return Returns a textual description of the event.
+     */
+    public String getMessage();
+
+    /**
+     * Retrieve the linked exception for this warning/error.
+     *
+     * @return Returns a {@link Throwable} related to the event. In most cases
+     * an exception causing the event.
+     */
+    public Throwable getLinkedException();
+
+    /**
+     * <p>
+     * Retrieve the locator for this warning/error.
+     * </p>
+     *
+     * @return Returns a description of the location, where the event
+     * occurred.
+     */
+    public JsonbEventLocator getLocator();
+}

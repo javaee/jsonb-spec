@@ -41,6 +41,7 @@ package javax.json.bind;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 
 /**
  * <p>
@@ -148,6 +149,26 @@ public interface Jsonb {
     <T> T fromJson(String str, Class<T> type) throws JsonbException;
 
     /**
+     * Reads in a JSON data from the specified string and return the resulting
+     * content tree.
+     *
+     * @param str
+     *      The string to unmarshal JSON data from.
+     * @param runtimeType
+     *      Runtime type of the content tree's root object.
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshalling.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
+     */
+    <T> T fromJson(String str, Type runtimeType) throws JsonbException;
+
+    /**
      * Unmarshal JSON data from the specified Reader and return the
      * resulting content tree.
      *
@@ -166,6 +187,28 @@ public interface Jsonb {
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(Readable readable, Class<T> type) throws JsonbException;
+
+    /**
+     * Unmarshal JSON data from the specified Reader and return the
+     * resulting content tree.
+     *
+     * @param readable
+     *      The character stream is read as a JSON data.
+     *
+     * @param runtimeType
+     *      Runtime type of the content tree's root object.
+     *
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshalling.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
+     */
+    <T> T fromJson(Readable readable, Type runtimeType) throws JsonbException;
 
     /**
      * Unmarshal JSON data from the specified InputStream and return the
@@ -189,6 +232,29 @@ public interface Jsonb {
     <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
 
     /**
+     * Unmarshal JSON data from the specified InputStream and return the
+     * resulting content tree.
+     *
+     * @param stream
+     *      The stream is read as a JSON data. Upon a
+     *      successful completion, the stream will be closed by this method.
+     *
+     * @param runtimeType
+     *      Runtime type of the content tree's root object.
+     *
+     * @param <T>
+     *      Type of the content tree's root object.
+     *
+     * @return the newly created root object of the java content tree
+     *
+     * @throws JsonbException
+     *     If any unexpected error(s) occur(s) while unmarshalling.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
+     */
+    <T> T fromJson(InputStream stream, Type runtimeType) throws JsonbException;
+
+    /**
      * Writes the Java object tree with root object {@code object} to a String
      * instance as JSON.
      *
@@ -205,6 +271,27 @@ public interface Jsonb {
      * @since JSON Binding 1.0
      */
     String toJson(Object object) throws JsonbException;
+
+    /**
+     * Writes the Java object tree with root object {@code object} to a String
+     * instance as JSON.
+     *
+     * @param object
+     *      The root object of the object content tree to be marshaled. Must not be null.
+     *
+     * @param runtimeType
+     *      Runtime type of the content tree's root object.
+     *
+     * @return String instance with marshaled JSON data.
+     *
+     * @throws JsonbException If any unexpected problem occurs during the
+     * marshalling, such as I/O error.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
+     *
+     * @since JSON Binding 1.0
+     */
+    String toJson(Object object, Type runtimeType) throws JsonbException;
 
     /**
      * Marshal the object content tree into a Writer character stream.
@@ -225,6 +312,28 @@ public interface Jsonb {
     void toJson(Object object, Appendable appendable) throws JsonbException;
 
     /**
+     * Marshal the object content tree into a Writer character stream.
+     *
+     * @param object
+     *      The object content tree to be marshaled.
+     *
+     * @param runtimeType
+     *      Runtime type of the content tree's root object.
+     *
+     * @param appendable
+     *      The JSON will be sent as a character stream to the given
+     *      {@link Appendable}.
+     *
+     * @throws JsonbException If any unexpected problem occurs during the
+     * marshalling.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
+     *
+     * @since JSON Binding 1.0
+     */
+    void toJson(Object object, Type runtimeType, Appendable appendable) throws JsonbException;
+
+    /**
      * Marshal the object content tree into output stream.
      *
      * @param object
@@ -243,4 +352,26 @@ public interface Jsonb {
      */
     void toJson(Object object, OutputStream stream) throws JsonbException;
 
+    /**
+     * Marshal the object content tree into output stream.
+     *
+     * @param object
+     *      The object content tree to be marshaled.
+     *
+     * @param runtimeType
+     *      Runtime type of the content tree's root object.
+     *
+     * @param stream
+     *      The JSON will be sent as a byte stream to the given
+     *      {@link OutputStream}. Upon a successful completion, the stream will be closed
+     *      by this method.
+     *
+     * @throws JsonbException If any unexpected problem occurs during the
+     * marshalling.
+     * @throws NullPointerException
+     *      If any of the parameters is {@code null}.
+     *
+     * @since JSON Binding 1.0
+     */
+    void toJson(Object object, Type runtimeType, OutputStream stream) throws JsonbException;
 }

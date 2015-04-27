@@ -142,7 +142,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(String str, Class<T> type) throws JsonbException;
@@ -162,7 +162,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(String str, Type runtimeType) throws JsonbException;
@@ -182,7 +182,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(Readable readable, Class<T> type) throws JsonbException;
@@ -204,7 +204,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(Readable readable, Type runtimeType) throws JsonbException;
@@ -225,7 +225,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
@@ -248,7 +248,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) while unmarshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(InputStream stream, Type runtimeType) throws JsonbException;
@@ -264,7 +264,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling, such as I/O error.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -285,7 +285,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling, such as I/O error.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -303,7 +303,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -325,7 +325,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -344,7 +344,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -367,7 +367,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * marshalling.
-     * @throws NullPointerException
+     * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0

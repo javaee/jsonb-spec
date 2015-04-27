@@ -132,7 +132,7 @@ public abstract class JsonbProvider {
      * @throws JsonbException if there is no provider found, or there is a problem
      *         instantiating the provider instance.
      *
-     * @throws NullPointerException if providerName is {@code null}.
+     * @throws IllegalArgumentException if providerName is {@code null}.
      *
      * @see java.util.ServiceLoader
      *
@@ -141,7 +141,7 @@ public abstract class JsonbProvider {
     @SuppressWarnings("UseSpecificCatch")
     public static JsonbProvider provider(final String providerName) {
         if (providerName == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         ServiceLoader<JsonbProvider> loader = ServiceLoader.load(JsonbProvider.class);
         Iterator<JsonbProvider> it = loader.iterator();

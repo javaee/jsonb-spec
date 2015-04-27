@@ -43,7 +43,6 @@ package javax.json.bind;
 /**
  * Root class for all JSON Binding exceptions.
  *
- * @author Martin Grebac
  * @since JSON Binding 1.0
  */
 public class JsonbException extends RuntimeException {

@@ -47,8 +47,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Marks any relevant JSON Binding annotations. Includes
  * {@code @Documented} and {@code @Retention(RUNTIME)} definitions.
- *
- * @author Martin Grebac
  */
 
 @Documented

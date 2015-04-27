@@ -7,9 +7,6 @@ import java.util.*;
 
 import static examples.mapping.Utils.*;
 
-/**
- * @author Martin Vojtek
- */
 public class DefaultMappingGenerics {
 
     public static void main(String[] args) throws Exception {

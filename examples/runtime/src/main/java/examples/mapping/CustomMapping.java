@@ -16,9 +16,6 @@ import java.util.*;
 
 import static examples.mapping.Utils.assertEquals;
 
-/**
- * @author Martin Vojtek
- */
 public class CustomMapping {
 
     public static void main(String[] args) throws Exception {

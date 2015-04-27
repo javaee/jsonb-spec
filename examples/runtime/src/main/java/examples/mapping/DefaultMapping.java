@@ -11,9 +11,6 @@ import java.util.List;
 
 import static examples.mapping.Utils.*;
 
-/**
- * @author Martin Vojtek
- */
 public class DefaultMapping {
 
     public static void main(String[] args) throws Exception {

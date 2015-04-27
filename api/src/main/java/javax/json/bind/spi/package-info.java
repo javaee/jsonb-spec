@@ -52,6 +52,5 @@
  * <p>The API locates and loads providers using {@link java.util.ServiceLoader ServiceLoader}.
  *
  * @since JSON Binding 1.0
- * @author Martin Grebac
  */
 package javax.json.bind.spi;

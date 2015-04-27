@@ -8,9 +8,6 @@ import java.util.*;
 
 import static examples.mapping.Utils.assertEquals;
 
-/**
- * @author Martin Vojtek
- */
 public class DefaultMappingDates {
 
     public static void main(String[] args) throws Exception {

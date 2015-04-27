@@ -81,7 +81,6 @@ import java.util.Optional;
  * This object is not thread safe. Implementations are expected to make a defensive copy
  * of the object before applying the configuration.
  *
- * @author Martin Grebac, Przemyslaw Bielicki, Eugen Cepoi, Hendrik Saly
  * @since JSON Binding 1.0
  */
 public class JsonbConfig {
@@ -207,7 +206,7 @@ public class JsonbConfig {
     public final JsonbConfig withEncoding(final String encoding) {
         return setProperty(JSONB_ENCODING, encoding);
     }
-    
+
     /**
      * Property used to specify custom naming policy.
      *

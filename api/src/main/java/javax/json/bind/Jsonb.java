@@ -123,7 +123,6 @@ import java.lang.reflect.Type;
  * @see Jsonb
  * @see JsonbBuilder
  * @see java.util.ServiceLoader
- * @author Eugen Cepoi, Martin Grebac, Przemyslaw Bielicki, Inderjeet Singh
  * @since JSON Binding 1.0
  */
 public interface Jsonb {

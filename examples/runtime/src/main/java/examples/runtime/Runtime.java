@@ -50,10 +50,6 @@ import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 import org.eclipse.persistence.json.bind.CustomJsonbBuilder;
 
-/**
- *
- * @author Martin Grebac
- */
 public class Runtime {
 
     public static void main(String[] args) {

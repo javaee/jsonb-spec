@@ -46,6 +46,5 @@
  * which builds {@link javax.json.bind.Jsonb Jsonb} instances.
  *
  * @since JSON Binding 1.0
- * @author Martin Grebac
  */
 package javax.json.bind;

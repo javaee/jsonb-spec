@@ -52,7 +52,6 @@ import javax.json.spi.JsonProvider;
  *
  * @see Jsonb
  * @see java.util.ServiceLoader
- * @author Eugen Cepoi, Martin Grebac, Przemyslaw Bielicki
  * @since JSON Binding 1.0
  */
 public interface JsonbBuilder {

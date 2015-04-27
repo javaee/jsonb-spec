@@ -66,7 +66,6 @@ import static java.lang.annotation.ElementType.TYPE;
  * <p>{@code @JsonbTransient} is mutually exclusive with all other
  * JSON Binding defined annotations. </p>
  *
- * @author Martin Grebac
  * @since JSON Binding 1.0
  */
 

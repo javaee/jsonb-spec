@@ -45,6 +45,5 @@
  * </p>
  *
  * @since JSON Binding 1.0
- * @author Martin Grebac
  */
 package javax.json.bind.annotation;

@@ -40,10 +40,6 @@
 
 package examples.model;
 
-/**
- *
- * @author Martin Grebac
- */
 public class Book {
 
     public long id;

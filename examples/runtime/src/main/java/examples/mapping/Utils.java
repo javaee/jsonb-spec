@@ -1,8 +1,5 @@
 package examples.mapping;
 
-/**
- * @author Martin Vojtek
- */
 public class Utils {
 
     public static void assertEquals(Object... objects) {

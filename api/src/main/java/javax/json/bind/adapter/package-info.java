@@ -38,51 +38,11 @@
  * holder.
  */
 
-package javax.json.bind.event;
-
-import java.net.URI;
-import java.util.Optional;
-import java.util.OptionalInt;
-
 /**
- * <p>Encapsulate the location of a {@link JsonbEvent}. </p>
+ * <p>
+ * Defines adapter related classes.
+ * </p>
  *
- * <p>The JsonbEventLocator indicates where the {@link JsonbEvent} occurred.</p>
+ * @since JSON Binding 1.0
  */
-public interface JsonbEventLocator {
-
-    /**
-     * Returns the column number if available.
-     *
-     * @return Returns the column number if available.
-     */
-    OptionalInt getColumnNumber();
-
-    /**
-     * Returns the line number if available.
-     *
-     * @return Returns the line number if available.
-     */
-    OptionalInt getLineNumber();
-
-    /**
-     * Returns a reference to the object in the Java content tree if available.
-     *
-     * @return Returns a reference to the object in the Java content tree if available.
-     */
-    Optional<Object> getObject();
-
-    /**
-     * Returns the byte offset if available.
-     *
-     * @return Returns the byte offset if available.
-     */
-    OptionalInt getOffset();
-
-    /**
-     * Returns the name of the JSON source as a URI if available.
-     *
-     * @return Returns the name of the JSON source as a URI if available.
-     */
-    Optional<URI> getURI();
-}
+package javax.json.bind.adapter;

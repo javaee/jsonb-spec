@@ -38,47 +38,38 @@
  * holder.
  */
 
-package javax.json.bind.config;
+package javax.json.bind.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * <p>
- *     Specifies available property naming policies.
+ *     Annotation indicates that result of the annotated non-void method
+ *     or field or constructor/factory method parameter will be used as the single value to serialize
+ *     for the instance.
+ *
+ *     The purpose of the annotation is similar to {@link javax.xml.bind.annotation.XmlValue}
  * </p>
  *
  * <p>
- *     This policy can be set via {@link javax.json.bind.JsonbConfig}.
+ *     At most one method of a <code>Class</code> can be annotated with this annotation;
+ *     if more than one is found, an exception will be thrown.
  * </p>
  *
- * @see javax.json.bind.JsonbConfig
+ * <p><b>Usage</b></p>
+ * <p> The {@code @JsonbValue} annotation can be used with the following
+ *     program elements:
+ * <ul>
+ *   <li> a JavaBean property </li>
+ *   <li> field </li>
+ *   <li> parameter </li>
+ * </ul>
  */
-public enum PropertyNamingPolicy {
-    /**
-     * Using this policy, the property name is unchanged.
-     */
-    IDENTITY,
-    /**
-     * Using this policy, the property name is transformed to lower case with dashes.
-     * The dashes are on the positions of different case boundaries in the original field name (camel case).
-     */
-    LOWER_CASE_WITH_DASHES,
-    /**
-     * Using this policy, the property name is transformed to lower case with underscores.
-     * The underscores are on the positions of different case boundaries in the original field name (camel case).
-     */
-    LOWER_CASE_WITH_UNDERSCORES,
-    /**
-     * Using this policy, the first character will be capitalized.
-     */
-    UPPER_CAMEL_CASE,
-    /**
-     * Using this policy, the first character will be capitalized and the words
-     * will be separated by spaces.
-     */
-    UPPER_CAMEL_CASE_WITH_SPACES,
-    /**
-     * Using this policy, the serialization will be same as identity.
-     * Deserialization will be case insensitive. E.g. property in JSON with name
-     * PropertyNAME, will be mapped to field propertyName.
-     */
-    CASE_INSENSITIVE
+@JsonbAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.ANNOTATION_TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
+public @interface JsonbValue {
 }

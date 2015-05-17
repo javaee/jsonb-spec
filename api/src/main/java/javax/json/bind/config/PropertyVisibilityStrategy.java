@@ -38,11 +38,27 @@
  * holder.
  */
 
+package javax.json.bind.config;
+
+import java.lang.reflect.Member;
+
 /**
  * <p>
- * Defines event handling mechanism.
+ *  Provides mechanism how to define customized property visibility strategy.
  * </p>
  *
- * @since JSON Binding 1.0
+ * <p>
+ *  This strategy can be set via {@link javax.json.bind.JsonbConfig}.
+ * </p>
  */
-package javax.json.bind.event;
+public interface PropertyVisibilityStrategy {
+
+    /**
+     * Responds whether the given member should be considered
+     * as the JsonbProperty.
+     *
+     * @param member member of the class
+     * @return true if member should be visible
+     */
+    public boolean isVisible(Member member);
+}

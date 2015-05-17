@@ -42,23 +42,57 @@ package javax.json.bind.config;
 
 /**
  * <p>
- *     Defines available null serialization policies.
+ *     Allows to define custom property naming strategy.
+ *     Specifies predefined property naming strategies.
  * </p>
  *
  * <p>
- *     This policy can be set via {@link javax.json.bind.JsonbConfig}.
+ *     This strategy can be set via {@link javax.json.bind.JsonbConfig}.
  * </p>
  *
  * @see javax.json.bind.JsonbConfig
  */
-public enum NullSerializationPolicy {
+public interface PropertyNamingStrategy {
     /**
-     * Using this policy, the property with null value will not be serialized.
-     * This is the default policy.
+     * Using this strategy, the property name is unchanged.
      */
-    SKIP,
+    public static final String IDENTITY = "jsonb.naming.identity";
+
     /**
-     * Using this policy, the property with null value is serialized as null value.
+     * Using this strategy, the property name is transformed to lower case with dashes.
+     * The dashes are on the positions of different case boundaries in the original field name (camel case).
      */
-    SERIALIZE_NULL
+    public static final String LOWER_CASE_WITH_DASHES = "jsonb.naming.lower-case-with-dashes";
+
+    /**
+     * Using this strategy, the property name is transformed to lower case with underscores.
+     * The underscores are on the positions of different case boundaries in the original field name (camel case).
+     */
+    public static final String LOWER_CASE_WITH_UNDERSCORES = "jsonb.naming.lower-case-with-underscores";
+
+    /**
+     * Using this strategy, the first character will be capitalized.
+     */
+    public static final String UPPER_CAMEL_CASE = "jsonb.naming.upper-camel-case";
+
+    /**
+     * Using this strategy, the first character will be capitalized and the words
+     * will be separated by spaces.
+     */
+    public static final String UPPER_CAMEL_CASE_WITH_SPACES = "jsonb.naming.upper-camel-case-with-spaces";
+
+    /**
+     * Using this strategy, the serialization will be same as identity.
+     * Deserialization will be case insensitive. E.g. property in JSON with name
+     * PropertyNAME, will be mapped to field propertyName.
+     */
+    public static final String CASE_INSENSITIVE = "jsonb.naming.case-insensitive";
+
+    /**
+     * Translates the property name into its JSON field name representation.
+     *
+     * @param propertyName Name of the property to translate.
+     * @return Translated JSON field name.
+     */
+    public String translateName(String propertyName);
 }

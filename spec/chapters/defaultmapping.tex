@@ -95,8 +95,9 @@ Implementations MUST support binding of the following standard Java date/time cl
 \end{list}
 
 If not specified otherwise in this section, GMT standard time zone and offset specified from UTC Greenwich is used. [JSB-\ref{sec:dates}-2] 
-If not specified otherwise, date time format for marshalling and unmarshalling is ISO 8601 without offset, as specified in java.time.format.DateTimeFormatter.ISO\verb|_|DATE. [JSB-\ref{sec:dates}-3] 
+If not specified otherwise, date time format for marshalling and unmarshalling is ISO 8601 with offset, as specified in java.time.format.DateTimeFormatter.ISO\verb|_|DATE. [JSB-\ref{sec:dates}-3]
 Implementations MUST report error if the datetime string in JSON document does not correspond to the expected datetime format. [JSB-\ref{sec:dates}-4]
+Uppercase rather than lowercase letters MUST be used.  [JSB-\ref{sec:dates}-5] The timezone MUST always be included and optional trailing seconds MUST be included even when their value is "00". [JSB-\ref{sec:dates}-6]
 
 \subsection{java.util.Date, Calendar, GregorianCalendar}
 \label{subsec:datecalendar}
@@ -107,7 +108,7 @@ Implementations MUST support unmarshalling of both ISO\verb|_|DATE and ISO\verb|
 \subsection{java.util.TimeZone, SimpleTimeZone}
 \label{subsec:dateTimezone}
 
-Implementations MUST support unmarshalling of any time zone format specified in java.util.TimeZone into field or property of type java.util.TimeZone, SimpleTimezone. [JSB-\ref{subsec:dateTimezone}-1] Implementations MUST report error for deprecated three-letter time zone IDs as specified in java.util.Timezone. [JSB-\ref{subsec:dateTimezone}-2]
+Implementations MUST support unmarshalling of any time zone format specified in java.util.TimeZone into field or property of type java.util.TimeZone, SimpleTimeZone. [JSB-\ref{subsec:dateTimezone}-1] Implementations MUST report error for deprecated three-letter time zone IDs as specified in java.util.Timezone. [JSB-\ref{subsec:dateTimezone}-2]
 Marshalling format of java.util.TimeZone, SimpleTimeZone is NormalizedCustomID as specified in java.util.TimeZone. [JSB-\ref{subsec:dateTimezone}-3]
 
 \subsection{java.time.*}
@@ -142,8 +143,10 @@ Implementations MUST support unmarshalling of any duration format specified in j
 Marshalling format of java.time.Duration is ISO 8601 seconds based representation, such as
 \verb|PT8H6M12.345S|. [JSB-\ref{subsec:time}-9]
 
-Implementations MUST support unmarshalling of any period format specified in java.time.Period into field or property of type java.time.Period. [JSB-\ref{subsec:time}-10] This is super-set of ISO 8601 period format.
-Marshalling format of java.time.Period is ISO 8601 period representation. [JSB-\ref{subsec:time}-11] Zero length period is represented as zero days \verb|'P0D'|. [JSB-\ref{subsec:time}-12]
+The result of serialization of duration must conform to the "duration" production in Appendix A of RFC 3339, with the same additional restrictions. [JSB-\ref{subsec:time}-10]
+
+Implementations MUST support unmarshalling of any period format specified in java.time.Period into field or property of type java.time.Period. [JSB-\ref{subsec:time}-11] This is super-set of ISO 8601 period format.
+Marshalling format of java.time.Period is ISO 8601 period representation. [JSB-\ref{subsec:time}-12] Zero length period is represented as zero days \verb|'P0D'|. [JSB-\ref{subsec:time}-13]
 
 
 \section{Untyped mapping}
@@ -273,6 +276,10 @@ JSON Binding implementations MUST support binding of generic types. [JSB-\ref{se
 
 There are two ways for JSON Binding implementations to obtain generic type information. If there is a class file available (in the following text referred as static type information), it is possible to obtain generic type information (effectively generic type declaration) from Signature attribute (if this information is present). [JSB-\ref{sec:generics}-2] The second option is to provide generic type information at runtime. To provide generic type information at runtime, an argument of java.lang.reflect.Type MUST be passed to Jsonb::toJson or to Jsonb::fromJson method. [JSB-\ref{sec:generics}-3]
 
+\section{Big numbers}
+\label{sec:big_numbers}
+JSON Binding implementation MUST serialize numbers that express greater magnitude or precision than an IEEE 754 double precision number as strings. [JSB-\ref{sec:big_numbers}-1]
+
 \subsection{Type resolution algorithm}
 \label{sec:type_resolution_algorithm}
 There are several levels of information JSON Binding implementations may obtain about the type of field/class/interface: [JSB-\ref{sec:type_resolution_algorithm}-1]
@@ -322,6 +329,16 @@ public class MyGenericType<T,U> {
 \end{figure}
 
 To resolve type of field1, runtime type of MyGenericType and static type of field1 is required.
+
+\section{Must-Ignore policy}
+\label{sec:must_ignore_policy}
+When JSON Binding implementation encounters key in key/value pair that it does not recognize, it should treat the rest of the JSON document as if the element simply did not appear, and in particular, the implementation MUST NOT treat this as an error condition. [JSB-\ref{sec:must_ignore_policy}-1]
+
+\section{Uniqueness of properties}
+\label{sec:uniqueness_properties}
+JSON Binding implementations MUST NOT produce JSON documents with members with duplicate names. In this context, "duplicate" means that the names, after processing any escaped characters, are identical sequences of Unicode characters. [JSB-\ref{sec:uniqueness_properties}-1]
+
+When non-unique property (after override and rename) is found, implementation MUST throw an exception. This doesn't apply for customized user serialization behavior implemented with the usage of JsonbAdapter mechanism. [JSB-\ref{sec:uniqueness_properties}-2]
 
 \section{JSON Processing integration}
 \label{sec:jsonp_integration}

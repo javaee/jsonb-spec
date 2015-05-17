@@ -57,16 +57,23 @@ import java.lang.annotation.Target;
  * <ul>
  *   <li> a JavaBean property </li>
  *   <li> field </li>
+ *   <li> parameter </li>
  * </ul>
  */
 @JsonbAnnotation
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.ANNOTATION_TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 public @interface JsonbProperty {
 
     /**
      *
      * Customized name of the field (or JavaBean property).
      */
-    String value();
+    String value() default "";
+
+    /**
+     *
+     * True if field with null value should be marshalled as key/value pair into JSON with null value.
+     */
+    boolean nillable() default false;
 }

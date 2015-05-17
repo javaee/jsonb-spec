@@ -13,10 +13,12 @@ There are two standard ways how to customize serialization of field (or JavaBean
 
 According to default mapping ref{sec:naming}, property names are serialized unchanged to JSON document (identity transformation). To provide custom name for given field (or JavaBean property), javax.json.bind.annotation.JsonbProperty may be used. JsonbProperty annotation may be specified on field, getter or setter method. If specified on field, custom name is used both for serialization and deserialization. If javax.json.bind.annotation.JsonbProperty is specified on getter method, it is used only for serialization. If javax.json.bind.annotation.JsonbProperty is specified on setter method, it is used only for deserialization. It is possible to specify different values for getter and setter method for javax.json.bind.annotation.JsonbProperty annotation. In such case the different custom name will be used for serialization and deserialization. [JSB-\ref{subsec:JsonbProperty}-1]
 
-\subsection{javax.json.bind.config.PropertyNamingPolicy}
-\label{subsec:PropertyNamingPolicy}
+\subsection{javax.json.bind.config.PropertyNamingStrategy}
+\label{subsec:PropertyNamingStrategy}
 
-Enum javax.json.bind.config.PropertyNamingPolicy provides the most common property naming strategies.
+To customize name translation of properties, JSON Binding provides javax.json.bind.config.PropertyNamingStrategy interface.
+
+Interface javax.json.bind.config.PropertyNamingStrategy provides the most common property naming strategies.
 
 \begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
 \item IDENTITY
@@ -29,62 +31,104 @@ Enum javax.json.bind.config.PropertyNamingPolicy provides the most common proper
 
 The detailed description of property naming strategies can be found in javadoc.
 
-The way to set custom property naming policy is to use javax.json.bin.JsonbConfig::setPropertyNamingPolicy method. [JSB-\ref{subsec:JsonbProperty}-1]
+The way to set custom property naming policy is to use javax.json.bin.JsonbConfig::withPropertyNamingStrategy method. [JSB-\ref{subsec:JsonbProperty}-1]
+
+\subsection{Property names resolution}
+\label{sec:property_names_resolution}
+Property name resolution consist of two phases:
+
+1. Standard override mechanism
+2. Applying property name resolution, which involves the value of @JsonbProperty
+
+If duplicate name is found exception MUST be thrown.
+The definition of duplicate (non-unique) property can be found in \ref{sec:uniqueness_properties}. [JSB-\ref{sec:property_names_resolution}-1]
+
 
 \section{Customizing Property Order}
 \label{sec:custom_property_order}
 
 To customize order of serialized properties, JSON Binding provides javax.json.bind.config.PropertyOrderStrategy interface.
 
-The way to set custom property order is to use javax.json.bin.JsonbConfig::setPropertyOrderStrategy method. [JSB-\ref{sec:custom_property_order}-1]
+Interface javax.json.bind.config.PropertyOrderStrategy provides the most common property order strategies.
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item LEXICOGRAPHICAL
+\item REFLECTION
+\item REVERSE
+\end{list}
+
+The detailed description of property order strategies can be found in javadoc.
+
+The way to set custom property order policy is to use javax.json.bin.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{subsec:custom_property_order}-2]
 
 \section{Customizing Null Handling}
 \label{sec:custom_null_handling}
 
-There are two ways how to change default null handling. The first option is to anotate given object (field, JavaBean property, type or package) with javax.json.bind.annotation.JsonbNillable annotation. The second option is to provide config wide (via javax.json.bin.JsonbConfig::setNullSerializationPolicy method) configuration.
+There are three ways how to change default null handling. The first option is to annotate type or package with javax.json.bind.annotation.JsonbNillable annotation. The second option is to annotate field or JavaBean property with javax.json.bind.annotation.JsonbProperty and to set nillable parameter to true. The third option is to set config wide configuration via JsonbConfig::withSkippedNullValues method.
 
 \subsection{javax.json.bind.annotation.JsonbNillable}
 \label{subsec:JsonbNillable}
 
-To customize the result of serializing field (or JavaBean property) with null value, JSON Binding provides javax.json.bind.annotation.JsonbNillable annotation.
+To customize the result of serializing field (or JavaBean property) with null value, JSON Binding provides javax.json.bind.annotation.JsonbNillable and javax.json.bind.annotation.JsonbProperty annotations.
 
-When given object (field, JavaBean property, type or package) is annotated with javax.json.bind.annotation.JsonbNillable annotation, the result of null value will be presence of associated property in JSON document with explicit null value. [JSB-\ref{subsec:JsonbNillable}-1]
+When given object (type or package) is annotated with javax.json.bind.annotation.JsonbNillable annotation, the result of null value will be presence of associated property in JSON document with explicit null value. [JSB-\ref{subsec:JsonbNillable}-1]
 
-JSON Binding implementations MUST implement override of annotations according to target of the annotation (FIELD, METHOD, TYPE, PACKAGE). Type level annotation overrides behavior set at the package level. Method or field level annotation overrides behavior set at the type level. [JSB-\ref{subsec:JsonbNillable}-2]
+The same behavior as JsonbNillable, but only at field, parameter and method (JavaBean property) level is provided by javax.json.bind.annotation.JsonbProperty annotation with its nillable parameter. [JSB-\ref{subsec:JsonbNillable}-2]
 
-\subsection{javax.json.bind.config.NullSerializationPolicy}
+JSON Binding implementations MUST implement override of annotations according to target of the annotation (FIELD, PARAMETER, METHOD, TYPE, PACKAGE). Type level annotation overrides behavior set at the package level. Method, parameter or field level annotation overrides behavior set at the type level. [JSB-\ref{subsec:JsonbNillable}-3]
+
+\subsection{Global null handling configuration}
 \label{subsec:NullSerializationPolicy}
 
-Enum javax.json.bind.config.NullSerializationPolicy provides two most common null serialization strategies.
+Null handling behavior can be customized via javax.json.bind.JsonbConfig::withSkippedNullValues method.
 
-\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
-\item SKIP
-\item SERIALIZE\_NULL
-\end{list}
+The way to skip serialization of null values, is to call method javax.json.bind.JsonbConfig::withSkippedNullValues with parameter true. The way to serialize members with explicit null values is to call method javax.json.bind.JsonbConfig::withSkippedNullValues with parameter false. [JSB-\ref{subsec:NullSerializationPolicy}-1]
 
-The detailed description of null serialization strategies can be found in javadoc.
+\section{I-JSON support}
+\label{sec:i_json}
 
-The way to set custom null serialization policy is to use javax.json.bin.JsonbConfig::setNullSerializationPolicy method. [JSB-\ref{subsec:NullSerializationPolicy}-1]
+I-JSON (short for "Internet JSON") is a restricted profile of JSON designed to maximize interoperability and increase confidence that software can process it successfully with predictable results. The profile is defined in RFC 7493 https://tools.ietf.org/html/rfc7493.
 
-\section{Customizing Exception Handling}
-\label{sec:custom_exception_handling}
+\subsection{Serialization}
+\label{subsec:i_json_serialization}
 
-To allow for multiple deserialization (or serialization or other) errors to be processed in one pass, each error is mapped to an error event. An error event relates the error or warning encountered to the location of the text or object(s) involved with the error. The stream of potential error events can be communicated to the application through a registered event handler at the time the error is encountered.
+JSON Binding provides full support for I-JSON standard. Without any configuration, JSON Binding produces JSON documents which are compliant with I-JSON with two exceptions. JSON Binding does not restrict the serialization of top-level JSON texts that are neither objects nor arrays. Another difference is that JSON Binding does not serialize binary data with base64url encoding.
 
-The default exception strategy is to fail fast. To customize this exception strategy, JSON Binding provides javax.json.bin.JsonbConfig::setEventHandler method with one parameter of javax.json.bind.event.JsonbEventHandler.
+To enforce strict compliance of serialized JSON documents, JSON Binding implementations MUST implement configuration option "jsonb.i-json.strict-ser-compliance".
+[JSB-\ref{subsec:i_json_serialization}-1]
 
-\subsection{javax.json.bind.event.JsonbEventHandler}
-\label{subsec:JsonbEventHandler}
+The way to enable strict compliance of serialized JSON documents, is to call method JsonbConfig::withStrictIJSONSerializationCompliance with parameter true.
 
-To customize exception handling behavior, implementation of javax.json.bind.event.JsonbEventHandler need to be provided to javax.json.bin.JsonbConfig configuration. JsonbEventHandler contains handleEvent method with javax.json.bind.event.JsonbEvent parameter. JsonbEvent has associated severity.
+\subsection{Deserialization}
+\label{subsec:i_json_deserialization}
 
-\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
-\item INFO
-\item WARNING
-\item ERROR
-\item FATAL\_ERROR
-\end{list}
+JSON Binding implementations MUST implement configuration option "jsonb.i-json.validation". The configuration option provides support to turn on/off validation of I-JSON message conformance according to RFC 7493. The validation applies only to inbound messages. In other words, validation is run only during deserialization of JSON documents and is not run for messages produced by JSON Binding implementation.
+[JSB-\ref{subsec:i_json_deserialization}-1]
 
-The detailed description of severity levels can be found in javadoc. Events with severity level different than FATAL\_ERROR are recoverable and can be effectively ignored by returning false from handleEvent method.
+The way to enable inbound I-JSON message validation, is to call method JsonbConfig::withIJSONValidation with parameter true.
 
-The location of event is provided (if available) by javax.json.bind.event.JsonbEventLocator which can be obtained from JsonbEvent::getLocator method.
+\section{Simple values}
+\label{sec:simple_values}
+
+Using javax.json.bind.annotation.JsonbValue annotation, a class can be mapped to a simple value. Class can contain at most one mapped property or field that is annotated with javax.json.bind.annotation.JsonbValue.
+[JSB-\ref{sec:simple_values}-1]
+
+Annotation javax.json.bind.annotation.JsonbValue indicates that result of the annotated non-void method or field or constructor parameter will be used as the single value to serialize for the instance.
+[JSB-\ref{sec:simple_values}-2]
+
+\section{Custom instantiation}
+\label{sec:custom_instantiation}
+
+In many scenarios instantiation with the use of default constructor is not enough. To support these scenarios, JSON Binding provides javax.json.bind.annotation.JsonbCreator annotation.
+
+JsonbCreator annotation can be used to annotation custom constructor or static void factory method.
+
+\section{Custom visibility}
+\label{sec:custom_visibility}
+
+To customize scope and field access strategy as specified in section \ref{subsec:fieldstrategy}, it is possible to specify javax.json.bind.annotation.JsonbVisibility annotation or to override default behavior globally calling JsonbConfig::withPropertyVisibilityStrategy method with given custom property visibility strategy. [JSB-\ref{sec:custom_visibility}-1]
+
+\section{JsonbAdapter}
+\label{sec:jsonb_adapter}
+
+To provide custom mapping for specific java type, it is necessary to extend javax.json.bind.adapter.JsonbAdapter abstract class.

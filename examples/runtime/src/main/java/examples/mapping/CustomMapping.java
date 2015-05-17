@@ -6,11 +6,8 @@ import javax.json.bind.JsonbConfig;
 import javax.json.bind.annotation.JsonbNillable;
 import javax.json.bind.annotation.JsonbProperty;
 import javax.json.bind.annotation.JsonbPropertyOrder;
-import javax.json.bind.config.NullSerializationPolicy;
-import javax.json.bind.config.PropertyNamingPolicy;
+import javax.json.bind.config.PropertyNamingStrategy;
 import javax.json.bind.config.PropertyOrderStrategy;
-import javax.json.bind.event.JsonbEvent;
-import javax.json.bind.event.JsonbEventHandler;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -29,8 +26,6 @@ public class CustomMapping {
         toJson_nillable(jsonb);
 
         toJson_propertyOrder(jsonb);
-
-        exceptionHandling(jsonb);
     }
 
     public static void fromJson_customName(Jsonb jsonb) {
@@ -56,7 +51,7 @@ public class CustomMapping {
     }
 
     public static void customNamePolicy() {
-        JsonbConfig caseInsensitiveConfig = new JsonbConfig().setPropertyNamingPolicy(PropertyNamingPolicy.CASE_INSENSITIVE);
+        JsonbConfig caseInsensitiveConfig = new JsonbConfig().withPropertyNamingStrategy(PropertyNamingStrategy.CASE_INSENSITIVE);
         Jsonb caseInsensitiveJsonb = JsonbBuilder.create(caseInsensitiveConfig);
 
         assertEquals("{\"name\":\"Effective Java\"}", caseInsensitiveJsonb.toJson(new Book()));
@@ -74,7 +69,7 @@ public class CustomMapping {
 
         assertEquals("{\"nillableField\":nill}", jsonb.toJson(new NillableTypeOverride()));
 
-        JsonbConfig nillableConfig = new JsonbConfig().setNullSerializationPolicy(NullSerializationPolicy.SERIALIZE_NULL);
+        JsonbConfig nillableConfig = new JsonbConfig().withSkippedNullValues(false);
         Jsonb nillableJsonb = JsonbBuilder.create(nillableConfig);
 
         Book book = new Book();
@@ -85,22 +80,12 @@ public class CustomMapping {
     public static void toJson_propertyOrder(Jsonb jsonb) {
         PropertyOrderClass propertyOrderClass = new PropertyOrderClass();
 
-        JsonbConfig customPropertyOrderConfig = new JsonbConfig().setPropertyOrderStrategy(new CustomPropertyOrderStrategy());
+        JsonbConfig customPropertyOrderConfig = new JsonbConfig().withPropertyOrderStrategy(new CustomPropertyOrderStrategy());
         Jsonb customPropertyOrderJsonb = JsonbBuilder.create(customPropertyOrderConfig);
 
         assertEquals("{\"aField\":\"a\",\"dField\":\"d\",\"cField\":\"c\",\"bField\":\"b\"}", customPropertyOrderJsonb.toJson(new PropertyOrderClass()));
 
         assertEquals("{\"dField\":\"d\",\"cField\":\"c\",\"bField\":\"b\",\"aField\":\"a\"}", jsonb.toJson(new PropertyOrderSpecificClass()));
-    }
-
-    public static void exceptionHandling(Jsonb jsonb) {
-        JsonbConfig eventConfig = new JsonbConfig().setEventHandler(new JsonbEventHandler() {
-            @Override
-            public boolean handleEvent(JsonbEvent event) {
-                //ignore all events
-                return true;
-            }
-        });
     }
 
     @JsonbPropertyOrder({"dField","cField","bField","aField"})
@@ -130,7 +115,7 @@ public class CustomMapping {
 
     static class NillableClass {
 
-        @JsonbNillable
+        @JsonbProperty(nillable=true)
         public String nillableField;
 
         public NillableClass() {}
@@ -142,7 +127,7 @@ public class CustomMapping {
 
         public NillableClassWithGetter() {}
 
-        @JsonbNillable
+        @JsonbProperty(nillable=true)
         public String getNillableField() {
             return nillableField;
         }
@@ -163,7 +148,7 @@ public class CustomMapping {
     static class NillableTypeOverride {
         public String nillableField;
 
-        @JsonbNillable(false)
+        @JsonbProperty(nillable=false)
         public String absentField;
 
         public NillableTypeOverride() {}
@@ -181,7 +166,7 @@ public class CustomMapping {
          * Not guaranteed to work in the same way on all the JDKs.
          */
         @Override
-        public String[] getPropertiesOrder(Class clazz, String[] propertyNames) {
+        public List<String> getPropertiesOrder(Class clazz, List<String> propertyNames) {
 
             final Map<String, Integer> orderMap = new HashMap<>();
 
@@ -190,8 +175,8 @@ public class CustomMapping {
                 orderMap.put(field.getName(), i++);
             }
 
-            List<String> orderedList = new ArrayList<>(propertyNames.length);
-            orderedList.addAll(Arrays.asList(propertyNames));
+            List<String> orderedList = new ArrayList<>(propertyNames.size());
+            orderedList.addAll(propertyNames);
 
             Collections.sort(orderedList, new Comparator<String>() {
                 @Override
@@ -212,7 +197,7 @@ public class CustomMapping {
                 }
             });
 
-            return orderedList.toArray(new String[propertyNames.length]);
+            return orderedList;
         }
     }
 

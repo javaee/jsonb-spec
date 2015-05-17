@@ -39,10 +39,9 @@
  */
 package javax.json.bind;
 
-import javax.json.bind.config.NullSerializationPolicy;
-import javax.json.bind.config.PropertyNamingPolicy;
+import javax.json.bind.config.PropertyNamingStrategy;
 import javax.json.bind.config.PropertyOrderStrategy;
-import javax.json.bind.event.JsonbEventHandler;
+import javax.json.bind.config.PropertyVisibilityStrategy;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,14 +103,9 @@ public class JsonbConfig {
     public static final String JSONB_ENCODING = "jsonb.encoding";
 
     /**
-     * Property used to specify custom naming policy.
+     * Property used to specify custom naming strategy.
      */
-    public static final String JSONB_PROPERTY_NAMING_POLICY = "jsonb.property-naming-policy";
-
-    /**
-     * Property used to specify custom null serialization policy.
-     */
-    public static final String JSONB_NULL_SERIALIZATION_POLICY = "jsonb.null-serialization-policy";
+    public static final String JSONB_PROPERTY_NAMING_STRATEGY = "jsonb.property-naming-strategy";
 
     /**
      * Property used to specify custom order strategy.
@@ -122,6 +116,27 @@ public class JsonbConfig {
      * Property used to specify custom event handler.
      */
     public static final String JSONB_EVENT_HANDLER = "jsonb.event-handler";
+
+    /**
+     * Property used to specify null values serialization behavior.
+     */
+    public static final String JSONB_SKIP_NULL_VALUES = "jsonb.skip-null-values";
+
+    /**
+     * Property used to specify string I-JSON serialization compliance.
+     */
+    public static final String JSONB_STRICT_I_JSON_SER_COMPLIANCE = "jsonb.i-json.strict-ser-compliance";
+
+    /**
+     * Property used to specify whether or not the inbound I-JSON validation
+     * should be performed.
+     */
+    public static final String JSONB_I_JSON_VALIDATION = "jsonb.i-json.validation";
+
+    /**
+     * Property used to specify custom visibility strategy.
+     */
+    public static final String JSONB_PROPERTY_VISIBILITY_STRATEGY = "jsonb.property-visibility-strategy";
 
     /**
      * Set the particular configuration property to a new value. The method can
@@ -177,16 +192,31 @@ public class JsonbConfig {
      * Property used to specify whether or not the marshaled JSON data is formatted
      * with linefeeds and indentation.
      *
-     * Configures value of {@code JSONB_TO_JSON_FORMATTING} property.
+     * Configures value of {@code JSONB_FORMATTING} property.
      *
      * @param formatted
-     *      True means marshalled data is formatted, false (default)
+     *      True means marshaled data is formatted, false (default)
      *      means no formatting.
      *
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withFormatting(final Boolean formatted) {
         return setProperty(JSONB_FORMATTING, formatted);
+    }
+
+    /**
+     * Property used to specify whether null values will be skipped in JSON document.
+     *
+     * Configures value of {@code JSONB_SKIP_NULL_VALUES} property.
+     *
+     * @param skipped
+     *      True means that null values will not be marshaled into JSON document,
+     *      they will be effectively skipped.
+     *
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withSkippedNullValues(final Boolean skipped) {
+        return setProperty(JSONB_SKIP_NULL_VALUES, skipped);
     }
 
     /**
@@ -208,31 +238,75 @@ public class JsonbConfig {
     }
 
     /**
-     * Property used to specify custom naming policy.
+     * Property used to specify whether strict I-JSON serialization compliance should be enforced.
      *
-     * Configures values of {@code JSONB_PROPERTY_NAMING_POLICY} property.
+     * Configures value of {@code JSONB_STRICT_I_JSON_SER_COMPLIANCE} property.
      *
-     * @param propertyNamingPolicy
-     *      Custom naming policy which affects serialization and deserialization.
+     * @param enabled
+     *      True means data is marshaled in strict compliance according to RFC 7493.
      *
      * @return This JsonbConfig instance.
      */
-    public final JsonbConfig setPropertyNamingPolicy(final PropertyNamingPolicy propertyNamingPolicy) {
-        return setProperty(JSONB_PROPERTY_NAMING_POLICY, propertyNamingPolicy);
+    public final JsonbConfig withStrictIJSONSerializationCompliance(final Boolean enabled) {
+        return setProperty(JSONB_STRICT_I_JSON_SER_COMPLIANCE, enabled);
     }
 
     /**
-     * Property used to specify custom null serialization policy.
+     * Property used to specify whether JSON document should be validated
+     * against I-JSON conformance rules during deserialization.
      *
-     * Configures values of {@code JSONB_NULL_SERIALIZATION_POLICY} property.
+     * Configures value of {@code JSONB_I_JSON_VALIDATION} property.
      *
-     * @param nullSerializationPolicy
-     *      Custom null serialization policy which affects serialization.
+     * @param enabled
+     *      True means that JSON document should be validated. JSON document must
+     *      be valid I-JSON message as defined in RFC 7493.
      *
      * @return This JsonbConfig instance.
      */
-    public final JsonbConfig setNullSerializationPolicy(final NullSerializationPolicy nullSerializationPolicy) {
-        return setProperty(JSONB_NULL_SERIALIZATION_POLICY, nullSerializationPolicy);
+    public final JsonbConfig withIJSONValidation(final Boolean enabled) {
+        return setProperty(JSONB_I_JSON_VALIDATION, enabled);
+    }
+
+    /**
+     * Property used to specify custom naming strategy.
+     *
+     * Configures value of {@code JSONB_PROPERTY_NAMING_STRATEGY} property.
+     *
+     * @param propertyNamingStrategy
+     *      Custom naming strategy which affects serialization and deserialization.
+     *
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withPropertyNamingStrategy(final PropertyNamingStrategy propertyNamingStrategy) {
+        return setProperty(JSONB_PROPERTY_NAMING_STRATEGY, propertyNamingStrategy);
+    }
+
+    /**
+     * Property used to specify custom naming strategy.
+     *
+     * Configures value of {@code JSONB_PROPERTY_NAMING_STRATEGY} property.
+     *
+     * @param propertyNamingStrategy
+     *      Predefined naming strategy which affects serialization and deserialization.
+     *
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withPropertyNamingStrategy(final String propertyNamingStrategy) {
+        return setProperty(JSONB_PROPERTY_NAMING_STRATEGY, propertyNamingStrategy);
+    }
+
+    /**
+     * Property used to specify property order strategy.
+     *
+     * Configures value of {@code JSONB_PROPERTY_ORDER_STRATEGY} property.
+     *
+     * @param propertyOrderStrategy
+     *      Custom property order strategy which affects serialization.
+     *
+     * @return This Jsonbconfig instance.
+     */
+    public final JsonbConfig withPropertyOrderStrategy(final PropertyOrderStrategy propertyOrderStrategy) {
+        return setProperty(JSONB_PROPERTY_ORDER_STRATEGY, propertyOrderStrategy);
     }
 
     /**
@@ -241,26 +315,26 @@ public class JsonbConfig {
      * Configures values of {@code JSONB_PROPERTY_ORDER_STRATEGY} property.
      *
      * @param propertyOrderStrategy
-     *      Custom property order strategy which affects serialization.
+     *      Predefined property order strategy which affects serialization.
      *
      * @return This Jsonbconfig instance.
      */
-    public final JsonbConfig setPropertyOrderStrategy(final PropertyOrderStrategy propertyOrderStrategy) {
+    public final JsonbConfig withPropertyOrderStrategy(final String propertyOrderStrategy) {
         return setProperty(JSONB_PROPERTY_ORDER_STRATEGY, propertyOrderStrategy);
     }
 
     /**
-     * Property used to specify custom event handler.
+     * Property used to specify custom property visibility strategy.
      *
-     * Configures values of {@code JSONB_EVENT_HANDLER} property.
+     * Configures value of {@code JSONB_PROPERTY_VISIBILITY_STRATEGY} property.
      *
-     * @param eventHandler
-     *      Custom event handler which intercepts events generated by JSON-B provider.
+     * @param propertyVisibilityStrategy
+     *      Custom property visibility strategy which affects serialization and deserialization.
      *
      * @return This Jsonbconfig instance.
      */
-    public final JsonbConfig setEventHandler(final JsonbEventHandler eventHandler) {
-        return setProperty(JSONB_EVENT_HANDLER, eventHandler);
+    public final JsonbConfig withPropertyVisibilityStrategy(final PropertyVisibilityStrategy
+                                                                    propertyVisibilityStrategy) {
+        return setProperty(JSONB_PROPERTY_VISIBILITY_STRATEGY, propertyVisibilityStrategy);
     }
-
 }

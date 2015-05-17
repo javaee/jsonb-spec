@@ -37,62 +37,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package javax.json.bind.annotation;
 
-package javax.json.bind.event;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * <p>
- *     This event represents that some error/warning or some condition
- *     was encountered during serialization or deserialization.
+ *     Annotation provides way how to use custom constructor or factory method
+ *     to create instance of the associated class.
  * </p>
+ *
+ * <p><b>Usage</b></p>
+ * <p> The {@code @JsonbCreator} annotation can be used with the following
+ *     program elements:
+ * <ul>
+ *   <li> method </li>
+ *   <li> constructor </li>
+ * </ul>
  */
-public interface JsonbEvent {
-
-    /**
-     * Represents informational/expected event.
-     */
-    public static final int INFO = -1;
-
-    /**
-     * Represents unexpected condition.
-     */
-    public static final int WARNING = 0;
-
-    /**
-     * Represents the error which is recoverable.
-     */
-    public static final int ERROR = 1;
-
-    /**
-     * Represents the error which is not recoverable.
-     */
-    public static final int FATAL_ERROR = 2;
-
-    /**
-     * @return Returns the events severity.
-     */
-    public int getSeverity();
-
-    /**
-     * @return Returns a textual description of the event.
-     */
-    public String getMessage();
-
-    /**
-     * Retrieve the linked exception for this warning/error.
-     *
-     * @return Returns a {@link Throwable} related to the event. In most cases
-     * an exception causing the event.
-     */
-    public Throwable getLinkedException();
-
-    /**
-     * <p>
-     * Retrieve the locator for this warning/error.
-     * </p>
-     *
-     * @return Returns a description of the location, where the event
-     * occurred.
-     */
-    public JsonbEventLocator getLocator();
+@JsonbAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.ANNOTATION_TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR})
+public @interface JsonbCreator {
 }

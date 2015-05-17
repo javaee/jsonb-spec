@@ -10,7 +10,10 @@ import javax.json.bind.JsonbConfig;
 public class I_JSONCompatibility {
 
     public static void main(String[] args) {
-        JsonbConfig jsonIConfig = new JsonbConfig().setProperty("jsonb.i-json.compliance", true);
+        JsonbConfig jsonIConfig = new JsonbConfig().
+                withStrictIJSONSerializationCompliance(true).
+                withIJSONValidation(true);
+
         Jsonb jsonb = JsonbBuilder.create(jsonIConfig);
     }
 }

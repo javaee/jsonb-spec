@@ -40,19 +40,38 @@
 
 package javax.json.bind.config;
 
+import java.util.List;
+
 /**
  * <p>
  *  Provides mechanism how to define customized order when serializing properties.
  * </p>
  *
  * <p>
- *  This policy can be set via {@link javax.json.bind.JsonbConfig}.
+ *  This strategy can be set via {@link javax.json.bind.JsonbConfig}.
  * </p>
  */
 public interface PropertyOrderStrategy {
 
     /**
-     *  Returns ordererd array of names of properties.
+     * Using this strategy, the order of properties is lexicographical.
+     */
+    public static final String LEXICOGRAPHICAL = "jsonb.order.lexicographical";
+
+    /**
+     * Using this strategy, the order of properties is same as
+     * the output of java.lang.Class::getFields() method.
+     */
+    public static final String REFLECTION = "jsonb.order.reflection";
+
+    /**
+     * Using this strategy, the order of properties is in reverse order
+     * to lexicographical order.
+     */
+    public static final String REVERSE = "jsonb.order.reverse";
+
+    /**
+     *  Returns ordererd list of names of properties.
      *
      * @param clazz
      *      Class to serialize.
@@ -60,7 +79,7 @@ public interface PropertyOrderStrategy {
      * @param propertyNames
      *      Names of properties to serialize.
      *
-     * @return Returns ordered array of names of properties.
+     * @return Returns ordered list of names of properties.
      */
-    String[] getPropertiesOrder(Class clazz, String[] propertyNames);
+    List<String> getPropertiesOrder(Class clazz, List<String> propertyNames);
 }

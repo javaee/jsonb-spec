@@ -42,6 +42,7 @@ package javax.json.bind.annotation;
 
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
@@ -70,6 +71,6 @@ import static java.lang.annotation.ElementType.TYPE;
  */
 
 @JsonbAnnotation
-@Target({FIELD, METHOD, TYPE})
+@Target({ANNOTATION_TYPE, FIELD, METHOD, TYPE})
 public @interface JsonbTransient { }
 

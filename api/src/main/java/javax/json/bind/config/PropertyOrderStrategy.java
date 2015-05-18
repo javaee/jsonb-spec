@@ -56,19 +56,19 @@ public interface PropertyOrderStrategy {
     /**
      * Using this strategy, the order of properties is lexicographical.
      */
-    public static final String LEXICOGRAPHICAL = "jsonb.order.lexicographical";
+    public static final String LEXICOGRAPHICAL = "LEXICOGRAPHICAL";
 
     /**
      * Using this strategy, the order of properties is same as
      * the output of java.lang.Class::getFields() method.
      */
-    public static final String REFLECTION = "jsonb.order.reflection";
+    public static final String REFLECTION = "REFLECTION";
 
     /**
      * Using this strategy, the order of properties is in reverse order
      * to lexicographical order.
      */
-    public static final String REVERSE = "jsonb.order.reverse";
+    public static final String REVERSE = "REVERSE";
 
     /**
      *  Returns ordererd list of names of properties.

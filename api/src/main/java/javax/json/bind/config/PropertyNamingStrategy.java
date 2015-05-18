@@ -56,37 +56,37 @@ public interface PropertyNamingStrategy {
     /**
      * Using this strategy, the property name is unchanged.
      */
-    public static final String IDENTITY = "jsonb.naming.identity";
+    public static final String IDENTITY = "IDENTITY";
 
     /**
      * Using this strategy, the property name is transformed to lower case with dashes.
      * The dashes are on the positions of different case boundaries in the original field name (camel case).
      */
-    public static final String LOWER_CASE_WITH_DASHES = "jsonb.naming.lower-case-with-dashes";
+    public static final String LOWER_CASE_WITH_DASHES = "LOWER_CASE_WITH_DASHES";
 
     /**
      * Using this strategy, the property name is transformed to lower case with underscores.
      * The underscores are on the positions of different case boundaries in the original field name (camel case).
      */
-    public static final String LOWER_CASE_WITH_UNDERSCORES = "jsonb.naming.lower-case-with-underscores";
+    public static final String LOWER_CASE_WITH_UNDERSCORES = "LOWER_CASE_WITH_UNDERSCORES";
 
     /**
      * Using this strategy, the first character will be capitalized.
      */
-    public static final String UPPER_CAMEL_CASE = "jsonb.naming.upper-camel-case";
+    public static final String UPPER_CAMEL_CASE = "UPPER_CAMEL_CASE";
 
     /**
      * Using this strategy, the first character will be capitalized and the words
      * will be separated by spaces.
      */
-    public static final String UPPER_CAMEL_CASE_WITH_SPACES = "jsonb.naming.upper-camel-case-with-spaces";
+    public static final String UPPER_CAMEL_CASE_WITH_SPACES = "UPPER_CAMEL_CASE_WITH_SPACES";
 
     /**
      * Using this strategy, the serialization will be same as identity.
      * Deserialization will be case insensitive. E.g. property in JSON with name
      * PropertyNAME, will be mapped to field propertyName.
      */
-    public static final String CASE_INSENSITIVE = "jsonb.naming.case-insensitive";
+    public static final String CASE_INSENSITIVE = "CASE_INSENSITIVE";
 
     /**
      * Translates the property name into its JSON field name representation.

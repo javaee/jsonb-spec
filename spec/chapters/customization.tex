@@ -31,7 +31,7 @@ Interface javax.json.bind.config.PropertyNamingStrategy provides the most common
 
 The detailed description of property naming strategies can be found in javadoc.
 
-The way to set custom property naming policy is to use javax.json.bin.JsonbConfig::withPropertyNamingStrategy method. [JSB-\ref{subsec:JsonbProperty}-1]
+The way to set custom property naming strategy is to use javax.json.bin.JsonbConfig::withPropertyNamingStrategy method. [JSB-\ref{subsec:JsonbProperty}-1]
 
 \subsection{Property names resolution}
 \label{sec:property_names_resolution}
@@ -59,12 +59,14 @@ Interface javax.json.bind.config.PropertyOrderStrategy provides the most common 
 
 The detailed description of property order strategies can be found in javadoc.
 
-The way to set custom property order policy is to use javax.json.bin.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{subsec:custom_property_order}-2]
+The way to set custom property order strategy is to use javax.json.bin.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{subsec:custom_property_order}-2]
 
 \section{Customizing Null Handling}
 \label{sec:custom_null_handling}
 
 There are three ways how to change default null handling. The first option is to annotate type or package with javax.json.bind.annotation.JsonbNillable annotation. The second option is to annotate field or JavaBean property with javax.json.bind.annotation.JsonbProperty and to set nillable parameter to true. The third option is to set config wide configuration via JsonbConfig::withSkippedNullValues method.
+
+If annotations (JsonbNillable or JsonbProperty) on different level apply to the same field (or JavaBean property) or if there is config wide configuration and some annotation (JsonbNillable or JsonbProperty) which apply to the same field (or JavaBean property), the annotation with the smallest scope applies. For example, if there is type level JsonbNillable annotation applied to some class with field which is annotated with JsonbProperty annotation with nillable = false, then JsonbProperty annotation overrides JsonbNillable annotation.
 
 \subsection{javax.json.bind.annotation.JsonbNillable}
 \label{subsec:JsonbNillable}
@@ -87,25 +89,31 @@ The way to skip serialization of null values, is to call method javax.json.bind.
 \section{I-JSON support}
 \label{sec:i_json}
 
-I-JSON (short for "Internet JSON") is a restricted profile of JSON designed to maximize interoperability and increase confidence that software can process it successfully with predictable results. The profile is defined in RFC 7493 https://tools.ietf.org/html/rfc7493.
+I-JSON (short for "Internet JSON") is a restricted profile of JSON designed to maximize interoperability and increase confidence that software can process it successfully with predictable results. The profile is defined in \cite{rfc7159}.
 
-\subsection{Serialization}
-\label{subsec:i_json_serialization}
+JSON Binding provides full support for I-JSON standard. Without any configuration, JSON Binding produces JSON documents which are compliant with I-JSON with three exceptions.
 
-JSON Binding provides full support for I-JSON standard. Without any configuration, JSON Binding produces JSON documents which are compliant with I-JSON with two exceptions. JSON Binding does not restrict the serialization of top-level JSON texts that are neither objects nor arrays. Another difference is that JSON Binding does not serialize binary data with base64url encoding.
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item JSON Binding does not restrict the serialization of top-level JSON texts that are neither objects nor arrays. The restriction should happen at application level.
+\item JSON Binding does not serialize binary data with base64url encoding.
+\item JSON Binding does not enforce additional restrictions on dates/times/duration.
+\end{list}
+
+These exceptions refer only to recommended areas of I-JSON.
 
 To enforce strict compliance of serialized JSON documents, JSON Binding implementations MUST implement configuration option "jsonb.i-json.strict-ser-compliance".
-[JSB-\ref{subsec:i_json_serialization}-1]
+[JSB-\ref{sec:i_json}-1]
 
 The way to enable strict compliance of serialized JSON documents, is to call method JsonbConfig::withStrictIJSONSerializationCompliance with parameter true.
 
-\subsection{Deserialization}
-\label{subsec:i_json_deserialization}
+\subsection{Strict date serialization}
+\label{subsec:strict_date_serialization}
 
-JSON Binding implementations MUST implement configuration option "jsonb.i-json.validation". The configuration option provides support to turn on/off validation of I-JSON message conformance according to RFC 7493. The validation applies only to inbound messages. In other words, validation is run only during deserialization of JSON documents and is not run for messages produced by JSON Binding implementation.
-[JSB-\ref{subsec:i_json_deserialization}-1]
+Uppercase rather than lowercase letters MUST be used.  [JSB-\ref{subsec:strict_date_serialization}-1] The timezone MUST always be included and optional trailing seconds MUST be included even when their value is "00". [JSB-\ref{subsec:strict_date_serialization}-2]
 
-The way to enable inbound I-JSON message validation, is to call method JsonbConfig::withIJSONValidation with parameter true.
+JSON Binding implementations MUST serialize java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.time.LocalDate, java.time.LocalDateTime and java.time.Instant in the same format as java.time.ZonedDateTime. [JSB-\ref{subsec:strict_date_serialization}-3]
+
+The result of serialization of duration must conform to the "duration" production in Appendix A of RFC 3339, with the same additional restrictions. [JSB-\ref{subsec:strict_date_serialization}-4]
 
 \section{Simple values}
 \label{sec:simple_values}
@@ -128,7 +136,58 @@ JsonbCreator annotation can be used to annotation custom constructor or static v
 
 To customize scope and field access strategy as specified in section \ref{subsec:fieldstrategy}, it is possible to specify javax.json.bind.annotation.JsonbVisibility annotation or to override default behavior globally calling JsonbConfig::withPropertyVisibilityStrategy method with given custom property visibility strategy. [JSB-\ref{sec:custom_visibility}-1]
 
-\section{JsonbAdapter}
+\section{Custom mapping}
 \label{sec:jsonb_adapter}
 
-To provide custom mapping for specific java type, it is necessary to extend javax.json.bind.adapter.JsonbAdapter abstract class.
+To provide custom mapping for specific java type, it is necessary to implement javax.json.bind.adapter.JsonbAdapter interface. [JSB-\ref{sec:jsonb_adapter}-1]
+
+There are two ways how to register custom JsonbAdapter. Using JsonbConfig::withAdapters method or annotating specific field or JavaBean property with JsonbJavaTypeAdapter annotation. [JSB-\ref{sec:jsonb_adapter}-2]
+
+JsonbAdapter registered via JsonbConfig::withAdapters is visible to all serialize/deserialize operations performed with given JsonbConfig. JsonbAdapter registered with annotation is visible to serialize/deserialize operation used only for given field/JavaBean property annotated. [JSB-\ref{sec:jsonb_adapter}-3]
+
+\section{Custom date format}
+\label{sec:custom_date_format}
+
+To specify custom date format, it is necessary to annotate given annotation target with javax.json.bind.annotation.JsonbDateFormat annotation. [JSB-\ref{sec:custom_date_format}-1] JsonbDateFormat annotation can be applied to the following targets:
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item field
+\item method
+\item type
+\item parameter
+\item package
+\end{list}
+
+Annotation applied to more specific target overrides the same annotation applied to target with wider scope. For example, annotation applied to type target will override the same annotation applied to package target. [JSB-\ref{sec:custom_date_format}-2]
+
+\section{Custom number format}
+\label{sec:custom_number_format}
+
+To specify custom number format, it is necessary to annotate given annotation target with javax.json.bind.annotation.JsonbNumberFormat annotation. [JSB-\ref{sec:custom_number_format}-1] JsonbNumberFormat annotation can be applied to the following targets:
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item field
+\item method
+\item type
+\item parameter
+\item package
+\end{list}
+
+Annotation applied to more specific target overrides the same annotation applied to target with wider scope. For example, annotation applied to type target will override the same annotation applied to package target. [JSB-\ref{sec:custom_number_format}-2]
+
+\section{Custom binary data handling}
+\label{sec:custom_binary_data}
+
+To customize encoding of binary data, JSON Binding provides javax.json.bind.config.BinaryDataStrategy class.
+
+Class javax.json.bind.config.BinaryDataStrategy provides the most common binary data encodings.
+
+\begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
+\item BYTE
+\item BASE\_64
+\item BASE\_64\_URL
+\end{list}
+
+The detailed description of binary encoding strategies can be found in javadoc.
+
+The way to set custom binary data handling strategy is to use javax.json.bin.JsonbConfig::withBinaryDataStrategy method. [JSB-\ref{sec:custom_binary_data}-1]

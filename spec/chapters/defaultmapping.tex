@@ -94,10 +94,9 @@ Implementations MUST support binding of the following standard Java date/time cl
 \item java.time.OffsetTime
 \end{list}
 
-If not specified otherwise in this section, GMT standard time zone and offset specified from UTC Greenwich is used. [JSB-\ref{sec:dates}-2] 
-If not specified otherwise, date time format for marshalling and unmarshalling is ISO 8601 with offset, as specified in java.time.format.DateTimeFormatter.ISO\verb|_|DATE. [JSB-\ref{sec:dates}-3]
+If not specified otherwise in this section, GMT standard time zone and offset specified from UTC Greenwich is used. [JSB-\ref{sec:dates}-2]
+If not specified otherwise, date time format for marshalling and unmarshalling is ISO 8601 without offset, as specified in java.time.format.DateTimeFormatter.ISO\verb|_|DATE. [JSB-\ref{sec:dates}-3]
 Implementations MUST report error if the datetime string in JSON document does not correspond to the expected datetime format. [JSB-\ref{sec:dates}-4]
-Uppercase rather than lowercase letters MUST be used.  [JSB-\ref{sec:dates}-5] The timezone MUST always be included and optional trailing seconds MUST be included even when their value is "00". [JSB-\ref{sec:dates}-6]
 
 \subsection{java.util.Date, Calendar, GregorianCalendar}
 \label{subsec:datecalendar}
@@ -143,10 +142,8 @@ Implementations MUST support unmarshalling of any duration format specified in j
 Marshalling format of java.time.Duration is ISO 8601 seconds based representation, such as
 \verb|PT8H6M12.345S|. [JSB-\ref{subsec:time}-9]
 
-The result of serialization of duration must conform to the "duration" production in Appendix A of RFC 3339, with the same additional restrictions. [JSB-\ref{subsec:time}-10]
-
-Implementations MUST support unmarshalling of any period format specified in java.time.Period into field or property of type java.time.Period. [JSB-\ref{subsec:time}-11] This is super-set of ISO 8601 period format.
-Marshalling format of java.time.Period is ISO 8601 period representation. [JSB-\ref{subsec:time}-12] Zero length period is represented as zero days \verb|'P0D'|. [JSB-\ref{subsec:time}-13]
+Implementations MUST support unmarshalling of any period format specified in java.time.Period into field or property of type java.time.Period. [JSB-\ref{subsec:time}-10] This is super-set of ISO 8601 period format.
+Marshalling format of java.time.Period is ISO 8601 period representation. [JSB-\ref{subsec:time}-11] Zero length period is represented as zero days \verb|'P0D'|. [JSB-\ref{subsec:time}-12]
 
 
 \section{Untyped mapping}

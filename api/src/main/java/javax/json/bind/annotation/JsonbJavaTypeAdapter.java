@@ -37,49 +37,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package javax.json.bind.annotation;
 
-package javax.json.bind.config;
-
-import java.util.List;
+import javax.json.bind.adapter.JsonbAdapter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * <p>
- *  Provides mechanism how to define customized order when serializing properties.
+ *     Annotation provides way how to set custom JsonbAdapter to field or JavaBean property.
  * </p>
  *
- * <p>
- *  This strategy can be set via {@link javax.json.bind.JsonbConfig}.
- * </p>
+ * <p><b>Usage</b></p>
+ * <p> The {@code @JsonbJavaTypeAdapter} annotation can be used with the following
+ *     program elements:
+ * <ul>
+ *   <li> field </li>
+ *   <li> method </li>
+ * </ul>
  */
-public interface PropertyOrderStrategy {
+@JsonbAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD, ElementType.METHOD})
+public @interface JsonbJavaTypeAdapter {
 
     /**
-     * Using this strategy, the order of properties is lexicographical.
+     * Custom JsonbAdapter which provides custom mapping for given field or JavaBean property.
      */
-    public static final String LEXICOGRAPHICAL = "LEXICOGRAPHICAL";
-
-    /**
-     * Using this strategy, the order of properties is same as
-     * the output of java.lang.Class::getFields() method.
-     */
-    public static final String REFLECTION = "REFLECTION";
-
-    /**
-     * Using this strategy, the order of properties is in reverse order
-     * to lexicographical order.
-     */
-    public static final String REVERSE = "REVERSE";
-
-    /**
-     *  Returns ordererd list of names of properties.
-     *
-     * @param clazz
-     *      Class to serialize.
-     *
-     * @param propertyNames
-     *      Names of properties to serialize.
-     *
-     * @return Returns ordered list of names of properties.
-     */
-    List<String> getPropertyOrder(Class clazz, List<String> propertyNames);
+    public Class<? extends JsonbAdapter> value();
 }

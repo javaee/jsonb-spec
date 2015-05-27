@@ -39,6 +39,7 @@
  */
 package javax.json.bind;
 
+import javax.json.bind.adapter.JsonbAdapter;
 import javax.json.bind.config.PropertyNamingStrategy;
 import javax.json.bind.config.PropertyOrderStrategy;
 import javax.json.bind.config.PropertyVisibilityStrategy;
@@ -123,20 +124,24 @@ public class JsonbConfig {
     public static final String JSONB_SKIP_NULL_VALUES = "jsonb.skip-null-values";
 
     /**
-     * Property used to specify string I-JSON serialization compliance.
+     * Property used to specify strict I-JSON serialization compliance.
      */
-    public static final String JSONB_STRICT_I_JSON_SER_COMPLIANCE = "jsonb.i-json.strict-ser-compliance";
-
-    /**
-     * Property used to specify whether or not the inbound I-JSON validation
-     * should be performed.
-     */
-    public static final String JSONB_I_JSON_VALIDATION = "jsonb.i-json.validation";
+    public static final String JSONB_STRICT_IJSON = "JSONB_STRICT_IJSON";
 
     /**
      * Property used to specify custom visibility strategy.
      */
     public static final String JSONB_PROPERTY_VISIBILITY_STRATEGY = "jsonb.property-visibility-strategy";
+
+    /**
+     * Property used to specify custom mapping adapters.
+     */
+    public static final String JSONB_ADAPTERS = "jsonb.adapters";
+
+    /**
+     * Property used to specify custom binary data strategy.
+     */
+    public static final String JSONB_BINARY_DATA_STRATEGY = "jsonb.binary-data-strategy";
 
     /**
      * Set the particular configuration property to a new value. The method can
@@ -240,31 +245,15 @@ public class JsonbConfig {
     /**
      * Property used to specify whether strict I-JSON serialization compliance should be enforced.
      *
-     * Configures value of {@code JSONB_STRICT_I_JSON_SER_COMPLIANCE} property.
+     * Configures value of {@code JSONB_STRICT_IJSON} property.
      *
      * @param enabled
      *      True means data is marshaled in strict compliance according to RFC 7493.
      *
      * @return This JsonbConfig instance.
      */
-    public final JsonbConfig withStrictIJSONSerializationCompliance(final Boolean enabled) {
-        return setProperty(JSONB_STRICT_I_JSON_SER_COMPLIANCE, enabled);
-    }
-
-    /**
-     * Property used to specify whether JSON document should be validated
-     * against I-JSON conformance rules during deserialization.
-     *
-     * Configures value of {@code JSONB_I_JSON_VALIDATION} property.
-     *
-     * @param enabled
-     *      True means that JSON document should be validated. JSON document must
-     *      be valid I-JSON message as defined in RFC 7493.
-     *
-     * @return This JsonbConfig instance.
-     */
-    public final JsonbConfig withIJSONValidation(final Boolean enabled) {
-        return setProperty(JSONB_I_JSON_VALIDATION, enabled);
+    public final JsonbConfig withStrictIJSON(final Boolean enabled) {
+        return setProperty(JSONB_STRICT_IJSON, enabled);
     }
 
     /**
@@ -303,7 +292,7 @@ public class JsonbConfig {
      * @param propertyOrderStrategy
      *      Custom property order strategy which affects serialization.
      *
-     * @return This Jsonbconfig instance.
+     * @return This JsonbConfig instance.
      */
     public final JsonbConfig withPropertyOrderStrategy(final PropertyOrderStrategy propertyOrderStrategy) {
         return setProperty(JSONB_PROPERTY_ORDER_STRATEGY, propertyOrderStrategy);
@@ -317,7 +306,7 @@ public class JsonbConfig {
      * @param propertyOrderStrategy
      *      Predefined property order strategy which affects serialization.
      *
-     * @return This Jsonbconfig instance.
+     * @return This JsonbConfig instance.
      */
     public final JsonbConfig withPropertyOrderStrategy(final String propertyOrderStrategy) {
         return setProperty(JSONB_PROPERTY_ORDER_STRATEGY, propertyOrderStrategy);
@@ -331,10 +320,38 @@ public class JsonbConfig {
      * @param propertyVisibilityStrategy
      *      Custom property visibility strategy which affects serialization and deserialization.
      *
-     * @return This Jsonbconfig instance.
+     * @return This JsonbConfig instance.
      */
     public final JsonbConfig withPropertyVisibilityStrategy(final PropertyVisibilityStrategy
                                                                     propertyVisibilityStrategy) {
         return setProperty(JSONB_PROPERTY_VISIBILITY_STRATEGY, propertyVisibilityStrategy);
+    }
+
+    /**
+     * Property used to specify custom mapping adapters.
+     *
+     * Configures value of {@code JSONB_ADAPTERS} property.
+     *
+     * @param adapters
+     *      Custom mapping adapters which affects serialization and deserialization.
+     *
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withAdapters(final JsonbAdapter... adapters) {
+        return setProperty(JSONB_ADAPTERS, adapters);
+    }
+
+    /**
+     * Property used to specify custom binary data strategy.
+     *
+     * Configures value of {@code JSONB_BINARY_DATA_STRATEGY} property.
+     *
+     * @param binaryDataStrategy
+     *      Custom binary data strategy which affects serialization and deserialization.
+     *
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withBinaryDataStrategy(final String binaryDataStrategy) {
+        return setProperty(JSONB_BINARY_DATA_STRATEGY, binaryDataStrategy);
     }
 }

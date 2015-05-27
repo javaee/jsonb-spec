@@ -50,8 +50,6 @@ import java.lang.annotation.Target;
  *     Annotation indicates that result of the annotated non-void method
  *     or field or constructor/factory method parameter will be used as the single value to serialize
  *     for the instance.
- *
- *     The purpose of the annotation is similar to {@link javax.xml.bind.annotation.XmlValue}
  * </p>
  *
  * <p>

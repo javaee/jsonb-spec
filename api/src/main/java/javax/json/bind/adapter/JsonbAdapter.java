@@ -39,59 +39,96 @@
  */
 package javax.json.bind.adapter;
 
+import java.lang.reflect.Type;
+
 /**
  * <p>
  *     Allows to define custom mapping for given java type.
  *     The target type could be string or some mappable java type.
  * </p>
  *
- * @param <BoundType>
+ * <BoundType>
  *      The type that JSON Binding does not know how to handle. An adapter is written
  *      to allow this type to be used as an in-memory representation through
  *      the <tt>ValueType</tt>.
  *
- * @param <ValueType>
+ * <ValueType>
  *      The type that JSON Binding knows how to handle out of the box.
+ *
+ * <p>
+ * Exactly two default methods must be overridden.
+ * If BoundType is generic type, it is recommended to override getRuntimeBoundType method.
+ * Otherwise getBoundType method should be overridden.
+ *
+ * If ValueType is generic type, it is recommended to override getRuntimeValueType method.
+ * Otherwise getValueType method should be overridden.
+ * </p>
+ *
  */
-public abstract class JsonbAdapter<ValueType, BoundType> {
+public interface JsonbAdapter {
 
     /**
-     * Do-nothing constructor for the derived classes.
-     */
-    protected JsonbAdapter() { }
-
-    /**
-     * Convert a value type to a bound type.
-     *
-     * @param valueType
-     *      The value to be converted. Can be null.
-     *
-     * @return An instance of the type that JSON Binding does not know how to handle.
-     *
+     * Converts an object to type T.
+     * @param obj object to convert
+     * @param <ValueType> type we know how to serialize
+     * @return object we need how to serialize
      * @throws Exception
-     *      if there is an error during the conversion.
+     *  if there is an error during the conversion.
      */
-    public abstract BoundType deserialize(ValueType valueType) throws Exception;
+    <ValueType> ValueType serialize(Object obj) throws Exception;
 
     /**
-     * Convert a bound type to a value type.
-     *
-     * @param boundType
-     *      The value to be convereted. Can be null.
-     *
-     * @return An instance of the type that JSON Binding knows how to handle.
-     *
+     * Converts an object to type T.
+     * @param obj object to convert
+     * @param <BoundType> type we don't know how to deserialize
+     * @return object we don't know how to deserialize
      * @throws Exception
-     *      if there is an error during the conversion.
+     *  if there is an error during the conversion.
      */
-    public abstract ValueType serialize(BoundType boundType) throws Exception;
+    <BoundType> BoundType deserialize(Object obj) throws Exception;
+
+    /**
+     * Returns Value Type.
+     *
+     * @return Non-generic Value Type
+     */
+    default Class<?> getValueType() {
+        return null;
+    }
+
+    /**
+     * Returns Bound Type.
+     *
+     * @return Non-generic Bound Type
+     */
+    default Class<?> getBoundType() {
+        return null;
+    }
+
+    /**
+     * Returns runtime Value Type.
+     *
+     * @return runtime Value Type
+     */
+    default Type getRuntimeValueType() {
+        return null;
+    }
+
+    /**
+     * Returns runtime Bound Type.
+     *
+     * @return runtime Bound Type
+     */
+    default Type getRuntimeBoundType() {
+        return null;
+    }
 
     /**
      * Returns false if null values should be handled by JSON Binding.
      *
      * @return false if null values should be handled by JSON Binding
      */
-    public boolean handlesNullValue() {
+    default boolean handlesNullValue() {
         return false;
     }
 }

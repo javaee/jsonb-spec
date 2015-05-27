@@ -166,7 +166,7 @@ public class CustomMapping {
          * Not guaranteed to work in the same way on all the JDKs.
          */
         @Override
-        public List<String> getPropertiesOrder(Class clazz, List<String> propertyNames) {
+        public List<String> getPropertyOrder(Class clazz, List<String> propertyNames) {
 
             final Map<String, Integer> orderMap = new HashMap<>();
 

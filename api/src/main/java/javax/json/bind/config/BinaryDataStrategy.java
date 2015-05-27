@@ -40,46 +40,40 @@
 
 package javax.json.bind.config;
 
-import java.util.List;
-
 /**
  * <p>
- *  Provides mechanism how to define customized order when serializing properties.
+ *     Allows to define custom binary data handing strategy.
+ *     Specifies predefined binary data handling strategies.
  * </p>
  *
  * <p>
- *  This strategy can be set via {@link javax.json.bind.JsonbConfig}.
+ *     This strategy can be set via {@link javax.json.bind.JsonbConfig}.
  * </p>
+ *
+ * @see javax.json.bind.JsonbConfig
  */
-public interface PropertyOrderStrategy {
+public final class BinaryDataStrategy {
 
     /**
-     * Using this strategy, the order of properties is lexicographical.
+     * Private constructor to disallow instantiation.
      */
-    public static final String LEXICOGRAPHICAL = "LEXICOGRAPHICAL";
+    private BinaryDataStrategy() { };
 
     /**
-     * Using this strategy, the order of properties is same as
-     * the output of java.lang.Class::getFields() method.
+     * Using this strategy, binary data is encoded as a byte array.
+     * Default encoding strategy.
      */
-    public static final String REFLECTION = "REFLECTION";
+    public static final String BYTE = "BYTE";
 
     /**
-     * Using this strategy, the order of properties is in reverse order
-     * to lexicographical order.
+     * Using this strategy, binary data is encoded using
+     * the Base64 encoding scheme as specified in RFC 4648 and RFC 2045.
      */
-    public static final String REVERSE = "REVERSE";
+    public static final String BASE_64 = "BASE_64";
 
     /**
-     *  Returns ordererd list of names of properties.
-     *
-     * @param clazz
-     *      Class to serialize.
-     *
-     * @param propertyNames
-     *      Names of properties to serialize.
-     *
-     * @return Returns ordered list of names of properties.
+     * Using this strategy, binary data is encoded using
+     * the "URL and Filename safe Base64 Alphabet" as specified in Table 2 of RFC 4648.
      */
-    List<String> getPropertyOrder(Class clazz, List<String> propertyNames);
+    public static final String BASE_64_URL = "BASE_64_URL";
 }

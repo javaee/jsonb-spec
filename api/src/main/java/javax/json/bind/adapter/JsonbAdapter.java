@@ -47,12 +47,12 @@ import java.lang.reflect.Type;
  *     The target type could be string or some mappable java type.
  * </p>
  *
- * <BoundType>
+ * BoundType -
  *      The type that JSON Binding does not know how to handle. An adapter is written
  *      to allow this type to be used as an in-memory representation through
  *      the <tt>ValueType</tt>.
  *
- * <ValueType>
+ * ValueType -
  *      The type that JSON Binding knows how to handle out of the box.
  *
  * <p>

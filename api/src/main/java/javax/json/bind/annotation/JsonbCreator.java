@@ -50,6 +50,15 @@ import java.lang.annotation.Target;
  *     to create instance of the associated class.
  * </p>
  *
+ * <p>
+ *     Only one constructor or static factory method can be annotated
+ *     with {@code JsonbCreator} in a given class.
+ * </p>
+ * <p>
+ *     The {@code @JsonbCreator} annotation is intended to be used with
+ *     constructors/methods with parameters. Such parameters could be
+ *     annotated for instance with {@code @JsonbProperty}.
+ * </p>
  * <p><b>Usage</b></p>
  * <p> The {@code @JsonbCreator} annotation can be used with the following
  *     program elements:

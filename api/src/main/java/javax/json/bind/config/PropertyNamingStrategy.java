@@ -94,5 +94,5 @@ public interface PropertyNamingStrategy {
      * @param propertyName Name of the property to translate.
      * @return Translated JSON field name.
      */
-    public String translateName(String propertyName);
+    String translateName(String propertyName);
 }

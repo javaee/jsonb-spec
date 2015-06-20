@@ -40,7 +40,8 @@
 
 package javax.json.bind.config;
 
-import java.lang.reflect.Member;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * <p>
@@ -54,11 +55,20 @@ import java.lang.reflect.Member;
 public interface PropertyVisibilityStrategy {
 
     /**
-     * Responds whether the given member should be considered
+     * Responds whether the given field should be considered
      * as the JsonbProperty.
      *
-     * @param member member of the class
+     * @param field member of the class
      * @return true if member should be visible
      */
-    public boolean isVisible(Member member);
+    boolean isVisible(Field field);
+
+    /**
+     * Responds whether the given method should be considered
+     * as the JsonbProperty.
+     *
+     * @param method member of the class
+     * @return true if member should be visible
+     */
+    boolean isVisible(Method method);
 }

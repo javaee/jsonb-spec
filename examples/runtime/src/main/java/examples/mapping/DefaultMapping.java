@@ -468,6 +468,9 @@ public class DefaultMapping {
 
         POJO pojo = jsonb.fromJson("{\"id\":1, \"name\":\"pojoName\"}", POJO.class);
 
+        POJO nullPOJO = jsonb.fromJson("{\"id\":1, \"name\":null}", POJO.class);
+        assert(null == nullPOJO.name);
+
         //just public nested class
         POJOWithNestedClass pojoWithNestedClass = jsonb.fromJson("{\"id\":1, \"name\":\"pojo_name\", \"nestedClass\" : {\"nestedId\":2, \"nestedName\" : \"nestedPojoName\"}}", POJOWithNestedClass.class);
 

@@ -76,12 +76,24 @@ public @interface JsonbDateFormat {
     public static final String DEFAULT_LOCALE = "##default";
 
     /**
+     * Value that indicates the default format.
+     */
+    public static final String DEFAULT_FORMAT = "##default";
+
+    /**
+     * Special date format which serializes given date as milliseconds.
+     * Such date is serialized as a number.
+     */
+    public static final String TIME_IN_MILLIS = "##time-in-millis";
+
+    /**
      * Specifies the date pattern to use.
      */
-    String value() default "";
+    String value() default DEFAULT_FORMAT;
 
     /**
      * Custom {@link java.util.Locale} to use.
      */
     public String locale() default DEFAULT_LOCALE;
+
 }

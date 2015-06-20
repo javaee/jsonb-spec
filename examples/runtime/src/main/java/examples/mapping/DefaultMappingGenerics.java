@@ -100,7 +100,7 @@ public class DefaultMappingGenerics {
 
         boundedGenericClass.boundedSet = intSet;
 
-        assertEquals("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}", jsonb.toJson(boundedGenericClass));
+        assertEquals("{\"boundedSet\":[3],\"superList\":[{\"area\":0.0,\"radius\":2.5}]}", jsonb.toJson(boundedGenericClass));
 
         List<java.util.Optional<String>> expected = Arrays.asList(Optional.empty(), Optional.ofNullable("first"), Optional.of("second"));
 
@@ -137,14 +137,14 @@ public class DefaultMappingGenerics {
 
         //wildcardList is treated as List<Object>
         GenericWithWildcardClass genericWithWildcardClass = jsonb.fromJson("{\"wildcardList\":[{\"k1\":\"v1\"}]}", GenericWithWildcardClass.class);
-        assert(genericWithWildcardClass.wildcardList.get(0) instanceof LinkedHashMap);
+        assert(genericWithWildcardClass.wildcardList.get(0) instanceof Map);
 
         //multi level generics
 
         //T,U is treated as Object
         MyGenericClass multiLevelGeneric = jsonb.fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}", MyGenericClass.class);
 
-        assert(multiLevelGeneric.field1 instanceof LinkedHashMap);
+        assert(multiLevelGeneric.field1 instanceof Map);
         assert(multiLevelGeneric.field2 instanceof Integer);
 
         //unmarshal with runtime type
@@ -163,7 +163,7 @@ public class DefaultMappingGenerics {
             Integer intValue = intSet.iterator().next();
             System.out.println("intValue="+intValue);
             assert(false);
-        } catch (JsonbException e) {
+        } catch (ClassCastException e) {
             //exception - incompatible types
             //Double cannot be converted to Integer
         }

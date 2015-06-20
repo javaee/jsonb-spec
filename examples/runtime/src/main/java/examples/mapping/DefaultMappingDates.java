@@ -2,6 +2,7 @@ package examples.mapping;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.json.bind.JsonbException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
@@ -104,6 +105,13 @@ public class DefaultMappingDates {
 
         //java.util.GregorianCalendar
         GregorianCalendar gregorianCalendar = jsonb.fromJson("\"2015-04-03T00:00:00\"", GregorianCalendar.class);
+
+        try {
+            GregorianCalendar badCalendar = jsonb.fromJson("\"03.04.2015T00:00:00\"", GregorianCalendar.class);
+            assert(false);
+        } catch (JsonbException e) {
+            //not supported date format
+        }
 
         //java.util.TimeZone
         TimeZone timeZone = jsonb.fromJson("\"Europe/Prague\"", TimeZone.class);

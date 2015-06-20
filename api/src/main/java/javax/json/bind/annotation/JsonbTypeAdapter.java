@@ -51,7 +51,7 @@ import java.lang.annotation.Target;
  * </p>
  *
  * <p><b>Usage</b></p>
- * <p> The {@code @JsonbJavaTypeAdapter} annotation can be used with the following
+ * <p> The {@code @JsonbTypeAdapter} annotation can be used with the following
  *     program elements:
  * <ul>
  *   <li> field </li>
@@ -61,7 +61,7 @@ import java.lang.annotation.Target;
 @JsonbAnnotation
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.ANNOTATION_TYPE, ElementType.FIELD, ElementType.METHOD})
-public @interface JsonbJavaTypeAdapter {
+public @interface JsonbTypeAdapter {
 
     /**
      * Custom JsonbAdapter which provides custom mapping for given field or JavaBean property.

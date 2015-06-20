@@ -61,30 +61,23 @@ public class CustomMapping {
     }
 
     public static void toJson_nillable(Jsonb jsonb) {
-        assertEquals("{\"nillableField\":nill}", jsonb.toJson(new NillableClass()));
+        assertEquals("{\"nillableField\":null}", jsonb.toJson(new NillableClass()));
 
-        assertEquals("{\"nillableField\":nill}", jsonb.toJson(new NillableClassWithGetter()));
+        assertEquals("{\"nillableField\":null}", jsonb.toJson(new NillableClassWithGetter()));
 
-        assertEquals("{\"nillableField\":nill}", jsonb.toJson(new NillableType()));
+        assertEquals("{\"nillableField\":null}", jsonb.toJson(new NillableType()));
 
-        assertEquals("{\"nillableField\":nill}", jsonb.toJson(new NillableTypeOverride()));
+        assertEquals("{\"nillableField\":null}", jsonb.toJson(new NillableTypeOverride()));
 
-        JsonbConfig nillableConfig = new JsonbConfig().withSkippedNullValues(false);
+        JsonbConfig nillableConfig = new JsonbConfig().withNullValues(true);
         Jsonb nillableJsonb = JsonbBuilder.create(nillableConfig);
 
         Book book = new Book();
         book.name = null;
-        assertEquals("{\"name\":nill}", nillableJsonb.toJson(new Book()));
+        assertEquals("{\"name\":null}", nillableJsonb.toJson(new Book()));
     }
 
     public static void toJson_propertyOrder(Jsonb jsonb) {
-        PropertyOrderClass propertyOrderClass = new PropertyOrderClass();
-
-        JsonbConfig customPropertyOrderConfig = new JsonbConfig().withPropertyOrderStrategy(new CustomPropertyOrderStrategy());
-        Jsonb customPropertyOrderJsonb = JsonbBuilder.create(customPropertyOrderConfig);
-
-        assertEquals("{\"aField\":\"a\",\"dField\":\"d\",\"cField\":\"c\",\"bField\":\"b\"}", customPropertyOrderJsonb.toJson(new PropertyOrderClass()));
-
         assertEquals("{\"dField\":\"d\",\"cField\":\"c\",\"bField\":\"b\",\"aField\":\"a\"}", jsonb.toJson(new PropertyOrderSpecificClass()));
     }
 
@@ -158,47 +151,6 @@ public class CustomMapping {
         public String name = "Effective Java";
 
         public Book() {}
-    }
-
-    static class CustomPropertyOrderStrategy implements PropertyOrderStrategy {
-
-        /**
-         * Not guaranteed to work in the same way on all the JDKs.
-         */
-        @Override
-        public List<String> getPropertyOrder(Class clazz, List<String> propertyNames) {
-
-            final Map<String, Integer> orderMap = new HashMap<>();
-
-            int i = 0;
-            for (Field field : clazz.getFields()) {
-                orderMap.put(field.getName(), i++);
-            }
-
-            List<String> orderedList = new ArrayList<>(propertyNames.size());
-            orderedList.addAll(propertyNames);
-
-            Collections.sort(orderedList, new Comparator<String>() {
-                @Override
-                public int compare(String property1, String property2) {
-
-                    int propertyOrder1 = -1;
-                    int propertyOrder2 = -1;
-
-                    if (orderMap.containsKey(property1)) {
-                        propertyOrder1 = orderMap.get(property1);
-                    }
-
-                    if (orderMap.containsKey(property2)) {
-                        propertyOrder2 = orderMap.get(property2);
-                    }
-
-                    return propertyOrder1 < propertyOrder2 ? -1 : (propertyOrder1 == propertyOrder2 ? 0 : 1);
-                }
-            });
-
-            return orderedList;
-        }
     }
 
     static class CustomizedName {

@@ -75,7 +75,9 @@ public interface JsonbAdapter {
      * @throws Exception
      *  if there is an error during the conversion.
      */
-    <ValueType> ValueType serialize(Object obj) throws Exception;
+    default <ValueType> ValueType adaptTo(Object obj) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Converts an object to type T.
@@ -85,7 +87,9 @@ public interface JsonbAdapter {
      * @throws Exception
      *  if there is an error during the conversion.
      */
-    <BoundType> BoundType deserialize(Object obj) throws Exception;
+    default <BoundType> BoundType adaptFrom(Object obj) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns Value Type.

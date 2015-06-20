@@ -57,6 +57,65 @@ import java.lang.annotation.Target;
  *     if more than one is found, an exception will be thrown.
  * </p>
  *
+ * <p>
+ *     If the return value of such a method is {@code java.lang.String} or some other primitive type
+ *     like {@code java.lang.Integer}, the resulting single value will be unwrapped.
+ * </p>
+ * Example:
+ * <pre>{@code
+ *     class SimpleClass {
+ *
+ *         private int value = 5;
+ *
+ *         &#64;JsonbValue
+ *         public String singleValue() {
+ *             return "SimleClassValue("+value+")";
+ *         }
+ *     }
+ *
+ *     class OuterClass {
+ *         public int id = 356;
+ *
+ *         public SimpleClass simpleClass = new SimpleClass();
+ *     }
+ *   }</pre>
+ * Serialization output for new OuterClass() will be {"id":356,"simpleClass":"SimpleClassValue(5)"}
+ *
+ *
+ * <p>
+ *     If the return value of such a method is some mappable class different than {@code java.lang.String}
+ *     or some other primitive type like {@code java.lang.Integer}, the resulting single value will be wrapped.
+ *     The resulting single value will be inside curly braces as any other mappable class.
+ * </p>
+ * Example:
+ * <pre>{@code
+ *     class MappableClass {
+ *         public int id = 1;
+ *         public int value = 2;
+ *         public MappableClass(int id, int value) {
+ *             this.id = id;
+ *             this.value = value;
+ *         }
+ *     }
+ *
+ *     class SimpleClass {
+ *         private int value = 5;
+ *
+ *         &#64;JsonbValue
+ *         public MappableClass singleValue() {
+ *             return new MappableClass(1, value);
+ *         }
+ *     }
+ *
+ *     class OuterClass {
+ *         public int id = 356;
+ *
+ *         public SimpleClass simpleClass = new SimpleClass();
+ *     }
+ *   }</pre>
+ * Serialization output for new OuterClass() will be {"id":356,"simpleClass":{"id":1,"value":5}}
+ *
+ *
  * <p><b>Usage</b></p>
  * <p> The {@code @JsonbValue} annotation can be used with the following
  *     program elements:

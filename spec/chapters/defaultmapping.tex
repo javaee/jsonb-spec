@@ -69,7 +69,11 @@ Instances of type java.net.URL, URI are marshalled to JSON String value with con
 
 \subsection{java.util.Optional, OptionalInt, OptionalLong, OptionalDouble}
 \label{subsec:optional}
-Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to JSON value by retrieving their contained instance and converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] Empty optional instances marshalled as object instance properties are ignored in marshalling. [JSB-\ref{subsec:optional}-2] Empty optional instances marshalled as JSON array elements are marshalled as null value [JSB-\ref{subsec:optional}-3]. Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain null value. [JSB-\ref{subsec:url}-4] Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:url}-5]
+Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to JSON value by retrieving their contained instance and converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] Empty optional instances marshalled as object instance properties are ignored in marshalling. [JSB-\ref{subsec:optional}-2] Empty optional instances marshalled as JSON array elements are marshalled as null value [JSB-\ref{subsec:optional}-3]. Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain null value. [JSB-\ref{subsec:optional}-4] Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
+
+Instances of type java.util.Optional\textless T\textgreater are marshalled to JSON value as JSON objects when T alone would be marshalled as JSON object. When T would be marshalled as JSON value (e.g. java.lang.String, java.lang.Integer), instance of java.util.Optional\textless T\textgreater is marshalled as JSON value (without curly brackets). [JSB-\ref{subsec:optional}-6]
+
+Unmarshalling of JSON value into java.util.Optional\textless T\textgreater MUST be supported if unmarshalling of JSON value into instance of T is supported. [JSB-\ref{subsec:optional}-7]
 
 \section{Dates}
 \label{sec:dates}
@@ -157,7 +161,7 @@ JSON value & Java type \\
 object & java.util.Map \textless String,Object \textgreater\\
 array & java.util.List \textless Object \textgreater \\
 string & java.lang.String \\
-number & java.math.Integer|Long|BigDecimal \\
+number & java.lang.Integer|Long|java.math.BigDecimal \\
 true, false & java.lang.Boolean \\
 null & null \\
 \hline
@@ -182,6 +186,8 @@ JSON Binding implementations MUST NOT unmarshal into transient, final or static 
 Implementations MUST support marshalling of final fields. [JSB-\ref{subsec:fieldstrategy}-4] Transient and static fields MUST be ignored during marshalling operation. [JSB-\ref{subsec:fieldstrategy}-5]
 
 If JSON document contains name/value pair not corresponding to field or setter method, this name/value pair MUST be ignored. [JSB-\ref{subsec:fieldstrategy}-6]
+
+Public getter/setter methods without corresponding field MUST be supported. When only public getter/setter method without corresponding field is present in the class, the getter method is called to obtain value to marshall, and the setter method is called during unmarshall operation. [JSB-\ref{subsec:fieldstrategy}-7]
 
 \subsection{Nested Classes}
 \label{subsec:nestedclass}
@@ -256,6 +262,8 @@ When unmarshalling JSON document, declared fields MUST be set in the order of at
 \label{subsec:nullfield}
 The result of marshalling java field with null value is absence of the property in resulting JSON document. [JSB-\ref{subsec:nullfield}-1]
 Unmarshalling operation of a property absent in JSON document MUST not set the value of the field, setter (if available) MUST not be called, thus original value of the field MUST be preserved. [JSB-\ref{subsec:nullfield}-2]
+
+Unmarshalling operation of a property with null value in JSON document MUST set the value of the field to null value (or call setter with null value if setter is present). [JSB-\ref{subsec:nullfield}-3]
 
 \subsection{Null Array Values}
 \label{subsec:nullarray}

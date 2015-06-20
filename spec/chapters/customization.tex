@@ -1,12 +1,19 @@
 \chapter{Customizing Mapping}
 \label{customization}
 
-This section defines several ways how to customize the default behavior. The default behavior can be customized annotating a given field (or JavaBean property), or by providing an implementation of particular strategy, e.g. PropertyOrderStrategy. JSON Binding provider MUST support both these customization options.[JSB-\ref{c:general}-2]
+This section defines several ways how to customize the default behavior. The default behavior can be customized annotating a given field (or JavaBean property), or by providing an implementation of particular strategy, e.g. PropertyOrderStrategy. JSON Binding provider MUST support both these customization options.[JSB-\ref{c:customization}-1]
 
 \section{Customizing Property Names}
 \label{sec:custom_property_names}
 
 There are two standard ways how to customize serialization of field (or JavaBean property) to JSON document. The same applies to deserialization. The first way is to annotate field (or JavaBean property) with javax.json.bind.annotation.JsonbProperty annotation. The second option is to set javax.json.bind.config.PropertyNamingPolicy.
+
+\subsection{javax.json.bind.annotation.JsonbTransient}
+\label{subsec:JsonbTransient}
+
+JSON Binding implementations MUST NOT serialize fields (or JavaBean properties) annotated with javax.json.bind.annotation.JsonbTransient. When placed on a class, indicates that the class shouldn't be mapped to JSON by itself. Properties on such class will be mapped to JSON along with its derived classes, as if the class is inlined. [JSB-\ref{subsec:JsonbTransient}-1]
+
+JsonbTransient annotation is mutually exclusive with all other JSON Binding defined annotations. If this condition is not met, JSON Binding implementation MUST throw JsonbException. [JSB-\ref{subsec:JsonbTransient}-2]
 
 \subsection{javax.json.bind.annotation.JsonbProperty}
 \label{subsec:JsonbProperty}
@@ -31,7 +38,7 @@ Interface javax.json.bind.config.PropertyNamingStrategy provides the most common
 
 The detailed description of property naming strategies can be found in javadoc.
 
-The way to set custom property naming strategy is to use javax.json.bin.JsonbConfig::withPropertyNamingStrategy method. [JSB-\ref{subsec:JsonbProperty}-1]
+The way to set custom property naming strategy is to use javax.json.bind.JsonbConfig::withPropertyNamingStrategy method. [JSB-\ref{subsec:JsonbProperty}-1]
 
 \subsection{Property names resolution}
 \label{sec:property_names_resolution}
@@ -47,24 +54,28 @@ The definition of duplicate (non-unique) property can be found in \ref{sec:uniqu
 \section{Customizing Property Order}
 \label{sec:custom_property_order}
 
-To customize order of serialized properties, JSON Binding provides javax.json.bind.config.PropertyOrderStrategy interface.
+To customize order of serialized properties, JSON Binding provides javax.json.bind.config.PropertyOrderStrategy class.
 
-Interface javax.json.bind.config.PropertyOrderStrategy provides the most common property order strategies.
+Class javax.json.bind.config.PropertyOrderStrategy provides the most common property order strategies.
 
 \begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
 \item LEXICOGRAPHICAL
-\item REFLECTION
+\item ANY
 \item REVERSE
 \end{list}
 
 The detailed description of property order strategies can be found in javadoc.
 
-The way to set custom property order strategy is to use javax.json.bin.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{subsec:custom_property_order}-2]
+The way to set custom property order strategy is to use javax.json.bind.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{subsec:custom_property_order}-2]
+
+To customize order of serialized properties only for one specific type, JSON Binding provides javax.json.bind.annotation.JsonbPropertyOrder annotation. Order specified by JsonbPropertyOrder annotation overrides order specified by PropertyOrderStrategy. [JSB-\ref{subsec:custom_property_order}-3]
+
+The order is applied to already renamed properties as stated in \ref{sec:custom_property_names}.
 
 \section{Customizing Null Handling}
 \label{sec:custom_null_handling}
 
-There are three ways how to change default null handling. The first option is to annotate type or package with javax.json.bind.annotation.JsonbNillable annotation. The second option is to annotate field or JavaBean property with javax.json.bind.annotation.JsonbProperty and to set nillable parameter to true. The third option is to set config wide configuration via JsonbConfig::withSkippedNullValues method.
+There are three ways how to change default null handling. The first option is to annotate type or package with javax.json.bind.annotation.JsonbNillable annotation. The second option is to annotate field or JavaBean property with javax.json.bind.annotation.JsonbProperty and to set nillable parameter to true. The third option is to set config wide configuration via JsonbConfig::withNullValues method.
 
 If annotations (JsonbNillable or JsonbProperty) on different level apply to the same field (or JavaBean property) or if there is config wide configuration and some annotation (JsonbNillable or JsonbProperty) which apply to the same field (or JavaBean property), the annotation with the smallest scope applies. For example, if there is type level JsonbNillable annotation applied to some class with field which is annotated with JsonbProperty annotation with nillable = false, then JsonbProperty annotation overrides JsonbNillable annotation.
 
@@ -82,9 +93,9 @@ JSON Binding implementations MUST implement override of annotations according to
 \subsection{Global null handling configuration}
 \label{subsec:NullSerializationPolicy}
 
-Null handling behavior can be customized via javax.json.bind.JsonbConfig::withSkippedNullValues method.
+Null handling behavior can be customized via javax.json.bind.JsonbConfig::withNullValues method.
 
-The way to skip serialization of null values, is to call method javax.json.bind.JsonbConfig::withSkippedNullValues with parameter true. The way to serialize members with explicit null values is to call method javax.json.bind.JsonbConfig::withSkippedNullValues with parameter false. [JSB-\ref{subsec:NullSerializationPolicy}-1]
+The way to enforce serialization of null values, is to call method javax.json.bind.JsonbConfig::withNullValues with parameter true. The way to skip serialization of null values is to call method javax.json.bind.JsonbConfig::withNullValues with parameter false. [JSB-\ref{subsec:NullSerializationPolicy}-1]
 
 \section{I-JSON support}
 \label{sec:i_json}
@@ -190,4 +201,4 @@ Class javax.json.bind.config.BinaryDataStrategy provides the most common binary 
 
 The detailed description of binary encoding strategies can be found in javadoc.
 
-The way to set custom binary data handling strategy is to use javax.json.bin.JsonbConfig::withBinaryDataStrategy method. [JSB-\ref{sec:custom_binary_data}-1]
+The way to set custom binary data handling strategy is to use javax.json.bind.JsonbConfig::withBinaryDataStrategy method. [JSB-\ref{sec:custom_binary_data}-1]

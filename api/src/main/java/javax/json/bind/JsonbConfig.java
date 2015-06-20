@@ -40,8 +40,8 @@
 package javax.json.bind;
 
 import javax.json.bind.adapter.JsonbAdapter;
+import javax.json.bind.adapter.JsonbSimpleAdapter;
 import javax.json.bind.config.PropertyNamingStrategy;
-import javax.json.bind.config.PropertyOrderStrategy;
 import javax.json.bind.config.PropertyVisibilityStrategy;
 import java.util.Collections;
 import java.util.HashMap;
@@ -91,7 +91,7 @@ public class JsonbConfig {
      * Property used to specify whether or not the marshaled
      * JSON data is formatted with linefeeds and indentation.
      */
-    public static final String JSONB_FORMATTING = "jsonb.formatting";
+    public static final String FORMATTING = "jsonb.formatting";
 
     /**
      * The Jsonb marshalling {@code toJson()} methods will default to this property
@@ -101,47 +101,42 @@ public class JsonbConfig {
      * property encoding of input JSON data if the encoding cannot be detected
      * automatically.
      */
-    public static final String JSONB_ENCODING = "jsonb.encoding";
+    public static final String ENCODING = "jsonb.encoding";
 
     /**
      * Property used to specify custom naming strategy.
      */
-    public static final String JSONB_PROPERTY_NAMING_STRATEGY = "jsonb.property-naming-strategy";
+    public static final String PROPERTY_NAMING_STRATEGY = "jsonb.property-naming-strategy";
 
     /**
      * Property used to specify custom order strategy.
      */
-    public static final String JSONB_PROPERTY_ORDER_STRATEGY = "jsonb.property-order-strategy";
-
-    /**
-     * Property used to specify custom event handler.
-     */
-    public static final String JSONB_EVENT_HANDLER = "jsonb.event-handler";
+    public static final String PROPERTY_ORDER_STRATEGY = "jsonb.property-order-strategy";
 
     /**
      * Property used to specify null values serialization behavior.
      */
-    public static final String JSONB_SKIP_NULL_VALUES = "jsonb.skip-null-values";
+    public static final String NULL_VALUES = "jsonb.null-values";
 
     /**
      * Property used to specify strict I-JSON serialization compliance.
      */
-    public static final String JSONB_STRICT_IJSON = "JSONB_STRICT_IJSON";
+    public static final String STRICT_IJSON = "jsonb.strict-ijson";
 
     /**
      * Property used to specify custom visibility strategy.
      */
-    public static final String JSONB_PROPERTY_VISIBILITY_STRATEGY = "jsonb.property-visibility-strategy";
+    public static final String PROPERTY_VISIBILITY_STRATEGY = "jsonb.property-visibility-strategy";
 
     /**
-     * Property used to specify custom mapping adapters.
+     * Property used to specify custom mapping adapters for generic types.
      */
-    public static final String JSONB_ADAPTERS = "jsonb.adapters";
+    public static final String ADAPTERS = "jsonb.adapters";
 
     /**
      * Property used to specify custom binary data strategy.
      */
-    public static final String JSONB_BINARY_DATA_STRATEGY = "jsonb.binary-data-strategy";
+    public static final String BINARY_DATA_STRATEGY = "jsonb.binary-data-strategy";
 
     /**
      * Set the particular configuration property to a new value. The method can
@@ -197,7 +192,7 @@ public class JsonbConfig {
      * Property used to specify whether or not the marshaled JSON data is formatted
      * with linefeeds and indentation.
      *
-     * Configures value of {@code JSONB_FORMATTING} property.
+     * Configures value of {@code FORMATTING} property.
      *
      * @param formatted
      *      True means marshaled data is formatted, false (default)
@@ -206,22 +201,22 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withFormatting(final Boolean formatted) {
-        return setProperty(JSONB_FORMATTING, formatted);
+        return setProperty(FORMATTING, formatted);
     }
 
     /**
-     * Property used to specify whether null values will be skipped in JSON document.
+     * Property used to specify whether null values should be marshalled to JSON document or skipped.
      *
-     * Configures value of {@code JSONB_SKIP_NULL_VALUES} property.
+     * Configures value of {@code NULL_VALUES} property.
      *
-     * @param skipped
-     *      True means that null values will not be marshaled into JSON document,
-     *      they will be effectively skipped.
+     * @param marshalNullValues
+     *      True means that null values will be marshaled into JSON document,
+     *      otherwise they will be effectively skipped.
      *
      * @return This JsonbConfig instance.
      */
-    public final JsonbConfig withSkippedNullValues(final Boolean skipped) {
-        return setProperty(JSONB_SKIP_NULL_VALUES, skipped);
+    public final JsonbConfig withNullValues(final Boolean marshalNullValues) {
+        return setProperty(NULL_VALUES, marshalNullValues);
     }
 
     /**
@@ -229,7 +224,7 @@ public class JsonbConfig {
      * for encoding of JSON data. For input data (fromJson), selected encoding is used if
      * the encoding cannot be detected automatically. Default value is 'UTF-8'.
      *
-     * Configures value of {@code JSONB_ENCODING} property.
+     * Configures value of {@code ENCODING} property.
      *
      * @param encoding
      *      Valid character encoding as defined in the
@@ -239,13 +234,13 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withEncoding(final String encoding) {
-        return setProperty(JSONB_ENCODING, encoding);
+        return setProperty(ENCODING, encoding);
     }
 
     /**
      * Property used to specify whether strict I-JSON serialization compliance should be enforced.
      *
-     * Configures value of {@code JSONB_STRICT_IJSON} property.
+     * Configures value of {@code STRICT_IJSON} property.
      *
      * @param enabled
      *      True means data is marshaled in strict compliance according to RFC 7493.
@@ -253,7 +248,7 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withStrictIJSON(final Boolean enabled) {
-        return setProperty(JSONB_STRICT_IJSON, enabled);
+        return setProperty(STRICT_IJSON, enabled);
     }
 
     /**
@@ -267,7 +262,7 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withPropertyNamingStrategy(final PropertyNamingStrategy propertyNamingStrategy) {
-        return setProperty(JSONB_PROPERTY_NAMING_STRATEGY, propertyNamingStrategy);
+        return setProperty(PROPERTY_NAMING_STRATEGY, propertyNamingStrategy);
     }
 
     /**
@@ -281,21 +276,7 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withPropertyNamingStrategy(final String propertyNamingStrategy) {
-        return setProperty(JSONB_PROPERTY_NAMING_STRATEGY, propertyNamingStrategy);
-    }
-
-    /**
-     * Property used to specify property order strategy.
-     *
-     * Configures value of {@code JSONB_PROPERTY_ORDER_STRATEGY} property.
-     *
-     * @param propertyOrderStrategy
-     *      Custom property order strategy which affects serialization.
-     *
-     * @return This JsonbConfig instance.
-     */
-    public final JsonbConfig withPropertyOrderStrategy(final PropertyOrderStrategy propertyOrderStrategy) {
-        return setProperty(JSONB_PROPERTY_ORDER_STRATEGY, propertyOrderStrategy);
+        return setProperty(PROPERTY_NAMING_STRATEGY, propertyNamingStrategy);
     }
 
     /**
@@ -309,13 +290,13 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withPropertyOrderStrategy(final String propertyOrderStrategy) {
-        return setProperty(JSONB_PROPERTY_ORDER_STRATEGY, propertyOrderStrategy);
+        return setProperty(PROPERTY_ORDER_STRATEGY, propertyOrderStrategy);
     }
 
     /**
      * Property used to specify custom property visibility strategy.
      *
-     * Configures value of {@code JSONB_PROPERTY_VISIBILITY_STRATEGY} property.
+     * Configures value of {@code PROPERTY_VISIBILITY_STRATEGY} property.
      *
      * @param propertyVisibilityStrategy
      *      Custom property visibility strategy which affects serialization and deserialization.
@@ -324,13 +305,15 @@ public class JsonbConfig {
      */
     public final JsonbConfig withPropertyVisibilityStrategy(final PropertyVisibilityStrategy
                                                                     propertyVisibilityStrategy) {
-        return setProperty(JSONB_PROPERTY_VISIBILITY_STRATEGY, propertyVisibilityStrategy);
+        return setProperty(PROPERTY_VISIBILITY_STRATEGY, propertyVisibilityStrategy);
     }
 
     /**
      * Property used to specify custom mapping adapters.
      *
-     * Configures value of {@code JSONB_ADAPTERS} property.
+     * Configures value of {@code ADAPTERS} property.
+     *
+     * Calling withAdapters more than once will merge the adapters with previous value.
      *
      * @param adapters
      *      Custom mapping adapters which affects serialization and deserialization.
@@ -338,13 +321,13 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withAdapters(final JsonbAdapter... adapters) {
-        return setProperty(JSONB_ADAPTERS, adapters);
+        return setProperty(ADAPTERS, adapters);
     }
 
     /**
      * Property used to specify custom binary data strategy.
      *
-     * Configures value of {@code JSONB_BINARY_DATA_STRATEGY} property.
+     * Configures value of {@code BINARY_DATA_STRATEGY} property.
      *
      * @param binaryDataStrategy
      *      Custom binary data strategy which affects serialization and deserialization.
@@ -352,6 +335,6 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withBinaryDataStrategy(final String binaryDataStrategy) {
-        return setProperty(JSONB_BINARY_DATA_STRATEGY, binaryDataStrategy);
+        return setProperty(BINARY_DATA_STRATEGY, binaryDataStrategy);
     }
 }

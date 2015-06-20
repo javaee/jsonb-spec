@@ -40,7 +40,6 @@
 package javax.json.bind;
 
 import javax.json.bind.adapter.JsonbAdapter;
-import javax.json.bind.adapter.JsonbSimpleAdapter;
 import javax.json.bind.config.PropertyNamingStrategy;
 import javax.json.bind.config.PropertyVisibilityStrategy;
 import java.util.Collections;

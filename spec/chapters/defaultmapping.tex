@@ -53,7 +53,7 @@ MUST follow the conversion process defined in the javadoc specification for java
 \subsection{java.lang.Number}
 \label{subsec:abstractnumber}
 Marshalling of java.lang.Number instances (if their more concrete type is not defined elsewhere in this chapter) to a JSON string 
-MUST retrieve double value from java.lang.Number.doubleValue() method and convert it to a JSON Number as defined in \fullref{subsec:number}. [JSB-\ref{subsec:abstractnumber}-1]. \\
+MUST retrieve double value from java.lang.Number.doubleValue() method and convert it to a JSON Number as defined in \fullref{subsec:number}. [JSB-\ref{subsec:abstractnumber}-1]. 
 Unmarshalling of a JSON value into java.lang.Number type MUST return an instance of java.math.BigDecimal by using conversion process defined 
 in the javadoc specification for constructor of java.math.BigDecimal with java.lang.String argument. [JSB-\ref{subsec:abstractnumber}-2]
 

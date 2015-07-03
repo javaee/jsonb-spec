@@ -95,7 +95,8 @@ JSON Binding implementations MUST implement override of annotations according to
 
 Null handling behavior can be customized via javax.json.bind.JsonbConfig::withNullValues method.
 
-The way to enforce serialization of null values, is to call method javax.json.bind.JsonbConfig::withNullValues with parameter true. The way to skip serialization of null values is to call method javax.json.bind.JsonbConfig::withNullValues with parameter false. [JSB-\ref{subsec:NullSerializationPolicy}-1]
+The way to enforce serialization of null values, is to call method javax.json.bind.JsonbConfig::withNullValues with parameter true. \\
+The way to skip serialization of null values is to call method javax.json.bind.JsonbConfig::withNullValues with parameter false. [JSB-\ref{subsec:NullSerializationPolicy}-1]
 
 \section{I-JSON support}
 \label{sec:i_json}
@@ -115,7 +116,7 @@ These exceptions refer only to recommended areas of I-JSON.
 To enforce strict compliance of serialized JSON documents, JSON Binding implementations MUST implement configuration option "jsonb.i-json.strict-ser-compliance".
 [JSB-\ref{sec:i_json}-1]
 
-The way to enable strict compliance of serialized JSON documents, is to call method JsonbConfig::withStrictIJSONSerializationCompliance with parameter true.
+The way to enable strict compliance of serialized JSON documents, is to call method \\ JsonbConfig::withStrictIJSONSerializationCompliance with parameter true.
 
 \subsection{Strict date serialization}
 \label{subsec:strict_date_serialization}
@@ -159,7 +160,7 @@ JsonbAdapter registered via JsonbConfig::withAdapters is visible to all serializ
 \section{Custom date format}
 \label{sec:custom_date_format}
 
-To specify custom date format, it is necessary to annotate given annotation target with javax.json.bind.annotation.JsonbDateFormat annotation. [JSB-\ref{sec:custom_date_format}-1] JsonbDateFormat annotation can be applied to the following targets:
+To specify custom date format, it is necessary to annotate given annotation target with \\ javax.json.bind.annotation.JsonbDateFormat annotation. [JSB-\ref{sec:custom_date_format}-1] JsonbDateFormat annotation can be applied to the following targets:
 
 \begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
 \item field
@@ -174,7 +175,7 @@ Annotation applied to more specific target overrides the same annotation applied
 \section{Custom number format}
 \label{sec:custom_number_format}
 
-To specify custom number format, it is necessary to annotate given annotation target with javax.json.bind.annotation.JsonbNumberFormat annotation. [JSB-\ref{sec:custom_number_format}-1] JsonbNumberFormat annotation can be applied to the following targets:
+To specify custom number format, it is necessary to annotate given annotation target with \\ javax.json.bind.annotation.JsonbNumberFormat annotation. [JSB-\ref{sec:custom_number_format}-1] JsonbNumberFormat annotation can be applied to the following targets:
 
 \begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
 \item field

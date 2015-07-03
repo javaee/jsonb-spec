@@ -1,16 +1,19 @@
 \chapter{Default Mapping}
 \label{defaultmapping}
 
-This section defines the default binding (representation) of Java components and classes within Java programming language to JSON documents. The default binding defined here can be further customized as specified in Chapter \ref{customization} - \nameref{customization}.
+This section defines the default binding (representation) of Java components and classes to JSON documents. The default binding defined here can be further customized as specified in Chapter \ref{customization} - \nameref{customization}.
 
 \section{General}
 \label{sec:general}
 JSON Binding implementations ('implementations' in further text) MUST support binding of JSON documents as defined in RFC 7159 JSON Grammar \cite{rfc7159}. Marshalled JSON output MUST conform to the RFC 7159 JSON Grammar \cite{rfc7159} and be encoded in UTF-8 encoding as defined in Section 8.1 (Character Encoding) of RFC 7159 \cite{rfc7159}. [JSB-\ref{sec:general}-1] 
-Implementations MUST support unmarshalling of documents conforming to RFC 7159 JSON Grammar \cite{rfc7159}. [JSB-\ref{sec:general}-2] In addition, implementations SHOULD NOT allow unmarshalling of RFC 7159 \cite{rfc7159} non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:general}-3] Detection of UTF encoding of unmarshalled document is done as defined in the Section 3 (Encoding) of RFC 4627 \cite{rfc4627}. [JSB-\ref{sec:general}-4] Implementations SHOULD ignore presence of UTF byte order mark (BOM) and not treat it as an error.[JSB-\ref{sec:general}-5]
+Implementations MUST support unmarshalling of documents conforming to RFC 7159 JSON Grammar \cite{rfc7159}. [JSB-\ref{sec:general}-2] In addition, implementations SHOULD NOT allow unmarshalling of RFC 7159 \cite{rfc7159} non-conforming text (e.g. unsupported encoding, ...) and report error in such cases. [JSB-\ref{sec:general}-3] 
+Detection of UTF encoding of an unmarshalled document MUST follow the encoding process defined in the Section 3 (Encoding) of RFC 4627 \cite{rfc4627}. [JSB-\ref{sec:general}-4] 
+Implementations SHOULD ignore the presence of an UTF byte order mark (BOM) and not treat it as an error.[JSB-\ref{sec:general}-5]
 
 \section{Errors}
 \label{sec:errors}
-Implementations SHOULD NOT allow unmarshalling of RFC 7159 \cite{rfc7159} non-conforming text (e.g. unsupported encoding, ...) and report error in such case. [JSB-\ref{sec:errors}-1] Implementation SHOULD report error also during unmarshalling operation, if it is not possible to represent JSON document value in the expected Java type. [JSB-\ref{sec:errors}-2]
+Implementations SHOULD NOT allow unmarshalling of RFC 7159 \cite{rfc7159} non-conforming text (e.g. unsupported encoding, ...) and report an error in such case. [JSB-\ref{sec:errors}-1] 
+Implementations SHOULD also report an error during an unmarshalling operation, if it is not possible to represent a JSON document value with the expected Java type. [JSB-\ref{sec:errors}-2]
 
 \section{Basic Java Types}
 \label{sec:basic}
@@ -29,21 +32,30 @@ Implementations MUST support binding of the following basic Java classes and the
 
 \subsection{java.lang.String, Character}
 \label{subsec:string}
-Instances of type java.lang.String and java.lang.Character are marshalled to JSON String values as defined within RFC 7159 Section 7 (Strings) \cite{rfc7159} in UTF-8 encoding without byte order mark. [JSB-\ref{subsec:string}-1] Implementations SHOULD support unmarshaling of JSON text in other (than UTF-8) UTF encodings into java.lang.String instances.[JSB-\ref{subsec:string}-2]
+Instances of type java.lang.String and java.lang.Character are marshalled to JSON String values as defined within RFC 7159 Section 7 (Strings) \cite{rfc7159} in UTF-8 encoding without a byte order mark. [JSB-\ref{subsec:string}-1] 
+Implementations SHOULD support unmarshaling of JSON text in other (than UTF-8) UTF encodings into java.lang.String instances.[JSB-\ref{subsec:string}-2]
 
 \subsection{java.lang.Byte, Short, Integer, Long, Float, Double}
 \label{subsec:number}
-Instances of type java.lang.Byte, Short, Integer, Long, Float, Double and their corresponding primitive types are marshalled to JSON Number with conversion defined in specification for their corresponding toString method [JSB-\ref{subsec:number}-1]. Unmarshalling of JSON value into java.lang.Byte, Short, Integer, Long, Float, Double instance or corresponding primitive type is done with conversion as defined in the specification for their corresponding
-parse\${Type} method, such as java.lang.Byte.parseByte for Byte. [JSB-\ref{subsec:number}-2]
+Marshalling of type java.lang.Byte, Short, Integer, Long, Float or Double (and their corresponding primitive types) to a JSON Number
+MUST follow the conversion process defined in the javadoc specification for the corresponding type's toString() method [JSB-\ref{subsec:number}-1]. 
+Unmarshalling of a JSON value into java.lang.Byte, Short, Integer, Long, Float or Double instance (or their corresponding primitive types) 
+MUST follow the conversion process defined in the javadoc specification for the corresponding
+parse\${Type} method, such as java.lang.Byte.parseByte() for Byte. [JSB-\ref{subsec:number}-2]
 
 \subsection{java.lang.Boolean}
 \label{subsec:boolean}
-Instances of type java.lang.Boolean and its corresponding boolean primitive type are marshalled to JSON value with conversion defined in specification for java.lang.Boolean.toString method [JSB-\ref{subsec:boolean}-1]. Unmarshalling of JSON value into java.lang.Boolean instance or boolean primitive type is done with conversion as defined in specification for java.lang.Boolean.parseBoolean method. [JSB-\ref{subsec:boolean}-2]
+Marshalling of type java.lang.Boolean and its corresponding boolean primitive type to a JSON value 
+MUST follow the conversion process defined in the javadoc specification for java.lang.Boolean.toString() method [JSB-\ref{subsec:boolean}-1]. 
+Unmarshalling of a JSON value into java.lang.Boolean instance or boolean primitive type
+MUST follow the conversion process defined in the javadoc specification for java.lang.Boolean.parseBoolean() method. [JSB-\ref{subsec:boolean}-2]
 
 \subsection{java.lang.Number}
 \label{subsec:abstractnumber}
-Instances of type java.lang.Number (if their more concrete type is not defined elsewhere in this chapter) are marshalled to JSON string by retrieving double value returned from java.lang.Number.doubleValue() method and converting the value to JSON Number as defined in \fullref{subsec:number}. [JSB-\ref{subsec:abstractnumber}-1]. \\
-Unmarshalling of JSON value into Java type java.lang.Number SHOULD return instance of java.math.BigDecimal by using conversion as defined in the specification for constructor of java.math.BigDecimal with java.lang.String. [JSB-\ref{subsec:abstractnumber}-2]
+Marshalling of java.lang.Number instances (if their more concrete type is not defined elsewhere in this chapter) to a JSON string 
+MUST retrieve double value from java.lang.Number.doubleValue() method and convert it to a JSON Number as defined in \fullref{subsec:number}. [JSB-\ref{subsec:abstractnumber}-1]. \\
+Unmarshalling of a JSON value into java.lang.Number type MUST return an instance of java.math.BigDecimal by using conversion process defined 
+in the javadoc specification for constructor of java.math.BigDecimal with java.lang.String argument. [JSB-\ref{subsec:abstractnumber}-2]
 
 \section{Specific Standard Java SE Types}
 \label{sec:specific}
@@ -61,19 +73,31 @@ Implementations MUST support binding of the following standard Java SE classes: 
 
 \subsection{java.math.BigInteger, BigDecimal}
 \label{subsec:bignumber}
-Instances of type java.math.BigInteger, BigDecimal are marshalled to JSON Number with conversion defined in specification for their toString method [JSB-\ref{subsec:bignumber}-1]. Unmarshalling of JSON value into java.math.BigInteger, BigDecimal instance is done with conversion as defined in the specification for constructor of java.math.BigInteger, BigDecimal with java.lang.String. [JSB-\ref{subsec:bignumber}-2]
+Marshalling of type java.math.BigInteger or BigDecimal to a JSON Number 
+MUST follow the conversion process defined in the javadoc specification for the corresponding type's toString() method [JSB-\ref{subsec:bignumber}-1]. 
+Unmarshalling of a JSON value into java.math.BigInteger or BigDecimal instance 
+MUST follow the conversion process defined in the javadoc specification for the constructor of java.math.BigInteger or BigDecimal with java.lang.String argument. [JSB-\ref{subsec:bignumber}-2]
 
 \subsection{java.net.URL, URI}
 \label{subsec:url}
-Instances of type java.net.URL, URI are marshalled to JSON String value with conversion defined in specification for their toString method [JSB-\ref{subsec:url}-1]. Unmarshalling of JSON value into java.net.URL, URI instance is done with conversion as defined in the specification for constructor of java.net.URL, URI with java.lang.String input. [JSB-\ref{subsec:url}-2]
+Marshalling of type java.net.URL or URI to a JSON String 
+MUST follow the conversion process defined in the javadoc specification for the corresponding type's toString() method [JSB-\ref{subsec:url}-1]. 
+Unmarshalling of a JSON value into java.net.URL or URI instance 
+MUST follow the conversion process defined in the javadoc specification for the constructor of java.net.URL or URI with java.lang.String argument. [JSB-\ref{subsec:url}-2]
 
 \subsection{java.util.Optional, OptionalInt, OptionalLong, OptionalDouble}
 \label{subsec:optional}
-Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to JSON value by retrieving their contained instance and converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] Empty optional instances marshalled as object instance properties are ignored in marshalling. [JSB-\ref{subsec:optional}-2] Empty optional instances marshalled as JSON array elements are marshalled as null value [JSB-\ref{subsec:optional}-3]. Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain null value. [JSB-\ref{subsec:optional}-4] Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
+Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to a JSON value by retrieving their contained instance and 
+converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] 
+Empty optional instances marshalled as object instance properties are ignored during marshalling. [JSB-\ref{subsec:optional}-2] 
+Empty optional instances marshalled as JSON array elements are marshalled as null values [JSB-\ref{subsec:optional}-3]. 
+Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain a null value. [JSB-\ref{subsec:optional}-4] 
+Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type which unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
 
-Instances of type java.util.Optional\textless T\textgreater are marshalled to JSON value as JSON objects when T alone would be marshalled as JSON object. When T would be marshalled as JSON value (e.g. java.lang.String, java.lang.Integer), instance of java.util.Optional\textless T\textgreater is marshalled as JSON value (without curly brackets). [JSB-\ref{subsec:optional}-6]
+Instances of type java.util.Optional\textless T\textgreater are marshalled to a JSON value as JSON objects when T alone would be marshalled as JSON object. 
+When T would be marshalled as a JSON value (e.g. java.lang.String, java.lang.Integer), an instance of java.util.Optional\textless T\textgreater is marshalled as a JSON value (without curly brackets). [JSB-\ref{subsec:optional}-6]
 
-Unmarshalling of JSON value into java.util.Optional\textless T\textgreater MUST be supported if unmarshalling of JSON value into instance of T is supported. [JSB-\ref{subsec:optional}-7]
+Unmarshalling of a JSON value into java.util.Optional\textless T\textgreater MUST be supported if unmarshalling of a JSON value into instance of T is supported. [JSB-\ref{subsec:optional}-7]
 
 \section{Dates}
 \label{sec:dates}
@@ -99,28 +123,30 @@ Implementations MUST support binding of the following standard Java date/time cl
 \end{list}
 
 If not specified otherwise in this section, GMT standard time zone and offset specified from UTC Greenwich is used. [JSB-\ref{sec:dates}-2]
-If not specified otherwise, date time format for marshalling and unmarshalling is ISO 8601 without offset, as specified in java.time.format.DateTimeFormatter.ISO\verb|_|DATE. [JSB-\ref{sec:dates}-3]
-Implementations MUST report error if the datetime string in JSON document does not correspond to the expected datetime format. [JSB-\ref{sec:dates}-4]
+If not specified otherwise, the date time format for marshalling and unmarshalling is ISO 8601 without offset, as specified in java.time.format.DateTimeFormatter.ISO\verb|_|DATE. [JSB-\ref{sec:dates}-3]
+Implementations MUST report an error if the datetime string in a JSON document does not correspond to the expected datetime format. [JSB-\ref{sec:dates}-4]
 
 \subsection{java.util.Date, Calendar, GregorianCalendar}
 \label{subsec:datecalendar}
-Marshalling format of java.util.Date, Calendar, GregorianCalendar instances with no time information is ISO\verb|_|DATE. [JSB-\ref{subsec:datecalendar}-1]. If time information is present, the format is ISO\verb|_|DATE\verb|_|TIME [JSB-\ref{subsec:datecalendar}-2].
+The marshalling format of java.util.Date, Calendar, GregorianCalendar instances with no time information is ISO\verb|_|DATE. [JSB-\ref{subsec:datecalendar}-1]. If time information is present, the format is ISO\verb|_|DATE\verb|_|TIME [JSB-\ref{subsec:datecalendar}-2].
 
 Implementations MUST support unmarshalling of both ISO\verb|_|DATE and ISO\verb|_|DATE\verb|_|TIME into java.util.Date, Calendar, GregorianCalendar instances. [JSB-\ref{subsec:datecalendar}-3]
 
 \subsection{java.util.TimeZone, SimpleTimeZone}
 \label{subsec:dateTimezone}
 
-Implementations MUST support unmarshalling of any time zone format specified in java.util.TimeZone into field or property of type java.util.TimeZone, SimpleTimeZone. [JSB-\ref{subsec:dateTimezone}-1] Implementations MUST report error for deprecated three-letter time zone IDs as specified in java.util.Timezone. [JSB-\ref{subsec:dateTimezone}-2]
-Marshalling format of java.util.TimeZone, SimpleTimeZone is NormalizedCustomID as specified in java.util.TimeZone. [JSB-\ref{subsec:dateTimezone}-3]
+Implementations MUST support unmarshalling of any time zone format specified in java.util.TimeZone into a field or property of type java.util.TimeZone, SimpleTimeZone. [JSB-\ref{subsec:dateTimezone}-1] 
+Implementations MUST report an error for deprecated three-letter time zone IDs as specified in java.util.Timezone. [JSB-\ref{subsec:dateTimezone}-2]
+The marshalling format of java.util.TimeZone and SimpleTimeZone is NormalizedCustomID as specified in java.util.TimeZone. [JSB-\ref{subsec:dateTimezone}-3]
 
 \subsection{java.time.*}
 \label{subsec:time}
 
-Marshalling output for java.time.Instant instance is ISO\verb|_|INSTANT format, as specified in java.time.format.DateTimeFormatter. [JSB-\ref{subsec:time}-1]
-Implementations MUST support unmarshalling of ISO\verb|_|INSTANT format from JSON string to a java.time.Instant instance. [JSB-\ref{subsec:time}-2]
+The marshalling output for a java.time.Instant instance MUST be in a ISO\verb|_|INSTANT format, as specified in 
+java.time.format.DateTimeFormatter. [JSB-\ref{subsec:time}-1]
+Implementations MUST support the unmarshalling of an ISO\verb|_|INSTANT formatted JSON string to a java.time.Instant instance. [JSB-\ref{subsec:time}-2]
 
-Analogically, for other java.time.* classes, following mapping table matches Java types and corresponding formats: [JSB-\ref{subsec:time}-3]
+For other java.time.* classes, the following mapping table maps Java types to their corresponding formats: [JSB-\ref{subsec:time}-3]
 
 \begin{tabularx}{\textwidth}{ |X|X| }
 \hline
@@ -136,23 +162,25 @@ java.time.OffsetTime & ISO\verb|_|OFFSET\verb|_|TIME\\
 \hline
 \end{tabularx}
 
-Implementations MUST support unmarshalling of any time zone ID format specified in java.time.ZoneId into field or property of type java.time.ZoneId. [JSB-\ref{subsec:time}-4]
-Marshalling format of java.time.ZoneId is normalized zone ID as specified in java.time.ZoneId. [JSB-\ref{subsec:time}-5]
+Implementations MUST support the unmarshalling of any time zone ID format specified in java.time.ZoneId into a field or property of type java.time.ZoneId. [JSB-\ref{subsec:time}-4]
+The marshalling format of java.time.ZoneId is the normalized zone ID as specified in java.time.ZoneId. [JSB-\ref{subsec:time}-5]
 
-Implementations MUST support unmarshalling of any time zone ID format specified in java.time.ZoneOffset into field or property of type java.time.ZoneOffset. [JSB-\ref{subsec:time}-6]
-Marshalling format of java.time.ZoneOffset is normalized zone ID as specified in java.time.ZoneOffset. [JSB-\ref{subsec:time}-7]
+Implementations MUST support the unmarshalling of any time zone ID format specified in java.time.ZoneOffset into a field or property of type java.time.ZoneOffset. [JSB-\ref{subsec:time}-6]
+The marshalling format of java.time.ZoneOffset is the normalized zone ID as specified in java.time.ZoneOffset. [JSB-\ref{subsec:time}-7]
 
-Implementations MUST support unmarshalling of any duration format specified in java.time.Duration into field or property of type java.time.Duration. [JSB-\ref{subsec:time}-8] This is super-set of ISO 8601 duration format.
-Marshalling format of java.time.Duration is ISO 8601 seconds based representation, such as
+Implementations MUST support the unmarshalling of any duration format specified in java.time.Duration into a field or property of type java.time.Duration. [JSB-\ref{subsec:time}-8] This is super-set of ISO 8601 duration format.
+The marshalling format of java.time.Duration is the ISO 8601 seconds based representation, such as
 \verb|PT8H6M12.345S|. [JSB-\ref{subsec:time}-9]
 
-Implementations MUST support unmarshalling of any period format specified in java.time.Period into field or property of type java.time.Period. [JSB-\ref{subsec:time}-10] This is super-set of ISO 8601 period format.
-Marshalling format of java.time.Period is ISO 8601 period representation. [JSB-\ref{subsec:time}-11] Zero length period is represented as zero days \verb|'P0D'|. [JSB-\ref{subsec:time}-12]
+Implementations MUST support the unmarshalling of any period format specified in java.time.Period into a field or property of type java.time.Period. [JSB-\ref{subsec:time}-10] 
+This is a super-set of ISO 8601 period format.
+The marshalling format of java.time.Period is ISO 8601 period representation. [JSB-\ref{subsec:time}-11] 
+A zero-length period is represented as zero days \verb|'P0D'|. [JSB-\ref{subsec:time}-12]
 
 
 \section{Untyped mapping}
 \label{sec:untyped}
-For unspecified output type of unmarshal operation, as well as where output type is specified as Object.class, implementations MUST unmarshal JSON document using Java runtime types specified in table below: [JSB-\ref{sec:untyped}-1]
+For an unspecified output type of an unmarshal operation, as well as where output type is specified as Object.class, implementations MUST unmarshal a JSON document using Java runtime types specified in table below: [JSB-\ref{sec:untyped}-1]
 
 \begin{tabularx}{\textwidth}{ |X|X| }
 \hline
@@ -167,39 +195,46 @@ null & null \\
 \hline
 \end{tabularx}
 
-JSON object values are unmarshalled into implementation of java.util.Map \textless String, Object \textgreater with predictable iteration order.[JSB-\ref{sec:untyped}-2]
+JSON object values are unmarshalled into an implementation of java.util.Map \textless String, Object \textgreater with a predictable iteration order.[JSB-\ref{sec:untyped}-2]
 
-JSON number values are unmarshalled into smallest of types Integer, Long, BigDecimal which can hold the value represented by number without loss of value or precision.[JSB-\ref{sec:untyped}-3]
+JSON number values are unmarshalled into the smallest of types Integer, Long, BigDecimal that can hold the value represented by number without loss of value or precision.[JSB-\ref{sec:untyped}-3]
 
 \section{Java Class}
 \label{sec:class}
-Any instance passed to unmarshalling operation must have public or protected no-argument constructor, implementations SHOULD throw an error if this condition is not met. [JSB-\ref{sec:class}-1] This limitation does not apply to marshalling operations. [JSB-\ref{sec:class}-2]
+Any instance passed to an unmarshalling operation must have a public or protected no-argument constructor. Implementations SHOULD throw an error if this condition is not met. [JSB-\ref{sec:class}-1] This limitation does not apply to marshalling operations. [JSB-\ref{sec:class}-2]
 
 \subsection{Scope and Field access strategy}
 \label{subsec:fieldstrategy}
-For unmarshalling operation for a Java property, if a matching public setter method exists, the method is called to set the value of the property. If a matching setter method with private, protected, or defaulted to package-only access exists, then this field is ignored. If no matching setter method exists and the field is public, direct field assignment is used. [JSB-\ref{subsec:fieldstrategy}-1]
+For an unmarshalling operation of a Java property, if a matching public setter method exists, the method is called to set the value of the property. 
+If a matching setter method with private, protected, or defaulted to package-only access exists, then this field is ignored. 
+If no matching setter method exists and the field is public, then direct field assignment is used. [JSB-\ref{subsec:fieldstrategy}-1]
 
-For marshalling operation, if a matching public getter method exists, the method is called to obtain value of the property. If a matching getter method with private, protected, or defaulted to package-only access exists, then this field is ignored. If no matching getter method exists and the field is public, the value is obtained directly from the field. [JSB-\ref{subsec:fieldstrategy}-2]
+For a marshalling operation, if a matching public getter method exists, the method is called to obtain the value of the property. 
+If a matching getter method with private, protected, or defaulted to package-only access exists, then this field is ignored. 
+If no matching getter method exists and the field is public, then the value is obtained directly from the field. [JSB-\ref{subsec:fieldstrategy}-2]
 
 JSON Binding implementations MUST NOT unmarshal into transient, final or static fields and MUST ignore name/value pairs corresponding to such fields. [JSB-\ref{subsec:fieldstrategy}-3]
 
 Implementations MUST support marshalling of final fields. [JSB-\ref{subsec:fieldstrategy}-4] Transient and static fields MUST be ignored during marshalling operation. [JSB-\ref{subsec:fieldstrategy}-5]
 
-If JSON document contains name/value pair not corresponding to field or setter method, this name/value pair MUST be ignored. [JSB-\ref{subsec:fieldstrategy}-6]
+If a JSON document contains a name/value pair not corresponding to field or setter method, then this name/value pair MUST be ignored. [JSB-\ref{subsec:fieldstrategy}-6]
 
-Public getter/setter methods without corresponding field MUST be supported. When only public getter/setter method without corresponding field is present in the class, the getter method is called to obtain value to marshall, and the setter method is called during unmarshall operation. [JSB-\ref{subsec:fieldstrategy}-7]
+Public getter/setter methods without a corresponding field MUST be supported. 
+When only public getter/setter method without corresponding field is present in the class, the getter method is called to obtain the value to marshall, and the setter method is called during unmarshall operation. [JSB-\ref{subsec:fieldstrategy}-7]
 
 \subsection{Nested Classes}
 \label{subsec:nestedclass}
-Implementations MUST support binding of public and protected nested classes. [JSB-\ref{subsec:nestedclass}-1] For unmarshalling operations, both nested and encapsulating class MUST fulfill same instantiation requirements as specified in \fullref{subsec:fieldstrategy}. [JSB-\ref{subsec:nestedclass}-2]
+Implementations MUST support the binding of public and protected nested classes. [JSB-\ref{subsec:nestedclass}-1] 
+For unmarshalling operations, both nested and encapsulating classes MUST fulfill the same instantiation requirements as specified in \fullref{subsec:fieldstrategy}. [JSB-\ref{subsec:nestedclass}-2]
 
 \subsection{Static Nested Classes}
 \label{subsec:staticnested}
-Implementations MUST support binding of public and protected static nested classes. [JSB-\ref{subsec:staticnested}-1] For unmarshalling operations, the nested class MUST fulfill same instantiation requirements as specified in \fullref{subsec:fieldstrategy}. [JSB-\ref{subsec:staticnested}-2]
+Implementations MUST support the binding of public and protected static nested classes. [JSB-\ref{subsec:staticnested}-1] 
+For unmarshalling operations, the nested class MUST fulfill the same instantiation requirements as specified in \fullref{subsec:fieldstrategy}. [JSB-\ref{subsec:staticnested}-2]
 
 \subsection{Anonymous Classes}
 \label{subsec:anonymous}
-Unmarshalling into anonymous classes is not supported, marshalling of anonymous classes is supported by default object mapping. [JSB-\ref{subsec:nestedclass}-1]
+Unmarshalling into anonymous classes is not supported. Marshalling of anonymous classes is supported by default object mapping. [JSB-\ref{subsec:nestedclass}-1]
 
 \section{Polymorphic Types}
 \label{sec:polymorph}
@@ -207,15 +242,20 @@ Unmarshalling into polymorphic types is not supported by default mapping. [JSB-\
 
 \section{Enum}
 \label{sec:enum}
-Enum instances are marshalled to JSON String value with conversion defined in specification for their toString method [JSB-\ref{sec:enum}-1]. Unmarshalling of JSON value into enum instance is done by calling enum's valueOf(String) method. [JSB-\ref{sec:enum}-2]
+Marshalling of an Enum instance to a JSON String value 
+MUST follow the conversion process defined in javadoc specification for their toString method [JSB-\ref{sec:enum}-1]. 
+Unmarshalling of a JSON value into an enum instance MUST be done by calling the enum's valueOf(String) method. [JSB-\ref{sec:enum}-2]
 
 \section{Interfaces}
 \label{sec:interfaces}
-Implementations MUST support unmarshalling of specific interfaces defined in  \fullref{sec:collections}, and \fullref{subsec:abstractnumber}. [JSB-\ref{sec:interfaces}-1] Unmarshalling to other interfaces is not supported and implementations SHOULD report error in such case. [JSB-\ref{sec:interfaces}-2] If class property is defined with an interface, and not concrete type, mapping for marshalling the property is resolved based on its runtime type.[JSB-\ref{sec:interfaces}-3]
+Implementations MUST support the unmarshalling of specific interfaces defined in  \fullref{sec:collections}, and \fullref{subsec:abstractnumber}. [JSB-\ref{sec:interfaces}-1] 
+Unmarshalling to other interfaces is not supported and implementations SHOULD report error in such case. [JSB-\ref{sec:interfaces}-2] 
+If a class property is defined with an interface and not concrete type, then the mapping for a marshalled the property is resolved based on its runtime type.[JSB-\ref{sec:interfaces}-3]
 
 \section{Collections}
 \label{sec:collections}
-Implementations MUST support binding of the following collection interfaces, classes and their implementations. [JSB-\ref{sec:collections}-1] Implementations of interfaces below must provide accessible default constructor. JSON Binding implementations MUST report unmarshalling error if default constructor is not present or is not in accessible scope. [JSB-\ref{sec:collections}-2]
+Implementations MUST support the binding of the following collection interfaces, classes and their implementations. [JSB-\ref{sec:collections}-1] 
+Implementations of these interfaces must provide an accessible default constructor. JSON Binding implementations MUST report an unmarshalling error if a default constructor is not present or is not in accessible scope. [JSB-\ref{sec:collections}-2]
 
 \begin{list}{$\bullet$}{\parsep 0em \labelwidth 0em}
 \item java.util.Collection
@@ -246,24 +286,24 @@ Implementations MUST support binding of the following collection interfaces, cla
 
 \section{Arrays}
 \label{sec:arrays}
-JSON Binding implementations MUST support binding of Java arrays of all supported Java types from this chapter into/from JSON array structures as defined in Section 5 of RFC 7159 \cite{rfc7159}. [JSB-\ref{sec:arrays}-1] Arrays of primitive types and multi-dimensional arrays MUST be supported. [JSB-\ref{sec:untyped}-2]
+JSON Binding implementations MUST support the binding of Java arrays of all supported Java types from this chapter into/from JSON array structures as defined in Section 5 of RFC 7159 \cite{rfc7159}. [JSB-\ref{sec:arrays}-1] Arrays of primitive types and multi-dimensional arrays MUST be supported. [JSB-\ref{sec:untyped}-2]
 
 \section{Attribute order}
 \label{sec:attributes}
 
-Declared fields MUST be marshalled in lexicographical order into resulting JSON document. In case of inheritance, declared fields of super class MUST be marshalled before declared fields of child class. [JSB-\ref{sec:attributes}-1]
+Declared fields MUST be marshalled in lexicographical order into the resulting JSON document. In case of inheritance, declared fields of super class MUST be marshalled before declared fields of child class. [JSB-\ref{sec:attributes}-1]
 
-When unmarshalling JSON document, declared fields MUST be set in the order of attributes present in the JSON document. [JSB-\ref{sec:attributes}-2]
+When unmarshalling a JSON document, declared fields MUST be set in the order of attributes present in the JSON document. [JSB-\ref{sec:attributes}-2]
 
 \section{Null value handling}
 \label{sec:null}
 
 \subsection{Null Java field}
 \label{subsec:nullfield}
-The result of marshalling java field with null value is absence of the property in resulting JSON document. [JSB-\ref{subsec:nullfield}-1]
-Unmarshalling operation of a property absent in JSON document MUST not set the value of the field, setter (if available) MUST not be called, thus original value of the field MUST be preserved. [JSB-\ref{subsec:nullfield}-2]
+The result of marshalling a java field with a null value is the absence of the property in the resulting JSON document. [JSB-\ref{subsec:nullfield}-1]
+The unmarshalling operation of a property absent in JSON document MUST not set the value of the field, the setter (if available) MUST not be called, and thus original value of the field MUST be preserved. [JSB-\ref{subsec:nullfield}-2]
 
-Unmarshalling operation of a property with null value in JSON document MUST set the value of the field to null value (or call setter with null value if setter is present). [JSB-\ref{subsec:nullfield}-3]
+The unmarshalling operation of a property with a null value in a JSON document MUST set the value of the field to null value (or call setter with null value if setter is present). [JSB-\ref{subsec:nullfield}-3]
 
 \subsection{Null Array Values}
 \label{subsec:nullarray}

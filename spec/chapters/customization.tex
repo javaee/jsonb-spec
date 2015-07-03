@@ -1,7 +1,7 @@
 \chapter{Customizing Mapping}
 \label{customization}
 
-This section defines several ways how to customize the default behavior. The default behavior can be customized annotating a given field (or JavaBean property), or by providing an implementation of particular strategy, e.g. PropertyOrderStrategy. JSON Binding provider MUST support both these customization options.[JSB-\ref{c:customization}-1]
+This section defines several ways how to customize the default behavior. The default behavior can be customized annotating a given field (or JavaBean property), or by providing an implementation of particular strategy, e.g. PropertyOrderStrategy. JSON Binding provider MUST support both these customization options.[JSB-\ref{customization}-1]
 
 \section{Customizing Property Names}
 \label{sec:custom_property_names}
@@ -66,9 +66,9 @@ Class javax.json.bind.config.PropertyOrderStrategy provides the most common prop
 
 The detailed description of property order strategies can be found in javadoc.
 
-The way to set custom property order strategy is to use javax.json.bind.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{subsec:custom_property_order}-2]
+The way to set custom property order strategy is to use javax.json.bind.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{sec:custom_property_order}-2]
 
-To customize order of serialized properties only for one specific type, JSON Binding provides javax.json.bind.annotation.JsonbPropertyOrder annotation. Order specified by JsonbPropertyOrder annotation overrides order specified by PropertyOrderStrategy. [JSB-\ref{subsec:custom_property_order}-3]
+To customize order of serialized properties only for one specific type, JSON Binding provides javax.json.bind.annotation.JsonbPropertyOrder annotation. Order specified by JsonbPropertyOrder annotation overrides order specified by PropertyOrderStrategy. [JSB-\ref{sec:custom_property_order}-3]
 
 The order is applied to already renamed properties as stated in \ref{sec:custom_property_names}.
 

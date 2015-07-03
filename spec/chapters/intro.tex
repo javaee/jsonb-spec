@@ -27,13 +27,13 @@ The corresponding Javadocs can be found online at:
 http://jsonb-spec.java.net/
 \end{quote}
 
-The reference implementation will be obtained from:
+The reference implementation will be obtainable from:
 
 \begin{quote}
 http://eclipselink.org/
 \end{quote}
 
-The expert group seeks feedback from the community on any aspect of this specification, please send comments to:
+The expert group is seeking feedback from the community on any aspect of this specification. Please send comments to:
 
 \begin{quote}
 users@jsonb-spec.java.net
@@ -41,37 +41,37 @@ users@jsonb-spec.java.net
 
 \section{Goals}
 
-The following are the goals of the API:
+The goals of the API are as follows:
 
 \begin{description}
 
 \item[JSON] 
-Support binding (marshalling and unmarshalling) for all RFC 7159 compatible JSON documents.
+Support binding (marshalling and unmarshalling) for all RFC 7159-compatible JSON documents.
 
 \item [Relationships to JSON Related specifications]
-JSON related specifications will be surveyed to determine their relationship to JSON-Binding.
+JSON-related specifications will be surveyed to determine their relationship to JSON-Binding.
 
 \item[Consistency] 
-Maintain consistency with JAXB (Java API for XML Binding) and other JavaEE and SE APIs where appropriate.
+Maintain consistency with JAXB (Java API for XML Binding) and other Java EE and SE APIs where appropriate.
 
 \item[Convention] 
 Define default mapping of Java classes and instances to JSON document counterparts.
 
 \item[Customization] 
-Allow to customize the default mapping definition.
+Allow customization of the default mapping definition.
 
 \item[Ease Of Use] 
 Default use of the APIs should not require prior knowledge of the JSON document format and specification.
 
 \item[Partial Mapping] 
-In many usecases, only a subset of JSON Document is required to be mapped to a Java object  instance.
+In many use cases, only a subset of JSON Document is required to be mapped to a Java object instance.
 
 \item[Integration]
 Define or enable integration with following Java EE technology standards:
 \begin{list}{$-$}{\parsep 0em \labelwidth 0em}
 \item JSR 374 - Java API for JSON Processing (JSON-P) 1.1
 \item JSR 349 - Bean Validation (BV) 1.1
-\item JSR 370 - JavaTM API for RESTful Web Services (JAX-RS) 2.1
+\item JSR 370 - Java\texttrademark  API for RESTful Web Services (JAX-RS) 2.1
 \end{list}
   
 \end{description}
@@ -85,7 +85,7 @@ The following are non-goals:
 
 \item[Preserving equivalence (Round-trip)] The specification recommends, but does not require equivalence of content for unmarshalled and marshalled JSON documents.
 
-\item[JSON Schema] Generation of JSON Schema from Java classes, as well as validation based on JSON schema is out of scope of this specification.
+\item[JSON Schema] Generation of JSON Schema from Java classes, as well as validation based on JSON schema.
 
 \item[JEP 198 Lightweight JSON API Support] Support and integration with Lightweight JSON API as defined within JEP 198 is out of scope of this specification. Will be reconsidered in future specification revisions.
 
@@ -122,7 +122,7 @@ This is a note.
 \label{terminology}
 
 \begin{description}
-\item[Databinding] Process which defines representation of information in a JSON document as an object instance, and vice versa.
+\item[Data binding] Process which defines the representation of information in a JSON document as an object instance, and vice versa.
 \item[Unmarshalling] Process of reading a JSON document and constructing a tree of content objects, 
 where each object corresponds to part of JSON document, thus the content tree reflects the document's content.
 \item[Marshalling] Inverse process to unmarshalling. Process of traversing content object tree and writing a JSON document that reflects the tree's content.
@@ -154,6 +154,11 @@ The following are the present expert group members:
 \section{Acknowledgements}
 \label{acks}
 
-During the course of this JSR we received many excellent suggestions. Special thanks to ... .
+During the course of this JSR we received many excellent suggestions.
+Special thanks to Heather VanCura and David Delabassee for feedback and help with 
+evangelizing the specification, and John Clingan for feedback and language corrections.
 
-During the course of this JSR we received many excellent suggestions on the JSR java.net project mailing lists, thanks in particular to ...  for their contributions. The following individuals have also made invaluable technical contributions: ... .
+During the course of this JSR we also received many excellent suggestions on the JSR's java.net project mailing lists. 
+Thanks in particular to Olena Syrota, Oleg Tsal-Tsalko and whole JUG UA for their contributions.
+
+The following individuals have also made invaluable technical contributions: ... .

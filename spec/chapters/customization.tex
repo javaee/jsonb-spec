@@ -1,7 +1,7 @@
 \chapter{Customizing Mapping}
 \label{customization}
 
-This section defines several ways how to customize the default behavior. The default behavior can be customized annotating a given field (or JavaBean property), or by providing an implementation of particular strategy, e.g. PropertyOrderStrategy. JSON Binding provider MUST support both these customization options.[JSB-\ref{customization}-1]
+This section defines several ways how to customize the default behavior. The default behavior can be customized annotating a given field, JavaBean property, type or package, or by providing an implementation of particular strategy, e.g. PropertyOrderStrategy. JSON Binding provider MUST support these customization options.[JSB-\ref{customization}-1]
 
 \section{Customizing Property Names}
 \label{sec:custom_property_names}
@@ -11,7 +11,7 @@ There are two standard ways how to customize serialization of field (or JavaBean
 \subsection{javax.json.bind.annotation.JsonbTransient}
 \label{subsec:JsonbTransient}
 
-JSON Binding implementations MUST NOT serialize fields (or JavaBean properties) annotated with javax.json.bind.annotation.JsonbTransient. When placed on a class, indicates that the class shouldn't be mapped to JSON by itself. Properties on such class will be mapped to JSON along with its derived classes, as if the class is inlined. [JSB-\ref{subsec:JsonbTransient}-1]
+JSON Binding implementations MUST NOT serialize fields,  JavaBean properties or types annotated with javax.json.bind.annotation.JsonbTransient. When placed on a class, indicates that the class shouldn't be mapped to JSON by itself. Properties on such class will be mapped to JSON along with its derived classes, as if the class is inlined. [JSB-\ref{subsec:JsonbTransient}-1]
 
 JsonbTransient annotation is mutually exclusive with all other JSON Binding defined annotations. If this condition is not met, JSON Binding implementation MUST throw JsonbException. [JSB-\ref{subsec:JsonbTransient}-2]
 
@@ -130,10 +130,10 @@ The result of serialization of duration must conform to the "duration" productio
 \section{Simple values}
 \label{sec:simple_values}
 
-Using javax.json.bind.annotation.JsonbValue annotation, a class can be mapped to a simple value. Class can contain at most one mapped property or field that is annotated with javax.json.bind.annotation.JsonbValue.
+Using javax.json.bind.annotation.JsonbValue annotation, a class can be mapped to a simple value. Class can contain at most one mapped property or field that is annotated with javax.json.bind.annotation.JsonbValue, otherwise JsonbException MUST be thrown.
 [JSB-\ref{sec:simple_values}-1]
 
-Annotation javax.json.bind.annotation.JsonbValue indicates that result of the annotated non-void method or field or constructor parameter will be used as the single value to serialize for the instance.
+Annotation javax.json.bind.annotation.JsonbValue indicates that result of the annotated non-void method or field or constructor parameter will be used as the single value to serialize for the instance. In case of non-void method annotated with JsonbValue annotation, JsonbException MUST be thrown.
 [JSB-\ref{sec:simple_values}-2]
 
 \section{Custom instantiation}
@@ -141,7 +141,11 @@ Annotation javax.json.bind.annotation.JsonbValue indicates that result of the an
 
 In many scenarios instantiation with the use of default constructor is not enough. To support these scenarios, JSON Binding provides javax.json.bind.annotation.JsonbCreator annotation.
 
-JsonbCreator annotation can be used to annotation custom constructor or static void factory method.
+At most one JsonbCreator annotation can be used to annotate custom constructor or static void factory method in a class, otherwise JsonbException MUST be thrown. [JSB-\ref{sec:custom_instantiation}-1]
+
+Factory method annotated with JsonbCreator annotation should return instance of particular class this annotation is used for, otherwise JsonbException MUST be thrown. [JSB-\ref{sec:custom_instantiation}-2]
+
+Parameters of constructor/factory method annotated with JsonbCreator will be mapped from JSON fields with the same name. The name of a parameter can be changed annotating given parameter with JsonbProperty annotation. When a JSON field is not mappable to a parameter with the same name, JsonbException MUST be thrown. [JSB-\ref{sec:custom_instantiation}-3]
 
 \section{Custom visibility}
 \label{sec:custom_visibility}
@@ -153,7 +157,7 @@ To customize scope and field access strategy as specified in section \ref{subsec
 
 To provide custom mapping for specific java type, it is necessary to implement javax.json.bind.adapter.JsonbAdapter interface. [JSB-\ref{sec:jsonb_adapter}-1]
 
-There are two ways how to register custom JsonbAdapter. Using JsonbConfig::withAdapters method or annotating specific field or JavaBean property with JsonbJavaTypeAdapter annotation. [JSB-\ref{sec:jsonb_adapter}-2]
+There are two ways how to register custom JsonbAdapter. Using JsonbConfig::withAdapters method or annotating specific field or JavaBean property with JsonbTypeAdapter annotation. [JSB-\ref{sec:jsonb_adapter}-2]
 
 JsonbAdapter registered via JsonbConfig::withAdapters is visible to all serialize/deserialize operations performed with given JsonbConfig. JsonbAdapter registered with annotation is visible to serialize/deserialize operation used only for given field/JavaBean property annotated. [JSB-\ref{sec:jsonb_adapter}-3]
 

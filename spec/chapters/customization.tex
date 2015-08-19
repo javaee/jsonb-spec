@@ -54,7 +54,7 @@ The definition of duplicate (non-unique) property can be found in \ref{sec:uniqu
 \section{Customizing Property Order}
 \label{sec:custom_property_order}
 
-To customize order of serialized properties, JSON Binding provides javax.json.bind.config.PropertyOrderStrategy class.
+To customize the order of serialized properties, JSON Binding provides javax.json.bind.config.PropertyOrderStrategy class.
 
 Class javax.json.bind.config.PropertyOrderStrategy provides the most common property order strategies.
 
@@ -68,7 +68,7 @@ The detailed description of property order strategies can be found in javadoc.
 
 The way to set custom property order strategy is to use javax.json.bind.JsonbConfig::withPropertyOrderStrategy method. [JSB-\ref{sec:custom_property_order}-2]
 
-To customize order of serialized properties only for one specific type, JSON Binding provides javax.json.bind.annotation.JsonbPropertyOrder annotation. Order specified by JsonbPropertyOrder annotation overrides order specified by PropertyOrderStrategy. [JSB-\ref{sec:custom_property_order}-3]
+To customize the order of serialized properties only for one specific type, JSON Binding provides javax.json.bind.annotation.JsonbPropertyOrder annotation. Order specified by JsonbPropertyOrder annotation overrides order specified by PropertyOrderStrategy. [JSB-\ref{sec:custom_property_order}-3]
 
 The order is applied to already renamed properties as stated in \ref{sec:custom_property_names}.
 

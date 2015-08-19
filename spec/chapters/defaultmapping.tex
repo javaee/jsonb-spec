@@ -92,12 +92,12 @@ converting it to JSON value based on its type and corresponding mapping definiti
 Empty optional instances marshalled as object instance properties are ignored during marshalling. [JSB-\ref{subsec:optional}-2] 
 Empty optional instances marshalled as JSON array elements are marshalled as null values [JSB-\ref{subsec:optional}-3]. 
 Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain a null value. [JSB-\ref{subsec:optional}-4] 
-Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type which unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
+Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
 
-Instances of type java.util.Optional\textless T\textgreater are marshalled to a JSON value as JSON objects when T alone would be marshalled as JSON object. 
-When T would be marshalled as a JSON value (e.g. java.lang.String, java.lang.Integer), an instance of java.util.Optional\textless T\textgreater is marshalled as a JSON value (without curly brackets). [JSB-\ref{subsec:optional}-6]
+Instances of type java.util.Optional\textless T\textgreater\space are marshalled to a JSON value as JSON objects when T alone would be marshalled as JSON object. 
+When T would be marshalled as a JSON value (e.g. java.lang.String, java.lang.Integer), an instance of java.util.Optional\textless T\textgreater\space is marshalled as a JSON value (without curly brackets). [JSB-\ref{subsec:optional}-6]
 
-Unmarshalling of a JSON value into java.util.Optional\textless T\textgreater MUST be supported if unmarshalling of a JSON value into instance of T is supported. [JSB-\ref{subsec:optional}-7]
+Unmarshalling of a JSON value into java.util.Optional\textless T\textgreater\space MUST be supported if unmarshalling of a JSON value into instance of T is supported. [JSB-\ref{subsec:optional}-7]
 
 \section{Dates}
 \label{sec:dates}
@@ -186,8 +186,8 @@ For an unspecified output type of an unmarshal operation, as well as where outpu
 \hline
 JSON value & Java type \\ 
 \hline
-object & java.util.Map \textless String,Object \textgreater\\
-array & java.util.List \textless Object \textgreater \\
+object & java.util.Map\textless String,Object\textgreater\\
+array & java.util.List\textless Object\textgreater \\
 string & java.lang.String \\
 number & java.lang.Integer|Long|java.math.BigDecimal \\
 true, false & java.lang.Boolean \\
@@ -195,7 +195,7 @@ null & null \\
 \hline
 \end{tabularx}
 
-JSON object values are unmarshalled into an implementation of java.util.Map \textless String, Object \textgreater with a predictable iteration order.[JSB-\ref{sec:untyped}-2]
+JSON object values are unmarshalled into an implementation of java.util.Map\textless String, Object\textgreater\space with a predictable iteration order.[JSB-\ref{sec:untyped}-2]
 
 JSON number values are unmarshalled into the smallest of types Integer, Long, BigDecimal that can hold the value represented by number without loss of value or precision.[JSB-\ref{sec:untyped}-3]
 
@@ -250,7 +250,7 @@ Unmarshalling of a JSON value into an enum instance MUST be done by calling the 
 \label{sec:interfaces}
 Implementations MUST support the unmarshalling of specific interfaces defined in  \fullref{sec:collections}, and \fullref{subsec:abstractnumber}. [JSB-\ref{sec:interfaces}-1] 
 Unmarshalling to other interfaces is not supported and implementations SHOULD report error in such case. [JSB-\ref{sec:interfaces}-2] 
-If a class property is defined with an interface and not concrete type, then the mapping for a marshalled the property is resolved based on its runtime type.[JSB-\ref{sec:interfaces}-3]
+If a class property is defined with an interface and not concrete type, then the mapping for a marshalled property is resolved based on its runtime type.[JSB-\ref{sec:interfaces}-3]
 
 \section{Collections}
 \label{sec:collections}
@@ -307,13 +307,13 @@ The unmarshalling operation of a property with a null value in a JSON document M
 
 \subsection{Null Array Values}
 \label{subsec:nullarray}
-The result of unmarshalling n-ary array represented in JSON document is n-ary Java array. [JSB-\ref{subsec:nullarray}-1]. Null value in JSON array is represented by null values in Java array. [JSB-\ref{subsec:nullarray}-2]
+The result of unmarshalling n-ary array represented in JSON document is n-ary Java array. [JSB-\ref{subsec:nullarray}-1]. Null value in JSON array is represented by null value in Java array. [JSB-\ref{subsec:nullarray}-2]
 Marshalling operation on Java array with null value at index i MUST output null value at index i of the array in resulting JSON document. [JSB-\ref{subsec:nullarray}-3]
 
 \section{Names and identifiers}
 \label{sec:naming}
-According to RFC 7159 Section 7 \cite{rfc7159}, every Java identifier name can be transformed using identity function into a valid JSON String. Identity function MUST be used for transforming Java identifier names into name Strings in JSON document. [JSB-\ref{sec:naming}-1]
-For unmarshal operations defined in \fullref{sec:untyped} section, identity function is used to transform JSON name strings into Java String instances in the resulting map Map\textless String, Object\textgreater. [JSB-\ref{sec:naming}-2] Identity function is used also for other unmarshalling operations. [JSB-\ref{sec:naming}-3] If a Java identifier with corresponding name does not exist or is not accessible, the implementations MUST report error. [JSB-\ref{sec:naming}-4] Naming and error reporting strategies can be further customized in \fullref{customization}.
+According to RFC 7159 Section 7 \cite{rfc7159}, every Java identifier name can be transformed using identity function into a valid JSON String. Identity function MUST be used for transforming Java identifier names into Strings in JSON document. [JSB-\ref{sec:naming}-1]
+For unmarshal operations defined in \fullref{sec:untyped} section, identity function is used to transform JSON name strings into Java String instances in the resulting map Map\textless String, Object\textgreater. [JSB-\ref{sec:naming}-2] If a Java identifier with corresponding name does not exist or is not accessible, the implementations MUST report error. [JSB-\ref{sec:naming}-3] Naming and error reporting strategies can be further customized in \fullref{customization}.
 
 \section{Generics}
 \label{sec:generics}
@@ -341,7 +341,7 @@ If only raw type of given field/class/interface is known, then the type MUST be 
 
 JSON Binding implementations MUST use the most specific type derived from the information available. [JSB-\ref{sec:type_resolution_algorithm}-4]
 
-Let's consider situation where there is only static type information of a given field/class/interface known, and there is no runtime type information available. Let GenericClass\(<T_1,\dotsc,T_n>\) be part of generic type declaration, where GenericClass is name of the generic type and \(T_1,\dotsc,T_n\) are type parameters. For every \(T_i\), where i in \(1,\dotsc,n\), there are 3 possible options: [JSB-\ref{sec:type_resolution_algorithm}-5]
+Let's consider situation when there is only a static type information of a given field/class/interface known, and there is no runtime type information available. Let GenericClass\(<T_1,\dotsc,T_n>\) be part of generic type declaration, where GenericClass is name of the generic type and \(T_1,\dotsc,T_n\) are type parameters. For every \(T_i\), where i in \(1,\dotsc,n\), there are 3 possible options: [JSB-\ref{sec:type_resolution_algorithm}-5]
 
 \begin{enumerate}
 	\item \(T_i\) is concrete parameter type
@@ -351,7 +351,7 @@ Let's consider situation where there is only static type information of a given 
 
 In case 1, the most specific parameter type MUST be given concrete parameter type \(T_i\). [JSB-\ref{sec:type_resolution_algorithm}-6]
 
-For bounded parameter type, using bounds \(B_1,\dotsc,B_m\). If m = 1, then the most specific parameter type MUST be derived from the given bound \(B_1\). [JSB-\ref{sec:type_resolution_algorithm}-7] If \(B_1\) is class or interface, the most specific parameter type MUST be the class or interface. [JSB-\ref{sec:type_resolution_algorithm}-8] Otherwise, the most specific parameter type SHOULD be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-9]
+For bounded parameter type, let's use bounds \(B_1,\dotsc,B_m\). If m = 1, then the most specific parameter type MUST be derived from the given bound \(B_1\). [JSB-\ref{sec:type_resolution_algorithm}-7] If \(B_1\) is class or interface, the most specific parameter type MUST be the class or interface. [JSB-\ref{sec:type_resolution_algorithm}-8] Otherwise, the most specific parameter type SHOULD be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-9]
 
 If multiple bounds are specified, the first step is to resolve every bound separately. Let's define result of such resolution as \(S_1,\dotsc,S_m\) specific parameter types. If \(S_1,\dotsc,S_m\) are java.lang.Object, then the bounded parameter type \(T_i\) MUST be java.lang.Object. [JSB-\ref{sec:type_resolution_algorithm}-10] 
 If there is exactly one \(S_k\), where \(1<=k<=m\) is different than java.lang.Object, then the most specific parameter type for this bounded parameter type \(T_i\) MUST be \(S_k\). [JSB-\ref{sec:type_resolution_algorithm}-11] If there exists \(S_{k1},S_{k2}\), where \(1<=k1<=k2<=m\), then the most specific parameter type is \(S_{k1}\). [JSB-\ref{sec:type_resolution_algorithm}-12]

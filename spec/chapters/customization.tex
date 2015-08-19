@@ -18,7 +18,7 @@ JsonbTransient annotation is mutually exclusive with all other JSON Binding defi
 \subsection{javax.json.bind.annotation.JsonbProperty}
 \label{subsec:JsonbProperty}
 
-According to default mapping ref{sec:naming}, property names are serialized unchanged to JSON document (identity transformation). To provide custom name for given field (or JavaBean property), javax.json.bind.annotation.JsonbProperty may be used. JsonbProperty annotation may be specified on field, getter or setter method. If specified on field, custom name is used both for serialization and deserialization. If javax.json.bind.annotation.JsonbProperty is specified on getter method, it is used only for serialization. If javax.json.bind.annotation.JsonbProperty is specified on setter method, it is used only for deserialization. It is possible to specify different values for getter and setter method for javax.json.bind.annotation.JsonbProperty annotation. In such case the different custom name will be used for serialization and deserialization. [JSB-\ref{subsec:JsonbProperty}-1]
+According to default mapping \ref{sec:naming}, property names are serialized unchanged to JSON document (identity transformation). To provide custom name for given field (or JavaBean property), javax.json.bind.annotation.JsonbProperty may be used. JsonbProperty annotation may be specified on field, getter or setter method. If specified on field, custom name is used both for serialization and deserialization. If javax.json.bind.annotation.JsonbProperty is specified on getter method, it is used only for serialization. If javax.json.bind.annotation.JsonbProperty is specified on setter method, it is used only for deserialization. It is possible to specify different values for getter and setter method for javax.json.bind.annotation.JsonbProperty annotation. In such case the different custom name will be used for serialization and deserialization. [JSB-\ref{subsec:JsonbProperty}-1]
 
 \subsection{javax.json.bind.config.PropertyNamingStrategy}
 \label{subsec:PropertyNamingStrategy}
@@ -42,7 +42,7 @@ The way to set custom property naming strategy is to use javax.json.bind.JsonbCo
 
 \subsection{Property names resolution}
 \label{sec:property_names_resolution}
-Property name resolution consist of two phases:
+Property name resolution consists of two phases:
 
 1. Standard override mechanism
 2. Applying property name resolution, which involves the value of @JsonbProperty
@@ -133,7 +133,7 @@ The result of serialization of duration must conform to the "duration" productio
 Using javax.json.bind.annotation.JsonbValue annotation, a class can be mapped to a simple value. Class can contain at most one mapped property or field that is annotated with javax.json.bind.annotation.JsonbValue, otherwise JsonbException MUST be thrown.
 [JSB-\ref{sec:simple_values}-1]
 
-Annotation javax.json.bind.annotation.JsonbValue indicates that result of the annotated non-void method or field or constructor parameter will be used as the single value to serialize for the instance. In case of non-void method annotated with JsonbValue annotation, JsonbException MUST be thrown.
+Annotation javax.json.bind.annotation.JsonbValue indicates that result of the annotated non-void method or field or constructor parameter will be used as the single value to representing the instance. In case of non-void method annotated with JsonbValue annotation, JsonbException MUST be thrown.
 [JSB-\ref{sec:simple_values}-2]
 
 \section{Custom instantiation}

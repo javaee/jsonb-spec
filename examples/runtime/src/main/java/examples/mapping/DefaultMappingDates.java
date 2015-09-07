@@ -23,7 +23,7 @@ public class DefaultMappingDates {
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         Date parsedDate = sdf.parse("04.03.2015");
 
-        //marshal to ISO format
+        //serialize to ISO format
         assertEquals("\"2015-03-04T00:00:00\"", jsonb.toJson(parsedDate));
 
         //java.util.Calendar
@@ -31,10 +31,10 @@ public class DefaultMappingDates {
         dateCalendar.clear();
         dateCalendar.set(2015, 3, 3);
 
-        //marshal to ISO_DATE
+        //serialize to ISO_DATE
         assertEquals("\"2015-04-03\"", jsonb.toJson(dateCalendar));
 
-        //marshal to ISO_DATE_TIME
+        //serialize to ISO_DATE_TIME
         Calendar dateTimeCalendar = new Calendar.Builder().setDate(2015, 3, 3).build();
         assertEquals("\"2015-04-03T00:00:00\"", jsonb.toJson(dateCalendar));
 
@@ -43,10 +43,10 @@ public class DefaultMappingDates {
         dateGregorianCalendar.clear();
         dateGregorianCalendar.set(2015, 3, 3);
 
-        //marshal to ISO_DATE
+        //serialize to ISO_DATE
         assertEquals("\"2015-04-03\"", jsonb.toJson(dateGregorianCalendar));
 
-        //marshal to ISO_DATE_TIME
+        //serialize to ISO_DATE_TIME
         Calendar dateTimeGregorianCalendar = new Calendar.Builder().setDate(2015, 3, 3).build();
         assertEquals("\"2015-04-03T00:00:00\"", jsonb.toJson(dateTimeGregorianCalendar));
 

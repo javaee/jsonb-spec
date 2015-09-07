@@ -43,9 +43,12 @@ The way to set custom property naming strategy is to use javax.json.bind.JsonbCo
 \subsection{Property names resolution}
 \label{sec:property_names_resolution}
 Property name resolution consists of two phases:
-
-1. Standard override mechanism
-2. Applying property name resolution, which involves the value of @JsonbProperty
+\begin{enumerate}{\parsep 0em \labelwidth 0em}
+\setlength{\itemsep}{0cm}%
+\setlength{\parskip}{0cm}%
+\item Standard override mechanism
+\item Applying property name resolution, which involves the value of @JsonbProperty
+\end{enumerate}
 
 If duplicate name is found exception MUST be thrown.
 The definition of duplicate (non-unique) property can be found in \ref{sec:uniqueness_properties}. [JSB-\ref{sec:property_names_resolution}-1]

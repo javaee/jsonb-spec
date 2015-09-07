@@ -127,8 +127,8 @@ public class DefaultMappingGenerics {
         MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = jsonb.fromJson("{\"field1\":{\"subField\":\"subFieldValue\"}}",
                 DefaultMappingGenerics.class.getField("myCyclicGenericClassField").getGenericType());
 
-        //unmarshal into (generic) interface is by default unsupported (with the exception of concrete interfaces
-        // defined elsewhere in default mapping, e.g. java.lang.Number)
+        //deserialize into (generic) interface is by default unsupported (with the exception of concrete interfaces
+        //defined elsewhere in default mapping, e.g. java.lang.Number)
 
         //nested generic concrete class, I am able to access signature of List<String> from class file
         NestedGenericConcreteClass nestedGenericConcreteClass = jsonb.fromJson("{\"list\":[\"value1\"]}", NestedGenericConcreteClass.class);
@@ -147,7 +147,7 @@ public class DefaultMappingGenerics {
         assert(multiLevelGeneric.field1 instanceof Map);
         assert(multiLevelGeneric.field2 instanceof Integer);
 
-        //unmarshal with runtime type
+        //deserialize with runtime type
         MyGenericClass<MyGenericClass<String, String>, Integer> myGenericClass = jsonb.fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}",
                 DefaultMappingGenerics.class.getField("multiLevelGenericClassField").getGenericType());
 

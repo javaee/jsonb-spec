@@ -73,7 +73,7 @@ public @interface JsonbProperty {
 
     /**
      *
-     * True if field with null value should be marshalled as key/value pair into JSON with null value.
+     * True if field with null value should be serialized as key/value pair into JSON with null value.
      */
     boolean nillable() default false;
 }

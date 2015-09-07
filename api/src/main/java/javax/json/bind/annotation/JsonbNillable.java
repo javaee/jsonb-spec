@@ -86,7 +86,7 @@ import static java.lang.annotation.ElementType.TYPE;
 public @interface JsonbNillable {
 
     /**
-     * True if field with null value should be marshalled as key/value pair into JSON with null value.
+     * True if field with null value should be serialized as key/value pair into JSON with null value.
      */
     boolean value() default true;
 }

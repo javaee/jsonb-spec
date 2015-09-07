@@ -14,13 +14,10 @@ import static examples.mapping.Utils.*;
 public class DefaultMapping {
 
     public static void main(String[] args) throws Exception {
-        //in this context, words serialize and marshal are used interchangeably
-        //in this context, words deserialize and unmarshal are used interchangeably
-
         //statements true for default mapping
 
-        //no support for unmarshal of polymorphic types
-        //no support for unmarshal of anonymous classes
+        //no support for deserialization of polymorphic types
+        //no support for deserialization of anonymous classes
 
         //fail fast exception strategy
 
@@ -283,7 +280,7 @@ public class DefaultMapping {
 
     public static void fromJson_Collections(Jsonb jsonb) {
 
-        //support unmarshal of java.util.Collection and java.util.Map and its subinterfaces and implementing (sub)classes
+        //support deserialization of java.util.Collection and java.util.Map and its subinterfaces and implementing (sub)classes
 
         //Collection, Map
 
@@ -311,7 +308,7 @@ public class DefaultMapping {
         assertEquals("first", dequeList.getFirst());
         assertEquals("second", dequeList.getLast());
 
-        //JSON Binding supports default unmarshal of the following interfaces
+        //JSON Binding supports default deserialization of the following interfaces
         //syntax: interface -> default implementation
 
         //Collection -> ArrayList
@@ -991,22 +988,22 @@ public class DefaultMapping {
     }
 
     public static void fromJson_modifiers(Jsonb jsonb) {
-        //unmarshal of final field is ignored
+        //deserialization of final field is ignored
         ModifiersClass modifiersClass = jsonb.fromJson("{\"finalField\":\"newFinalValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
         assertEquals("finalField", modifiersClass.finalField);
         assertEquals("newRegularValue", modifiersClass.regularField);
 
-        //unmarshal of static field is ignored
+        //deserialization of static field is ignored
         modifiersClass = jsonb.fromJson("{\"staticField\":\"newStaticValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
         assertEquals("staticValue", modifiersClass.staticField);
         assertEquals("newRegularValue", modifiersClass.regularField);
 
-        //unmarshal of transient field is ignored
+        //deserialization of transient field is ignored
         modifiersClass = jsonb.fromJson("{\"transientField\":\"newTransientValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
         assertEquals("transientField", modifiersClass.transientField);
         assertEquals("newRegularValue", modifiersClass.regularField);
 
-        //unmarshal of unknown field is ignored
+        //deserialization of unknown field is ignored
         modifiersClass = jsonb.fromJson("{\"unknownField\":\"newUnknownValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
         assertEquals("newRegularValue", modifiersClass.regularField);
     }

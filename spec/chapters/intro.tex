@@ -46,7 +46,7 @@ The goals of the API are as follows:
 \begin{description}
 
 \item[JSON] 
-Support binding (marshalling and unmarshalling) for all RFC 7159-compatible JSON documents.
+Support binding (serialization and deserialization) for all RFC 7159-compatible JSON documents.
 
 \item [Relationships to JSON Related specifications]
 JSON-related specifications will be surveyed to determine their relationship to JSON-Binding.
@@ -83,7 +83,7 @@ The following are non-goals:
 
 \begin{description}
 
-\item[Preserving equivalence (Round-trip)] The specification recommends, but does not require equivalence of content for unmarshalled and marshalled JSON documents.
+\item[Preserving equivalence (Round-trip)] The specification recommends, but does not require equivalence of content for deserialized and serialized JSON documents.
 
 \item[JSON Schema] Generation of JSON Schema from Java classes, as well as validation based on JSON schema.
 
@@ -123,9 +123,9 @@ This is a note.
 
 \begin{description}
 \item[Data binding] Process which defines the representation of information in a JSON document as an object instance, and vice versa.
-\item[Unmarshalling] Process of reading a JSON document and constructing a tree of content objects, 
+\item[Deserialization] Process of reading a JSON document and constructing a tree of content objects, 
 where each object corresponds to part of JSON document, thus the content tree reflects the document's content.
-\item[Marshalling] Inverse process to unmarshalling. Process of traversing content object tree and writing a JSON document that reflects the tree's content.
+\item[Serialization] Inverse process to deserialization. Process of traversing content object tree and writing a JSON document that reflects the tree's content.
 
 \end{description}
 

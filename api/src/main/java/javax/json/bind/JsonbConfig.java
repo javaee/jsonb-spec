@@ -65,13 +65,13 @@ import java.util.Optional;
  * </dl>
  * <dl>
  *   <dt><tt>jsonb.to.json.encoding</tt> - java.lang.String
- *   <dd>The {@link javax.json.bind.Jsonb Jsonb} marshalling {@code toJson()} methods
+ *   <dd>The {@link javax.json.bind.Jsonb Jsonb} serialization {@code toJson()} methods
  *       will default to this property for encoding of output JSON data. Default
  *       value is 'UTF-8' if this property is not specified.
  * </dl>
  * <dl>
  *   <dt><tt>jsonb.from.json.encoding</tt> - java.lang.String
- *   <dd>The {@link javax.json.bind.Jsonb Jsonb} unmarshalling {@code fromJson()}
+ *   <dd>The {@link javax.json.bind.Jsonb Jsonb} deserialization {@code fromJson()}
  *       methods will default to this property encoding of input JSON data if the
  *       encoding cannot be detected.
  * </dl>
@@ -87,16 +87,16 @@ public class JsonbConfig {
     private final Map<String, Object> configuration = new HashMap<>();
 
     /**
-     * Property used to specify whether or not the marshaled
+     * Property used to specify whether or not the serialized
      * JSON data is formatted with linefeeds and indentation.
      */
     public static final String FORMATTING = "jsonb.formatting";
 
     /**
-     * The Jsonb marshalling {@code toJson()} methods will default to this property
+     * The Jsonb serialization {@code toJson()} methods will default to this property
      * for encoding of output JSON data. Default value is 'UTF-8'.
      *
-     * The Jsonb unmarshalling {@code fromJson()} methods will default to this
+     * The Jsonb deserialization {@code fromJson()} methods will default to this
      * property encoding of input JSON data if the encoding cannot be detected
      * automatically.
      */
@@ -188,13 +188,13 @@ public class JsonbConfig {
     }
 
     /**
-     * Property used to specify whether or not the marshaled JSON data is formatted
+     * Property used to specify whether or not the serialized JSON data is formatted
      * with linefeeds and indentation.
      *
      * Configures value of {@code FORMATTING} property.
      *
      * @param formatted
-     *      True means marshaled data is formatted, false (default)
+     *      True means serialized data is formatted, false (default)
      *      means no formatting.
      *
      * @return This JsonbConfig instance.
@@ -204,18 +204,18 @@ public class JsonbConfig {
     }
 
     /**
-     * Property used to specify whether null values should be marshalled to JSON document or skipped.
+     * Property used to specify whether null values should be serialized to JSON document or skipped.
      *
      * Configures value of {@code NULL_VALUES} property.
      *
-     * @param marshalNullValues
-     *      True means that null values will be marshaled into JSON document,
+     * @param serializeNullValues
+     *      True means that null values will be serialized into JSON document,
      *      otherwise they will be effectively skipped.
      *
      * @return This JsonbConfig instance.
      */
-    public final JsonbConfig withNullValues(final Boolean marshalNullValues) {
-        return setProperty(NULL_VALUES, marshalNullValues);
+    public final JsonbConfig withNullValues(final Boolean serializeNullValues) {
+        return setProperty(NULL_VALUES, serializeNullValues);
     }
 
     /**
@@ -242,7 +242,7 @@ public class JsonbConfig {
      * Configures value of {@code STRICT_IJSON} property.
      *
      * @param enabled
-     *      True means data is marshaled in strict compliance according to RFC 7493.
+     *      True means data is serialized in strict compliance according to RFC 7493.
      *
      * @return This JsonbConfig instance.
      */

@@ -48,8 +48,8 @@ import java.lang.reflect.Type;
  * {@code Jsonb} provides an abstraction over the JSON Binding framework operations:
  *
  * <ul>
- * <li>{@code fromJson}: read JSON input, unmarshal to Java objects content tree
- * <li>{@code toJson}: marshall Java objects content tree to JSON input
+ * <li>{@code fromJson}: read JSON input, deserialize to Java objects content tree
+ * <li>{@code toJson}: serialize Java objects content tree to JSON input
  * </ul>
  *
  * <p>
@@ -66,33 +66,33 @@ import java.lang.reflect.Type;
  Jsonb jsonb = new CustomJsonbBuilder().build();
  }</pre>
  *
- * <b>Unmarshalling (reading) from JSON</b><br>
+ * <b>Deserializing (reading) JSON</b><br>
  * <blockquote>
- * Unmarshalling can de-serialize JSON data that represents either an entire JSON
+ * Can de-serialize JSON data that represents either an entire JSON
  * document or a subtree of a JSON document.
  * </blockquote>
  * <blockquote>
- * Reading (unmarshalling) object content tree from a File:<br><br>
+ * Reading (deserializing) object content tree from a File:<br><br>
  *    <pre>
  *     Jsonb jsonb = JsonbBuilder.create();
  *     Book book = jsonb.fromJson(new File("jsonfile.json"), Book.class);</pre>
- * If the unmarshal process is unable to unmarshal the JSON content to an object
+ * If the deserialization process is unable to deserialize the JSON content to an object
  * content tree, fatal error is reported that terminates processing by
  * throwing JsonbException.
  * </blockquote>
  *
  * <p>
- * <b>Marshalling (writing) to JSON</b><br>
+ * <b>Serializing (writing) to JSON</b><br>
  * <blockquote>
  * <p>
- * Marshalling writes the representation of a Java object content tree into
+ * Serialization writes the representation of a Java object content tree into
  * JSON data.
  * </blockquote>
  * <blockquote>
- * Writing (marshalling) object content tree to a File:<br><br>
+ * Writing (serializing) object content tree to a File:<br><br>
  *    <pre>
  *     jsonb.toJson(object, new File("foo.json");</pre>
- * Writing (marshalling) to a Writer:<br><br>
+ * Writing (serializing) to a Writer:<br><br>
  *    <pre>
  *     jsonb.toJson(object, new PrintWriter(System.out));
  *    </pre>
@@ -100,16 +100,16 @@ import java.lang.reflect.Type;
  *
  * <b>Encoding</b><br>
  * <blockquote>
- * In unmarshalling operations ({@code fromJson}), encoding of JSON data is detected automatically.
+ * In deserialization operations ({@code fromJson}), encoding of JSON data is detected automatically.
  * Use the {@link javax.json.bind.JsonbConfig JsonbConfig} API to configure expected
- * input encoding used within unmarshal operations. Client applications are
+ * input encoding used within deserialization operations. Client applications are
  * expected to supply a valid character encoding as defined in the
  * <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by Java Platform.
  *
- * In marshalling operations ({@code toJson}), UTF-8 encoding is used by default
+ * In serialization operations ({@code toJson}), UTF-8 encoding is used by default
  * for writing JSON data.
  * Use the {@link javax.json.bind.JsonbConfig JsonbConfig} API to configure the
- * output encoding used within marshal operations. Client applications are
+ * output encoding used within serialization operations. Client applications are
  * expected to supply a valid character encoding as defined in the
  * <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by Java Platform.
  * </blockquote>
@@ -132,7 +132,7 @@ public interface Jsonb {
      * content tree.
      *
      * @param str
-     *      The string to unmarshal JSON data from.
+     *      The string to deserialize JSON data from.
      * @param type
      *      Type of the content tree's root object.
      * @param <T>
@@ -141,7 +141,7 @@ public interface Jsonb {
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
+     *     If any unexpected error(s) occur(s) during deserialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
@@ -152,7 +152,7 @@ public interface Jsonb {
      * content tree.
      *
      * @param str
-     *      The string to unmarshal JSON data from.
+     *      The string to deserialize JSON data from.
      * @param runtimeType
      *      Runtime type of the content tree's root object.
      * @param <T>
@@ -161,14 +161,14 @@ public interface Jsonb {
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
+     *     If any unexpected error(s) occur(s) during deserialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(String str, Type runtimeType) throws JsonbException;
 
     /**
-     * Unmarshal JSON data from the specified Reader and return the
+     * Reads in a JSON data from the specified Reader and return the
      * resulting content tree.
      *
      * @param readable
@@ -181,14 +181,14 @@ public interface Jsonb {
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
+     *     If any unexpected error(s) occur(s) during deserialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(Readable readable, Class<T> type) throws JsonbException;
 
     /**
-     * Unmarshal JSON data from the specified Reader and return the
+     * Reads in a JSON data from the specified Reader and return the
      * resulting content tree.
      *
      * @param readable
@@ -203,14 +203,14 @@ public interface Jsonb {
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
+     *     If any unexpected error(s) occur(s) during deserialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(Readable readable, Type runtimeType) throws JsonbException;
 
     /**
-     * Unmarshal JSON data from the specified InputStream and return the
+     * Reads in a JSON data from the specified InputStream and return the
      * resulting content tree.
      *
      * @param stream
@@ -224,14 +224,14 @@ public interface Jsonb {
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
+     *     If any unexpected error(s) occur(s) during deserialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
 
     /**
-     * Unmarshal JSON data from the specified InputStream and return the
+     * Reads in a JSON data from the specified InputStream and return the
      * resulting content tree.
      *
      * @param stream
@@ -247,7 +247,7 @@ public interface Jsonb {
      * @return the newly created root object of the java content tree
      *
      * @throws JsonbException
-     *     If any unexpected error(s) occur(s) while unmarshalling.
+     *     If any unexpected error(s) occur(s) during deserialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
@@ -258,12 +258,12 @@ public interface Jsonb {
      * instance as JSON.
      *
      * @param object
-     *      The root object of the object content tree to be marshaled. Must not be null.
+     *      The root object of the object content tree to be serialized. Must not be null.
      *
-     * @return String instance with marshaled JSON data.
+     * @return String instance with serialized JSON data.
      *
      * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling, such as I/O error.
+     * serialization, such as I/O error.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
@@ -276,15 +276,15 @@ public interface Jsonb {
      * instance as JSON.
      *
      * @param object
-     *      The root object of the object content tree to be marshaled. Must not be null.
+     *      The root object of the object content tree to be serialized. Must not be null.
      *
      * @param runtimeType
      *      Runtime type of the content tree's root object.
      *
-     * @return String instance with marshaled JSON data.
+     * @return String instance with serialized JSON data.
      *
      * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling, such as I/O error.
+     * serialization, such as I/O error.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
@@ -293,16 +293,16 @@ public interface Jsonb {
     String toJson(Object object, Type runtimeType) throws JsonbException;
 
     /**
-     * Marshal the object content tree into a Writer character stream.
+     * Writes the object content tree into a Writer character stream.
      *
      * @param object
-     *      The object content tree to be marshaled.
+     *      The object content tree to be serialized.
      * @param appendable
      *      The JSON will be sent as a character stream to the given
      *      {@link Appendable}.
      *
      * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling.
+     * serialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
@@ -311,10 +311,10 @@ public interface Jsonb {
     void toJson(Object object, Appendable appendable) throws JsonbException;
 
     /**
-     * Marshal the object content tree into a Writer character stream.
+     * Writes the object content tree into a Writer character stream.
      *
      * @param object
-     *      The object content tree to be marshaled.
+     *      The object content tree to be serialized.
      *
      * @param runtimeType
      *      Runtime type of the content tree's root object.
@@ -324,7 +324,7 @@ public interface Jsonb {
      *      {@link Appendable}.
      *
      * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling.
+     * serialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
@@ -333,17 +333,17 @@ public interface Jsonb {
     void toJson(Object object, Type runtimeType, Appendable appendable) throws JsonbException;
 
     /**
-     * Marshal the object content tree into output stream.
+     * Writes the object content tree into output stream.
      *
      * @param object
-     *      The object content tree to be marshaled.
+     *      The object content tree to be serialized.
      * @param stream
      *      The JSON will be sent as a byte stream to the given
      *      {@link OutputStream}. Upon a successful completion, the stream will be closed
      *      by this method.
      *
      * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling.
+     * serialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *
@@ -352,10 +352,10 @@ public interface Jsonb {
     void toJson(Object object, OutputStream stream) throws JsonbException;
 
     /**
-     * Marshal the object content tree into output stream.
+     * Writes the object content tree into output stream.
      *
      * @param object
-     *      The object content tree to be marshaled.
+     *      The object content tree to be serialized.
      *
      * @param runtimeType
      *      Runtime type of the content tree's root object.
@@ -366,7 +366,7 @@ public interface Jsonb {
      *      by this method.
      *
      * @throws JsonbException If any unexpected problem occurs during the
-     * marshalling.
+     * serialization.
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      *

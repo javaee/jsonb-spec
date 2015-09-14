@@ -201,7 +201,7 @@ JSON number values are deserialized into the smallest of types Integer, Long, Bi
 
 \section{Java Class}
 \label{sec:class}
-Any instance passed to a deserialization operation must have a public or protected no-argument constructor. Implementations SHOULD throw an error if this condition is not met. [JSB-\ref{sec:class}-1] This limitation does not apply to serialization operations. [JSB-\ref{sec:class}-2]
+Any instance passed to a deserialization operation must have a public or protected no-argument constructor. Implementations SHOULD throw an error if this condition is not met. [JSB-\ref{sec:class}-1] This limitation does not apply to serialization operations, as well as to classes which specify explicit instantiation methods as described in \fullref{sec:custom_instantiation} [JSB-\ref{sec:class}-2]
 
 \subsection{Scope and Field access strategy}
 \label{subsec:fieldstrategy}

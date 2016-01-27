@@ -39,93 +39,65 @@
  */
 package javax.json.bind.adapter;
 
-import java.lang.reflect.Type;
-
 /**
  * <p>
  *     Allows to define custom mapping for given java type.
  *     The target type could be string or some mappable java type.
  * </p>
  *
- * BoundType -
- *      The type that JSON Binding does not know how to handle. An adapter is written
- *      to allow this type to be used as an in-memory representation through
- *      the <tt>ValueType</tt>.
- *
- * ValueType -
- *      The type that JSON Binding knows how to handle out of the box.
+ * @param <From>
+ *     The type that JSON Binding does not know how to handle. An adapter is written
+ *      to allow this type to be adapted to "To" type
+ * @param <To>
+ *     The type that JSON Binding knows how to handle out of the box
  *
  * <p>
- * Exactly two default methods must be overridden.
- * If BoundType is generic type, it is recommended to override getRuntimeBoundType method.
- * Otherwise getBoundType method should be overridden.
- *
- * If ValueType is generic type, it is recommended to override getRuntimeValueType method.
- * Otherwise getValueType method should be overridden.
+ * Adapter runtime "From" and "To" generic types are inferred from subclassing information, be sure to provide it,
+ * so it is not deleted by type erasure.
  * </p>
  *
+ * <pre>
+ * {@code
+ *      //Generic information is provided by sublcassing.
+ *      class BoxToCrateAdapter implements JsonbAdapter<Box<Integer>, Crate<String>> {...};
+ *      jsonbConfig.withAdapters(new BoxToCrateAdapter());
+ *
+ *      //Generic information is provided by subclassing with anonymous class
+ *      jsonbConfig.withAdapters(new JsonbAdapter<Box<Integer>,Crate<String>> {...};
+ *
+ *      //in following case..
+ *      BoxToCrateAdapter<T> implements JsonbAdapter<Box<T>,Integer<T>> {...}
+ *
+ *      //Here, generic information is lost due to type erasure
+ *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>());
+ *
+ *      //instead this will work (note anonymous class curly braces)
+ *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>(){});
+ * }
+ * </pre>
+ *
  */
-public interface JsonbAdapter {
+public interface JsonbAdapter<From, To> {
 
     /**
-     * Converts an object to type T.
+     * Converts an object of type "To" to type "From".
      * @param obj object to convert
-     * @param <ValueType> type we know how to serialize
-     * @return object we need how to serialize
+     *
+     * @return Converted object representing pojo to be set in business model
      * @throws Exception
      *  if there is an error during the conversion.
      */
-    default <ValueType> ValueType adaptTo(Object obj) throws Exception {
-        throw new UnsupportedOperationException();
-    }
+    From adaptTo(To obj) throws Exception;
 
     /**
-     * Converts an object to type T.
+     * Converts an object of type "From" to type "To".
      * @param obj object to convert
-     * @param <BoundType> type we don't know how to deserialize
-     * @return object we don't know how to deserialize
+     *
+     * @return Converted object representing pojo to be set in business model
      * @throws Exception
      *  if there is an error during the conversion.
      */
-    default <BoundType> BoundType adaptFrom(Object obj) throws Exception {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns Value Type.
-     *
-     * @return Non-generic Value Type
-     */
-    default Class<?> getValueType() {
-        return null;
-    }
-
-    /**
-     * Returns Bound Type.
-     *
-     * @return Non-generic Bound Type
-     */
-    default Class<?> getBoundType() {
-        return null;
-    }
-
-    /**
-     * Returns runtime Value Type.
-     *
-     * @return runtime Value Type
-     */
-    default Type getRuntimeValueType() {
-        return null;
-    }
-
-    /**
-     * Returns runtime Bound Type.
-     *
-     * @return runtime Bound Type
-     */
-    default Type getRuntimeBoundType() {
-        return null;
-    }
+    To adaptFrom(From obj) throws Exception;
 
     /**
      * Returns false if null values should be handled by JSON Binding.

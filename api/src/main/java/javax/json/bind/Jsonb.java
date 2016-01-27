@@ -41,6 +41,8 @@ package javax.json.bind;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.Type;
 
 /**
@@ -171,7 +173,7 @@ public interface Jsonb {
      * Reads in a JSON data from the specified Reader and return the
      * resulting content tree.
      *
-     * @param readable
+     * @param reader
      *      The character stream is read as a JSON data.
      * @param type
      *      Type of the content tree's root object.
@@ -185,13 +187,13 @@ public interface Jsonb {
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
-    <T> T fromJson(Readable readable, Class<T> type) throws JsonbException;
+    <T> T fromJson(Reader reader, Class<T> type) throws JsonbException;
 
     /**
      * Reads in a JSON data from the specified Reader and return the
      * resulting content tree.
      *
-     * @param readable
+     * @param reader
      *      The character stream is read as a JSON data.
      *
      * @param runtimeType
@@ -207,7 +209,7 @@ public interface Jsonb {
      * @throws IllegalArgumentException
      *      If any of the parameters is {@code null}.
      */
-    <T> T fromJson(Readable readable, Type runtimeType) throws JsonbException;
+    <T> T fromJson(Reader reader, Type runtimeType) throws JsonbException;
 
     /**
      * Reads in a JSON data from the specified InputStream and return the
@@ -297,9 +299,9 @@ public interface Jsonb {
      *
      * @param object
      *      The object content tree to be serialized.
-     * @param appendable
+     * @param writer
      *      The JSON will be sent as a character stream to the given
-     *      {@link Appendable}.
+     *      {@link Writer}.
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization.
@@ -308,7 +310,7 @@ public interface Jsonb {
      *
      * @since JSON Binding 1.0
      */
-    void toJson(Object object, Appendable appendable) throws JsonbException;
+    void toJson(Object object, Writer writer) throws JsonbException;
 
     /**
      * Writes the object content tree into a Writer character stream.
@@ -319,9 +321,9 @@ public interface Jsonb {
      * @param runtimeType
      *      Runtime type of the content tree's root object.
      *
-     * @param appendable
+     * @param writer
      *      The JSON will be sent as a character stream to the given
-     *      {@link Appendable}.
+     *      {@link Writer}.
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization.
@@ -330,7 +332,7 @@ public interface Jsonb {
      *
      * @since JSON Binding 1.0
      */
-    void toJson(Object object, Type runtimeType, Appendable appendable) throws JsonbException;
+    void toJson(Object object, Type runtimeType, Writer writer) throws JsonbException;
 
     /**
      * Writes the object content tree into output stream.

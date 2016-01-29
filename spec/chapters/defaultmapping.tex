@@ -87,12 +87,12 @@ MUST follow the conversion process defined in the javadoc specification for the 
 
 \subsection{java.util.Optional, OptionalInt, OptionalLong, OptionalDouble}
 \label{subsec:optional}
-Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are serialized to a JSON value by retrieving their contained instance and 
+Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to a JSON value by retrieving their contained instance and 
 converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] 
-Empty optional instances serialized as object instance properties are ignored during serialization. [JSB-\ref{subsec:optional}-2] 
-Empty optional instances serialized as JSON array elements are serialized as null values [JSB-\ref{subsec:optional}-3]. 
-Deserialization into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain a null value. [JSB-\ref{subsec:optional}-4] 
-Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is deserialized based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
+Empty optional instances serialized as object instance properties are treated as null. [JSB-\ref{subsec:optional}-2] 
+Empty optional instances marshalled as JSON array elements are marshalled as null values [JSB-\ref{subsec:optional}-3]. 
+Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain a null value. [JSB-\ref{subsec:optional}-4] 
+Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type which unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
 
 Instances of type java.util.Optional\textless T\textgreater\space are serialized to a JSON value as JSON objects when T alone would be serialized as JSON object. 
 When T would be serialized as a JSON value (e.g. java.lang.String, java.lang.Integer), an instance of java.util.Optional\textless T\textgreater\space is serialized as a JSON value (without curly brackets). [JSB-\ref{subsec:optional}-6]
@@ -189,15 +189,13 @@ JSON value & Java type \\
 object & java.util.Map\textless String,Object\textgreater\\
 array & java.util.List\textless Object\textgreater \\
 string & java.lang.String \\
-number & java.lang.Integer|Long|java.math.BigDecimal \\
+number & java.math.BigDecimal \\
 true, false & java.lang.Boolean \\
 null & null \\
 \hline
 \end{tabularx}
 
 JSON object values are deserialized into an implementation of java.util.Map\textless String, Object\textgreater\space with a predictable iteration order.[JSB-\ref{sec:untyped}-2]
-
-JSON number values are deserialized into the smallest of types Integer, Long, BigDecimal that can hold the value represented by number without loss of value or precision.[JSB-\ref{sec:untyped}-3]
 
 \section{Java Class}
 \label{sec:class}
@@ -243,7 +241,7 @@ Deserialization into polymorphic types is not supported by default mapping. [JSB
 \section{Enum}
 \label{sec:enum}
 Serialization of an Enum instance to a JSON String value 
-MUST follow the conversion process defined in javadoc specification for their toString method [JSB-\ref{sec:enum}-1]. 
+MUST follow the conversion process defined in javadoc specification for their name() method [JSB-\ref{sec:enum}-1]. 
 Deserialization of a JSON value into an enum instance MUST be done by calling the enum's valueOf(String) method. [JSB-\ref{sec:enum}-2]
 
 \section{Interfaces}

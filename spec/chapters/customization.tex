@@ -11,7 +11,7 @@ There are two standard ways how to customize serialization of field (or JavaBean
 \subsection{javax.json.bind.annotation.JsonbTransient}
 \label{subsec:JsonbTransient}
 
-JSON Binding implementations MUST NOT serialize fields,  JavaBean properties or types annotated with javax.json.bind.annotation.JsonbTransient. When placed on a class, indicates that the class shouldn't be mapped to JSON by itself. Properties on such class will be mapped to JSON along with its derived classes, as if the class is inlined. [JSB-\ref{subsec:JsonbTransient}-1]
+JSON Binding implementations MUST NOT serialize fields, JavaBean properties or types annotated with javax.json.bind.annotation.JsonbTransient. [JSB-\ref{subsec:JsonbTransient}-1]
 
 JsonbTransient annotation is mutually exclusive with all other JSON Binding defined annotations. If this condition is not met, JSON Binding implementation MUST throw JsonbException. [JSB-\ref{subsec:JsonbTransient}-2]
 
@@ -129,15 +129,6 @@ Uppercase rather than lowercase letters MUST be used.  [JSB-\ref{subsec:strict_d
 JSON Binding implementations MUST serialize java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.time.LocalDate, java.time.LocalDateTime and java.time.Instant in the same format as java.time.ZonedDateTime. [JSB-\ref{subsec:strict_date_serialization}-3]
 
 The result of serialization of duration must conform to the "duration" production in Appendix A of RFC 3339, with the same additional restrictions. [JSB-\ref{subsec:strict_date_serialization}-4]
-
-\section{Simple values}
-\label{sec:simple_values}
-
-Using javax.json.bind.annotation.JsonbValue annotation, a class can be mapped to a simple value. Class can contain at most one mapped property or field that is annotated with javax.json.bind.annotation.JsonbValue, otherwise JsonbException MUST be thrown.
-[JSB-\ref{sec:simple_values}-1]
-
-Annotation javax.json.bind.annotation.JsonbValue indicates that result of the annotated non-void method or field or constructor parameter will be used as the single value to representing the instance. In case of non-void method annotated with JsonbValue annotation, JsonbException MUST be thrown.
-[JSB-\ref{sec:simple_values}-2]
 
 \section{Custom instantiation}
 \label{sec:custom_instantiation}

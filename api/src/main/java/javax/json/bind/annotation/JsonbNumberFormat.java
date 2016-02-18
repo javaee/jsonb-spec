@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -73,7 +73,7 @@ public @interface JsonbNumberFormat {
     /**
      * Value that indicates that default {@link java.util.Locale}.
      */
-    public static final String DEFAULT_LOCALE = "##default";
+    String DEFAULT_LOCALE = "##default";
 
     /**
      * Specifies the number pattern to use.
@@ -83,5 +83,5 @@ public @interface JsonbNumberFormat {
     /**
      * Custom {@link java.util.Locale} to use.
      */
-    public String locale() default DEFAULT_LOCALE;
+    String locale() default DEFAULT_LOCALE;
 }

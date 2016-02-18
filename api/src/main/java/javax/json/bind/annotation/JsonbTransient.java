@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,18 +44,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 
 /**
  * <p>
  * Prevents mapping of a Java Bean property, field or type to JSON representation.
  * <p>
- * When placed on a class, indicates that the class shouldn't be mapped
- * to JSON by itself. Properties on such class will be mapped to JSON along
- * with its derived classes, as if the class is inlined.
  *
  * <p><b>Usage</b></p>
  * <p> The {@code @JsonbTransient} annotation can be used with the following
@@ -63,7 +59,6 @@ import static java.lang.annotation.ElementType.TYPE;
  * <ul>
  *   <li> a JavaBean property </li>
  *   <li> field </li>
- *   <li> class </li>
  * </ul>
  *
  * <p>{@code @JsonbTransient} is mutually exclusive with all other
@@ -74,6 +69,6 @@ import static java.lang.annotation.ElementType.TYPE;
 
 @JsonbAnnotation
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ANNOTATION_TYPE, FIELD, METHOD, TYPE})
+@Target({ANNOTATION_TYPE, FIELD, METHOD})
 public @interface JsonbTransient { }
 

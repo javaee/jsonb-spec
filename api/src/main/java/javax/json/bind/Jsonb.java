@@ -144,7 +144,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) during deserialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(String str, Class<T> type) throws JsonbException;
@@ -164,7 +164,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) during deserialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(String str, Type runtimeType) throws JsonbException;
@@ -184,7 +184,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) during deserialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(Reader reader, Class<T> type) throws JsonbException;
@@ -206,7 +206,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) during deserialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(Reader reader, Type runtimeType) throws JsonbException;
@@ -227,7 +227,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) during deserialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(InputStream stream, Class<T> type) throws JsonbException;
@@ -250,7 +250,7 @@ public interface Jsonb {
      *
      * @throws JsonbException
      *     If any unexpected error(s) occur(s) during deserialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      */
     <T> T fromJson(InputStream stream, Type runtimeType) throws JsonbException;
@@ -266,7 +266,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization, such as I/O error.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -287,7 +287,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization, such as I/O error.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -305,7 +305,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -327,7 +327,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -346,7 +346,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0
@@ -369,7 +369,7 @@ public interface Jsonb {
      *
      * @throws JsonbException If any unexpected problem occurs during the
      * serialization.
-     * @throws IllegalArgumentException
+     * @throws NullPointerException
      *      If any of the parameters is {@code null}.
      *
      * @since JSON Binding 1.0

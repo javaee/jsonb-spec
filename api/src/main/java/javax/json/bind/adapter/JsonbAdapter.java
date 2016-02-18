@@ -44,16 +44,21 @@ package javax.json.bind.adapter;
  *     Allows to define custom mapping for given java type.
  *     The target type could be string or some mappable java type.
  * </p>
+ * <p>
+ *     On serialization "Original" type is converted into "Adapted" type. After that "Adapted" type is serialized to
+ *     JSON the standard way.
+ * </p>
+ * <p>
+ *     On deserialization it works the reverse way: JSON data are deserialized into "Adapted" type which is converted to
+ *     "Original" type after that.
+ * </p>
  *
- * @param <From>
- *     The type that JSON Binding does not know how to handle. An adapter is written
- *      to allow this type to be adapted to "To" type
- * @param <To>
- *     The type that JSON Binding knows how to handle out of the box
+ * @param <Original> original type
+ * @param <Adapted> adapted type
  *
  * <p>
- * Adapter runtime "From" and "To" generic types are inferred from subclassing information, be sure to provide it,
- * so it is not deleted by type erasure.
+ * Adapter runtime "Original" and "Adapted" generic types are inferred from subclassing information,
+ * which is mandatory for adapter to work.
  * </p>
  *
  * <pre>
@@ -71,32 +76,31 @@ package javax.json.bind.adapter;
  *      //Here, generic information is lost due to type erasure
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>());
  *
- *      //instead this will work (note anonymous class curly braces)
+ *      //instead subclassing with anonymous class will work (note anonymous class curly braces)
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>(){});
  * }
  * </pre>
  *
  */
-public interface JsonbAdapter<From, To> {
+public interface JsonbAdapter<Original, Adapted> {
 
     /**
-     * Converts an object of type "To" to type "From".
-     * @param obj object to convert
+     * This method is used on serialization only. It contains a conversion logic from type Original to type Adapted.
+     * After conversion Adapted type will be mapped to JSON the standard way.
      *
-     * @return Converted object representing pojo to be set in business model
-     * @throws Exception
-     *  if there is an error during the conversion.
+     * @param obj object to convert
+     * @return Converted object which will be serialized to JSON.
+     * @throws Exception if there is an error during the conversion.
      */
-    From adaptTo(To obj) throws Exception;
+    Adapted adaptOriginal(Original obj) throws Exception;
 
     /**
-     * Converts an object of type "From" to type "To".
-     * @param obj object to convert
+     * This method is used on deserialization only. It contains a conversion logic from type Adapted to type Original.
      *
-     * @return Converted object representing pojo to be set in business model
-     * @throws Exception
-     *  if there is an error during the conversion.
+     * @param obj object to convert
+     * @return Converted object representing pojo to be set into object graph.
+     * @throws Exception if there is an error during the conversion.
      */
-    To adaptFrom(From obj) throws Exception;
+    Original adaptAdapted(Adapted obj) throws Exception;
 
 }

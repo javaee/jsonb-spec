@@ -40,10 +40,10 @@
 
 package javax.json.bind.spi;
 
-import java.util.Iterator;
-import java.util.ServiceLoader;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbException;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 /**
  * Service provider for JSON Binding implementations.
@@ -132,7 +132,7 @@ public abstract class JsonbProvider {
      * @throws JsonbException if there is no provider found, or there is a problem
      *         instantiating the provider instance.
      *
-     * @throws IllegalArgumentException if providerName is {@code null}.
+     * @throws NullPointerException if providerName is {@code null}.
      *
      * @see java.util.ServiceLoader
      *

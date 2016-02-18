@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -50,26 +50,30 @@ import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * <p>
- * Specifies how the annotated field will be serialized into JSON in case the value of given field is null.
+ *     Specifies how the annotated field will be serialized into JSON in case the value of given field is null.
  * </p>
  *
  * <p>
- * If the annotation is specified on type, all accessors (field or a JavaBean property) of the given type
- * are handled as if they have been annotated with {@code @JsonNillable}.
- *
- * If the annotation is specified on package, all types within that package are handled as if they have been
- * annotated with {@code @JsonNillable}.
+ *     There are two possible values which can be specified.
+ *     In case of true, given field will be serialized as key/value pair with value null.
+ *     In case of false, given field will not be serialized.
  * </p>
  *
  * <p>
- * Serialization of given field (or a JavaBean property) is affected only if the value of
- * given field (or a JavaBean property) is null.
+ *     For java Optionals, an empty optional is treated same as null for other field types.
  * </p>
  *
  * <p>
- * There are two possible values which can be specified.
- * In case of true, given field will be serialized as key/value pair with value null.
- * In case of false, given field will not be serialized.
+ *     If the annotation is specified on type, all accessors (field or a JavaBean property) of the given type
+ *     are handled as if they have been annotated with {@code @JsonNillable}.
+ *
+ *     If the annotation is specified on package, all types within that package are handled as if they have been
+ *     annotated with {@code @JsonNillable}.
+ * </p>
+ *
+ * <p>
+ *     Serialization of given field (or a JavaBean property) is affected only if the value of
+ *     given field (or a JavaBean property) is null.
  * </p>
  *
  * <p><b>Usage</b></p>

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -141,7 +141,7 @@ public class JsonbConfig {
      * Set the particular configuration property to a new value. The method can
      * only be used to set one of the standard JSON Binding properties defined in
      * this class or a provider specific property. Attempting to set an undefined
-     * property will result in a JsonbConfigException being thrown.
+     * property will result in a JsonbException being thrown.
      * See <a href="#supportedProps"> Supported Properties</a>.
      *
      * @param name
@@ -153,7 +153,7 @@ public class JsonbConfig {
      *
      * @return This JsonbConfig instance.
      *
-     * @throws IllegalArgumentException if the name parameter is null.
+     * @throws NullPointerException if the name parameter is null.
      */
     public final JsonbConfig setProperty(final String name, final Object value) {
         configuration.put(name, value);
@@ -164,7 +164,7 @@ public class JsonbConfig {
      * Return value of particular configuration property. The method can
      * only be used to retrieve one of the standard JSON Binding properties defined
      * in this class or a provider specific property. Attempting to get an undefined
-     * property will result in a JsonbConfigException being thrown.
+     * property will result in a JsonbException being thrown.
      * See <a href="#supportedProps"> Supported Properties</a>.
      *
      * @param name
@@ -172,7 +172,7 @@ public class JsonbConfig {
      *
      * @return The value of the requested property
      *
-     * @throws IllegalArgumentException if the name parameter is null.
+     * @throws NullPointerException if the name parameter is null.
      */
     public final Optional<Object> getProperty(final String name) {
         return Optional.ofNullable(configuration.get(name));

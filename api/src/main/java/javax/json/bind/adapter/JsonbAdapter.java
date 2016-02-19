@@ -99,12 +99,4 @@ public interface JsonbAdapter<From, To> {
      */
     To adaptFrom(From obj) throws Exception;
 
-    /**
-     * Returns false if null values should be handled by JSON Binding.
-     *
-     * @return false if null values should be handled by JSON Binding
-     */
-    default boolean handlesNullValue() {
-        return false;
-    }
 }

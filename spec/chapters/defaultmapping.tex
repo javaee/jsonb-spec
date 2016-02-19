@@ -87,12 +87,11 @@ MUST follow the conversion process defined in the javadoc specification for the 
 
 \subsection{java.util.Optional, OptionalInt, OptionalLong, OptionalDouble}
 \label{subsec:optional}
-Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are marshalled to a JSON value by retrieving their contained instance and 
-converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] 
-Empty optional instances serialized as object instance properties are treated as null. [JSB-\ref{subsec:optional}-2] 
-Empty optional instances marshalled as JSON array elements are marshalled as null values [JSB-\ref{subsec:optional}-3]. 
-Unmarshalling into Optional, OptionalInt, OptionalLong, OptionalDouble returns empty optional value for properties which are not present in JSON document or contain a null value. [JSB-\ref{subsec:optional}-4] 
-Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type which unmarshalled based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
+Non-empty instances of type java.util.Optional, OptionalInt, OptionalLong, OptionalDouble are serialized to a JSON value by retrieving their contained instance and converting it to JSON value based on its type and corresponding mapping definitions within this chapter. [JSB-\ref{subsec:optional}-1] 
+Class fields containing empty optional instances are treated as having a null value and serialized based on \ref{subsec:nullfield}. [JSB-\ref{subsec:optional}-2] 
+Empty optional instances in array items are serialized as null values [JSB-\ref{subsec:optional}-3]. 
+Deserializing into Optional, OptionalInt, OptionalLong, OptionalDouble return empty optional value for properties containing a null value. [JSB-\ref{subsec:optional}-4] 
+Otherwise any non-empty Optional, OptionalInt, OptionalLong, OptionalDouble value is constructed of type which deserialized based on mappings defined in this chapter.[JSB-\ref{subsec:optional}-5]
 
 Instances of type java.util.Optional\textless T\textgreater\space are serialized to a JSON value as JSON objects when T alone would be serialized as JSON object. 
 When T would be serialized as a JSON value (e.g. java.lang.String, java.lang.Integer), an instance of java.util.Optional\textless T\textgreater\space is serialized as a JSON value (without curly brackets). [JSB-\ref{subsec:optional}-6]
@@ -142,8 +141,7 @@ The serialization format of java.util.TimeZone and SimpleTimeZone is NormalizedC
 \subsection{java.time.*}
 \label{subsec:time}
 
-The serialization output for a java.time.Instant instance MUST be in a ISO\verb|_|INSTANT format, as specified in 
-java.time.format.DateTimeFormatter. [JSB-\ref{subsec:time}-1]
+The serialization output for a java.time.Instant instance MUST be in a ISO\verb|_|INSTANT format, as specified in java.time.format.DateTimeFormatter. [JSB-\ref{subsec:time}-1]
 Implementations MUST support the deserialization of an ISO\verb|_|INSTANT formatted JSON string to a java.time.Instant instance. [JSB-\ref{subsec:time}-2]
 
 For other java.time.* classes, the following mapping table maps Java types to their corresponding formats: [JSB-\ref{subsec:time}-3]
@@ -301,7 +299,7 @@ When deserializing a JSON document, declared fields MUST be set in the order of 
 The result of serializing a java field with a null value is the absence of the property in the resulting JSON document. [JSB-\ref{subsec:nullfield}-1]
 The deserialization operation of a property absent in JSON document MUST not set the value of the field, the setter (if available) MUST not be called, and thus original value of the field MUST be preserved. [JSB-\ref{subsec:nullfield}-2]
 
-The deserialization operation of a property with a null value in a JSON document MUST set the value of the field to null value (or call setter with null value if setter is present). [JSB-\ref{subsec:nullfield}-3]
+The deserialization operation of a property with a null value in a JSON document MUST set the value of the field to null value (or call setter with null value if setter is present). The exception are java.util.Optional, OptionalInt, OptionalLong, OptionalDouble instances. In this case the value of the field is set to an empty optional value. [JSB-\ref{subsec:nullfield}-3]
 
 \subsection{Null Array Values}
 \label{subsec:nullarray}

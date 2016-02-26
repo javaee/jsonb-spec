@@ -120,14 +120,20 @@ import java.lang.reflect.Type;
  * reused - for a typical use-case, only one {@code Jsonb} instance is
  * required by an application.
  *
- * <p> All the methods in this class are safe for use by multiple concurrent threads.
+ * <p> All the methods in this class are safe for use by multiple concurrent threads. </p>
+ *
+ * <p> Calling {@code Closable.close()} method will cleanup all CDI managed components
+ * (such as adapters with CDI dependencies) created during interaction with Jsonb.
+ * Calling {@code close()} must be done after all threads has finished interaction with Jsonb.
+ * If there are remaining threads working with Jsonb and {@code close()} is called, behaviour is undefined.
+ * </p>
  *
  * @see Jsonb
  * @see JsonbBuilder
  * @see java.util.ServiceLoader
  * @since JSON Binding 1.0
  */
-public interface Jsonb {
+public interface Jsonb extends AutoCloseable {
 
     /**
      * Reads in a JSON data from the specified string and return the resulting

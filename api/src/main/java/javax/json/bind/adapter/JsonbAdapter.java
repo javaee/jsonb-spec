@@ -53,8 +53,8 @@ package javax.json.bind.adapter;
  *     "Original" type after that.
  * </p>
  *
- * @param <Original> original type
- * @param <Adapted> adapted type
+ * @param <Original> The type that JSONB doesn't know how to handle
+ * @param <Adapted> The type that JSONB knows how to handle out of the box
  *
  * <p>
  * Adapter runtime "Original" and "Adapted" generic types are inferred from subclassing information,
@@ -92,7 +92,7 @@ public interface JsonbAdapter<Original, Adapted> {
      * @return Converted object which will be serialized to JSON.
      * @throws Exception if there is an error during the conversion.
      */
-    Adapted adaptOriginal(Original obj) throws Exception;
+    Adapted adaptToJson(Original obj) throws Exception;
 
     /**
      * This method is used on deserialization only. It contains a conversion logic from type Adapted to type Original.
@@ -101,6 +101,6 @@ public interface JsonbAdapter<Original, Adapted> {
      * @return Converted object representing pojo to be set into object graph.
      * @throws Exception if there is an error during the conversion.
      */
-    Original adaptAdapted(Adapted obj) throws Exception;
+    Original adaptFromJson(Adapted obj) throws Exception;
 
 }

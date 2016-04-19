@@ -44,6 +44,7 @@ import javax.json.bind.config.PropertyNamingStrategy;
 import javax.json.bind.config.PropertyVisibilityStrategy;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -136,6 +137,16 @@ public class JsonbConfig {
      * Property used to specify custom binary data strategy.
      */
     public static final String BINARY_DATA_STRATEGY = "jsonb.binary-data-strategy";
+
+    /**
+     * Property used to specify custom date format globally.
+     */
+    public static final String DATE_FORMAT = "jsonb.date-format";
+
+    /**
+     * Property used to specify locale globally.
+     */
+    public static final String LOCALE = "jsonb.locale";
 
     /**
      * Set the particular configuration property to a new value. The method can
@@ -335,5 +346,27 @@ public class JsonbConfig {
      */
     public final JsonbConfig withBinaryDataStrategy(final String binaryDataStrategy) {
         return setProperty(BINARY_DATA_STRATEGY, binaryDataStrategy);
+    }
+
+    /**
+     * Property used to specify custom date format.
+     *
+     * @param dateFormat custom date format which affects serialization and deserialization
+     * @param locale locale, default if null
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withDateFormat(final String dateFormat, final Locale locale) {
+        return setProperty(DATE_FORMAT, dateFormat)
+                .setProperty(LOCALE, locale != null ? locale : Locale.getDefault());
+    }
+
+    /**
+     * Property used to specify custom locale.
+     *
+     * @param locale locale not null
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withLocale(final Locale locale) {
+        return setProperty(LOCALE, locale);
     }
 }

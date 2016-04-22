@@ -42,6 +42,8 @@ package javax.json.bind;
 import javax.json.bind.adapter.JsonbAdapter;
 import javax.json.bind.config.PropertyNamingStrategy;
 import javax.json.bind.config.PropertyVisibilityStrategy;
+import javax.json.bind.serializer.JsonbDeserializer;
+import javax.json.bind.serializer.JsonbSerializer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -132,6 +134,16 @@ public class JsonbConfig {
      * Property used to specify custom mapping adapters for generic types.
      */
     public static final String ADAPTERS = "jsonb.adapters";
+
+    /**
+     * Property used to specify custom serializers.
+     */
+    public static final String SERIALIZERS = "jsonb.serializers";
+
+    /**
+     * Property used to specify custom deserializers.
+     */
+    public static final String DESERIALIZERS = "jsonb.derializers";
 
     /**
      * Property used to specify custom binary data strategy.
@@ -332,6 +344,38 @@ public class JsonbConfig {
      */
     public final JsonbConfig withAdapters(final JsonbAdapter... adapters) {
         return setProperty(ADAPTERS, adapters);
+    }
+
+    /**
+     * Property used to specify custom serializers.
+     *
+     * Configures value of {@code SERIALIZERS} property.
+     *
+     * Calling withSerializers more than once will merge the serializers with previous value.
+     *
+     * @param serializers
+     *      Custom mapping serializers which affects serialization.
+     *
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withSerializers(final JsonbSerializer... serializers) {
+        return setProperty(SERIALIZERS, serializers);
+    }
+
+    /**
+     * Property used to specify custom deserializers.
+     *
+     * Configures value of {@code DESERIALIZERS} property.
+     *
+     * Calling withDeserializers more than once will merge the deserializers with previous value.
+     *
+     * @param deserializers
+     *      Custom deserializers which affects deserialization.
+     *
+     * @return This JsonbConfig instance.
+     */
+    public final JsonbConfig withDeserializers(final JsonbDeserializer... deserializers) {
+        return setProperty(DESERIALIZERS, deserializers);
     }
 
     /**

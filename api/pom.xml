@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2016 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -52,7 +52,7 @@
 
     <groupId>javax.json.bind</groupId>
     <artifactId>javax.json.bind-api</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>javax.json.bind-api</name>
 
@@ -101,13 +101,35 @@
 
     <developers>
         <developer>
+            <email>dmitry.kornilov@oracle.com</email>
+            <id>maiden168</id>
+            <name>Dmitry Kornilov</name>
+            <organization>Oracle</organization>
+            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
+            <roles>
+                <role>JSON Binding 1.0 Spec Lead</role>
+            </roles>
+            <timezone>CET</timezone>
+        </developer>
+        <developer>
+            <email>roman.grigoriadi@oracle.com</email>
+            <id>roman.grigoriadi</id>
+            <name>Roman Grigoriadi</name>
+            <organization>Oracle</organization>
+            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
+            <roles>
+                <role>JSON Binding 1.0 Developer</role>
+            </roles>
+            <timezone>CET</timezone>
+        </developer>
+        <developer>
             <email>snajper@java.net</email>
             <id>MartiNG</id>
             <name>Martin Grebac</name>
             <organization>Oracle</organization>
             <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
             <roles>
-                <role>JSON Binding 1.0 Spec Lead</role>
+                <role>JSON Binding 1.0 Co-Spec Lead</role>
             </roles>
             <timezone>CET</timezone>
             <url>https://blogs.oracle.com/mgrebac/</url>

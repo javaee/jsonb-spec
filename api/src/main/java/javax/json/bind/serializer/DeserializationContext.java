@@ -48,12 +48,16 @@ import java.lang.reflect.Type;
  * JSONB Mapper functionality on top of JSONP parser.
  *
  * @author Roman Grigoriadi
+ * @author Dmitry Kornilov
  */
 public interface DeserializationContext {
 
     /**
-     * Deserializes JSON stream into instance of provided class using {@link javax.json.stream.JsonParser}.
+     * Deserialize JSON stream into instance of provided class using {@link javax.json.stream.JsonParser}.
      * JsonParser cursor have to be at KEY_NAME before START_OBJECT to call this method.
+     *
+     * If method is called for the same type, which is deserializer bound to, deserializer recursion is suppressed.
+     * Otherwise deserializers are reentrant during deserialization process started by this method.
      *
      * @param clazz Type to deserialize into. No arg constructor required.
      * @param parser JSONP parser to drive
@@ -63,8 +67,11 @@ public interface DeserializationContext {
     <T> T deserialize(Class<T> clazz, JsonParser parser);
 
     /**
-     * Deserializes JSON stream into instance of provided class using {@link javax.json.stream.JsonParser}.
+     * Deserialize JSON stream into instance of provided class using {@link javax.json.stream.JsonParser}.
      * JsonParser cursor have to be at KEY_NAME before START_OBJECT to call this method.
+     *
+     * If method is called for the same type, which is deserializer bound to, deserializer recursion is suppressed.
+     * Otherwise deserializers are reentrant during deserialization process started by this method.
      *
      * @param type Type to deserialize into. No arg constructor required.
      * @param parser JSONP parser to drive
@@ -72,17 +79,5 @@ public interface DeserializationContext {
      * @return Deserialized instance
      */
     <T> T deserialize(Type type, JsonParser parser);
-
-    /**
-     * Converts string value into provided type. String value has to be single JSON value, not a part
-     * of a JSON document representing JSON object.
-     *
-     * @param clazz Class to convert string value into
-     * @param value single JSON value to convert
-     * @param <T> type of toClass
-     * @return converted instance
-     * @throws javax.json.bind.JsonbException if conversion of provided type is not supported
-     */
-    <T> T convertDefault(Class<T> clazz, String value);
 
 }

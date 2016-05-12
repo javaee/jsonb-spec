@@ -50,6 +50,7 @@ import java.lang.reflect.Type;
  * @param <T> Type to bind deserializer for.
  *
  * @author Roman Grigoriadi
+ * @author Dmitry Kornilov
  */
 public interface JsonbDeserializer<T> {
 

@@ -46,6 +46,7 @@ import javax.json.stream.JsonGenerator;
  * Provides JSONB internals for custom serializers.
  *
  * @author Roman Grigoriadi
+ * @author Dmitry Kornilov
  */
 public interface SerializationContext {
 
@@ -70,16 +71,4 @@ public interface SerializationContext {
      */
     <T> void serialize(T object, JsonGenerator generator);
 
-    /**
-     * Converts string value into provided type. String value has to be single JSON value, not a part
-     * of a JSON document representing JSON object.
-     *
-     * @param obj object to convert to string
-     * @param generator JSONP generator to serialize with
-     * @param <T> type of object
-     *
-     * @return converted string value
-     * @throws javax.json.bind.JsonbException if conversion of given type is not supported
-     */
-    <T> String convertDefault(T obj, JsonGenerator generator);
 }

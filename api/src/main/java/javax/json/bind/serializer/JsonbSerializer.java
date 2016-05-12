@@ -49,6 +49,7 @@ import javax.json.stream.JsonGenerator;
  * @param <T> Type to bind serializer for.
  *
  * @author Roman Grigoriadi
+ * @author Dmitry Kornilov
  */
 public interface JsonbSerializer<T> {
 

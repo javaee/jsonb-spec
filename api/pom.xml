@@ -52,7 +52,7 @@
 
     <groupId>javax.json.bind</groupId>
     <artifactId>javax.json.bind-api</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>javax.json.bind-api</name>
 
@@ -546,9 +546,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <last.final.spec.version>0.1</last.final.spec.version>
+        <last.final.spec.version>0.2</last.final.spec.version>
         <milestone.number>01</milestone.number>
-        <next.final.spec.version>0.2</next.final.spec.version>
+        <next.final.spec.version>1.0</next.final.spec.version>
         <new.spec.version>${next.final.spec.version}</new.spec.version>
         <non.final>true</non.final>
         <skip.release.tests>false</skip.release.tests>

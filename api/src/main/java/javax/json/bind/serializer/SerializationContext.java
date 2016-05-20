@@ -51,6 +51,8 @@ public interface SerializationContext {
 
     /**
      * Serializes arbitrary object to JSON, using current {@link javax.json.stream.JsonGenerator} instance.
+     * Serialization is ran as serialization of a root type from user {@link JsonbSerializer}. {@link JsonGenerator}
+     * instance is shared with JSONB and user serializer.
      *
      * @param key
      *      JSON key name
@@ -64,7 +66,11 @@ public interface SerializationContext {
     <T> void serialize(String key, T object, JsonGenerator generator);
 
     /**
-     * Serializes arbitrary object to JSON array, using current {@link javax.json.stream.JsonGenerator} instance.
+     * Serializes arbitrary object to JSON, using current {@link javax.json.stream.JsonGenerator} instance.
+     * Serialization is ran as serialization of a root type from user {@link JsonbSerializer}. {@link JsonGenerator}
+     * instance is shared with JSONB and user serializer.
+     *
+     * Method without key parameter is intended to serialize inside JSON_ARRAYs.
      *
      * @param object
      *      Object to serialize

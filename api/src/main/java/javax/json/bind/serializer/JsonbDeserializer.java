@@ -44,8 +44,36 @@ import javax.json.stream.JsonParser;
 import java.lang.reflect.Type;
 
 /**
- * Allows custom mapping of java type to json string.
- * Provides both, low level JSONP api and JSONB features.
+ *
+ * Deserialize java object from JSON stream. Either JSONP {@link JsonParser} can be used directly
+ * as lowest possible level access or {@link DeserializationContext} which acts as JSONB runtime, able to deserialize
+ * any java object provided.
+ *
+ * <pre>
+ *     BoxDeserializer implements JsonbDeserializer&lt;Box&gt; {
+ *         public Box deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
+ *             while(parser.hasNext()) {
+ *                 Event event = parser.next();
+ *
+ *                 //deserialize inner object with JSONB runtime
+ *                 if(event == JsonParser.Event.KEY_NAME &amp;&amp; parser.getString().equals("boxInnerObject") {
+ *                     //runs JSONB runtime deserialization as for root object
+ *                     BoxInner result = ctx.deserialize(CrateInner.class, jsonParser);
+ *                     continue; //JsonParser is pointing to closing curly brace of deserilized JSON object.
+ *                 }
+ *
+ *                 //user JsonParser for lower level access
+ *                 if(event == JsonParser.Event.KEY_NAME &amp;&amp; parser.getString().equals("unexpectedProperty") {
+ *                     parser.next()        //move to VALUE or OBJECT / ARRAY
+ *                     ...                  //custom business
+ *                 }
+ *             }
+ *         }
+ *     }
+ * </pre>
+ *
+ * In addition to {@link javax.json.bind.adapter.JsonbAdapter}, which acts more as converters from one java type
+ * to another, (de)serializer api provides more fine grained control over (de)serialization process.
  *
  * @param <T> Type to bind deserializer for.
  *
@@ -54,8 +82,7 @@ import java.lang.reflect.Type;
 public interface JsonbDeserializer<T> {
 
     /**
-     * Deserialize an object from JSON.
-     * Cursor of JsonParser is at START_OBJECT.
+     * Deserialize JSON stream into object.
      *
      * @param parser
      *      Json parser

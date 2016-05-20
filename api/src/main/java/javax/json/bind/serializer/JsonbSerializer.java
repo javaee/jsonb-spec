@@ -43,16 +43,38 @@ package javax.json.bind.serializer;
 import javax.json.stream.JsonGenerator;
 
 /**
- * Interface representing a custom serializer for given type.
+ * Serialize java object into JSON stream. Either JSONP {@link JsonGenerator} can be used directly
+ * as lowest possible level access or {@link SerializationContext} which acts as JSONB runtime, able to serialize
+ * any java object provided.
+ *
+ * <pre>
+ * class BoxSerializer implements JsonbSerializer&lt;Box&gt; {
+ *
+ *      public void serialize(T obj, JsonGenerator generator, SerializationContext ctx) {
+ *          generator.write("customBoxProperty", "property value"); //custom box key with value
+ *          generator.writeStartObject("customObjectInsideBox");    //start new JSON object inside box
+ *          generator.write("customProperty", "Custom value");      //write value inside
+ *          generator.writeEndObject();
+ *
+ *          //runs JSONB serialization as for root object
+ *          ctx.serialize("boxInternals", obj.getSomeInternals(), generator);      //serialize box inner object
+ *          ctx.serialize("currentDate", new Date(), generator);                   //and arbitrary one
+ *      }
+ * }
+ * </pre>
+ *
+ * In addition to {@link javax.json.bind.adapter.JsonbAdapter}, which acts more as converters from one java type
+ * to another, (de)serializer api provides more fine grained control over (de)serialization process.
  *
  * @param <T> Type to bind serializer for.
  *
  * @since JSON Binding 1.0
+ *
  */
 public interface JsonbSerializer<T> {
 
     /**
-     * Serializes an object to JSON.
+     * Serialize object into JSON stream.
      *
      * @param obj
      *      Object to serialize

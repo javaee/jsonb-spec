@@ -52,11 +52,19 @@ import java.lang.reflect.Type;
 public interface DeserializationContext {
 
     /**
+     * <p>
      * Deserialize JSON stream into instance of provided class using {@link javax.json.stream.JsonParser}.
-     * JsonParser cursor have to be at KEY_NAME before START_OBJECT to call this method.
+     * JsonParser cursor have to be at KEY_NAME before START_OBJECT / START_ARRAY, or at START_OBJECT / START_ARRAY
+     * to call this method. After deserialization is complete JsonParser will be at END_OBJECT / END_ARRAY
+     * for deserialized JSON structure.
+     * </p>
      *
+     * <p>
      * If method is called for the same type, which is deserializer bound to, deserializer recursion is suppressed.
      * Otherwise deserializers are reentrant during deserialization process started by this method.
+     * </p>
+     *
+     * {@link JsonParser} instance of JSONB runtime is shared with custom deserializer.
      *
      * @param clazz
      *      Type to deserialize into. No arg constructor required.
@@ -69,11 +77,19 @@ public interface DeserializationContext {
     <T> T deserialize(Class<T> clazz, JsonParser parser);
 
     /**
+     * <p>
      * Deserialize JSON stream into instance of provided class using {@link javax.json.stream.JsonParser}.
-     * JsonParser cursor have to be at KEY_NAME before START_OBJECT to call this method.
+     * JsonParser cursor have to be at KEY_NAME before START_OBJECT / START_ARRAY, or at START_OBJECT / START_ARRAY
+     * to call this method. After deserialization is complete JsonParser will be at END_OBJECT / END_ARRAY
+     * for deserialized JSON structure.
+     * </p>
      *
+     * <p>
      * If method is called for the same type, which is deserializer bound to, deserializer recursion is suppressed.
      * Otherwise deserializers are reentrant during deserialization process started by this method.
+     * </p>
+     *
+     * {@link JsonParser} instance of JSONB runtime is shared with custom deserializer.
      *
      * @param type
      *      Type to deserialize into. No arg constructor required.

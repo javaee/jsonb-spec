@@ -53,8 +53,8 @@ import java.util.ServiceLoader;
  * API clients can obtain instance of default provider by calling:
  * <pre>
  * {@code
- JsonbProvider provider = JsonbProvider.provider();
- }}</pre>
+ * JsonbProvider provider = JsonbProvider.provider();
+ * }}</pre>
  *
  * Specific provider instance lookup:
  * <pre>

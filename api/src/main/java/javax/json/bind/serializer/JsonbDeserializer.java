@@ -49,8 +49,7 @@ import java.lang.reflect.Type;
  *
  * @param <T> Type to bind deserializer for.
  *
- * @author Roman Grigoriadi
- * @author Dmitry Kornilov
+ * @since JSON Binding 1.0
  */
 public interface JsonbDeserializer<T> {
 
@@ -58,11 +57,13 @@ public interface JsonbDeserializer<T> {
      * Deserialize an object from JSON.
      * Cursor of JsonParser is at START_OBJECT.
      *
-     * @param parser Json parser
-     * @param ctx Deserialization context
-     * @param rtType type of returned object
+     * @param parser
+     *      Json parser
+     * @param ctx
+     *      Deserialization context
+     * @param rtType
+     *      Type of returned object
      * @return deserialized instance
      */
     T deserialize(JsonParser parser, DeserializationContext ctx, Type rtType);
-
 }

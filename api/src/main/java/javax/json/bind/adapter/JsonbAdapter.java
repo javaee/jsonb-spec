@@ -63,24 +63,25 @@ package javax.json.bind.adapter;
  *
  * <pre>
  * {@code
- *      //Generic information is provided by sublcassing.
+ *      // Generic information is provided by sublcassing.
  *      class BoxToCrateAdapter implements JsonbAdapter<Box<Integer>, Crate<String>> {...};
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter());
  *
- *      //Generic information is provided by subclassing with anonymous class
- *      jsonbConfig.withAdapters(new JsonbAdapter<Box<Integer>,Crate<String>> {...};
+ *      // Generic information is provided by subclassing with anonymous class
+ *      jsonbConfig.withAdapters(new JsonbAdapter<Box<Integer>, Crate<String>> {...};
  *
- *      //in following case..
- *      BoxToCrateAdapter<T> implements JsonbAdapter<Box<T>,Integer<T>> {...}
+ *      // in following case..
+ *      BoxToCrateAdapter<T> implements JsonbAdapter<Box<T>, Integer<T>> {...}
  *
- *      //Here, generic information is lost due to type erasure
+ *      // Here, generic information is lost due to type erasure
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>());
  *
- *      //instead subclassing with anonymous class will work (note anonymous class curly braces)
+ *      // instead subclassing with anonymous class will work (note anonymous class curly braces)
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>(){});
  * }
  * </pre>
  *
+ * @since JSON Binding 1.0
  */
 public interface JsonbAdapter<Original, Adapted> {
 
@@ -88,7 +89,8 @@ public interface JsonbAdapter<Original, Adapted> {
      * This method is used on serialization only. It contains a conversion logic from type Original to type Adapted.
      * After conversion Adapted type will be mapped to JSON the standard way.
      *
-     * @param obj object to convert
+     * @param obj
+     *      Object to convert
      * @return Converted object which will be serialized to JSON.
      * @throws Exception if there is an error during the conversion.
      */
@@ -97,10 +99,10 @@ public interface JsonbAdapter<Original, Adapted> {
     /**
      * This method is used on deserialization only. It contains a conversion logic from type Adapted to type Original.
      *
-     * @param obj object to convert
+     * @param obj
+     *      Object to convert
      * @return Converted object representing pojo to be set into object graph.
      * @throws Exception if there is an error during the conversion.
      */
     Original adaptFromJson(Adapted obj) throws Exception;
-
 }

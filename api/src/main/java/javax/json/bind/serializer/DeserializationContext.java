@@ -47,8 +47,7 @@ import java.lang.reflect.Type;
 /**
  * JSONB Mapper functionality on top of JSONP parser.
  *
- * @author Roman Grigoriadi
- * @author Dmitry Kornilov
+ * @since JSON Binding 1.0
  */
 public interface DeserializationContext {
 
@@ -59,9 +58,12 @@ public interface DeserializationContext {
      * If method is called for the same type, which is deserializer bound to, deserializer recursion is suppressed.
      * Otherwise deserializers are reentrant during deserialization process started by this method.
      *
-     * @param clazz Type to deserialize into. No arg constructor required.
-     * @param parser JSONP parser to drive
-     * @param <T> Type of class
+     * @param clazz
+     *      Type to deserialize into. No arg constructor required.
+     * @param parser
+     *      JSONP parser to drive
+     * @param <T>
+     *      Type of class
      * @return Deserialized instance
      */
     <T> T deserialize(Class<T> clazz, JsonParser parser);
@@ -73,11 +75,13 @@ public interface DeserializationContext {
      * If method is called for the same type, which is deserializer bound to, deserializer recursion is suppressed.
      * Otherwise deserializers are reentrant during deserialization process started by this method.
      *
-     * @param type Type to deserialize into. No arg constructor required.
-     * @param parser JSONP parser to drive
-     * @param <T> Type to deserialize into
+     * @param type
+     *      Type to deserialize into. No arg constructor required.
+     * @param parser
+     *      JSONP parser to drive
+     * @param <T>
+     *      Type to deserialize into
      * @return Deserialized instance
      */
     <T> T deserialize(Type type, JsonParser parser);
-
 }

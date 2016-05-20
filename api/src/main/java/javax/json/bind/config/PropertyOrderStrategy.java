@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -48,6 +48,8 @@ package javax.json.bind.config;
  * <p>
  *  This strategy can be set via {@link javax.json.bind.JsonbConfig}.
  * </p>
+ *
+ * @since JSON Binding 1.0
  */
 public final class PropertyOrderStrategy {
 

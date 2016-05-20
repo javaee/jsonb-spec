@@ -354,7 +354,7 @@ public class JsonbConfig {
      * Calling withSerializers more than once will merge the serializers with previous value.
      *
      * @param serializers
-     *      Custom mapping serializers which affects serialization.
+     *      Custom serializers which affects serialization.
      *
      * @return This JsonbConfig instance.
      */
@@ -395,8 +395,11 @@ public class JsonbConfig {
     /**
      * Property used to specify custom date format.
      *
-     * @param dateFormat custom date format which affects serialization and deserialization
-     * @param locale locale, default if null
+     * @param dateFormat
+     *      Custom date format as specified in {@link java.text.SimpleDateFormat} used be default for all
+     *      dates serialization and deserialization.
+     * @param locale
+     *      Locale, default is null
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withDateFormat(final String dateFormat, final Locale locale) {
@@ -407,7 +410,8 @@ public class JsonbConfig {
     /**
      * Property used to specify custom locale.
      *
-     * @param locale locale not null
+     * @param locale
+     *      Locale, must not be null
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withLocale(final Locale locale) {

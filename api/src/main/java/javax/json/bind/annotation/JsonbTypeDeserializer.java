@@ -60,6 +60,8 @@ import java.lang.annotation.Target;
  *   <li> field </li>
  *   <li> method </li>
  * </ul>
+ *
+ * @since JSON Binding 1.0
  */
 @JsonbAnnotation
 @Retention(RetentionPolicy.RUNTIME)

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2016 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -59,6 +59,8 @@ import java.lang.annotation.Target;
  *   <li> field </li>
  *   <li> parameter </li>
  * </ul>
+ *
+ * @since JSON Binding 1.0
  */
 @JsonbAnnotation
 @Retention(RetentionPolicy.RUNTIME)

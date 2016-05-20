@@ -45,30 +45,33 @@ import javax.json.stream.JsonGenerator;
 /**
  * Provides JSONB internals for custom serializers.
  *
- * @author Roman Grigoriadi
- * @author Dmitry Kornilov
+ * @since JSON Binding 1.0
  */
 public interface SerializationContext {
 
     /**
      * Serializes arbitrary object to JSON, using current {@link javax.json.stream.JsonGenerator} instance.
      *
-     * @param key JSON key name
-     * @param object object to serialize
-     * @param generator JSONP generator to serialize with
-     * @param <T> Type of serialized object
+     * @param key
+     *      JSON key name
+     * @param object
+     *      Object to serialize
+     * @param generator
+     *      JSONP generator to serialize with
+     * @param <T>
+     *      Type of serialized object
      */
     <T> void serialize(String key, T object, JsonGenerator generator);
-
-
 
     /**
      * Serializes arbitrary object to JSON array, using current {@link javax.json.stream.JsonGenerator} instance.
      *
-     * @param object object to serialize
-     * @param generator JSONP generator to serialize with
-     * @param <T> Type of serialized object
+     * @param object
+     *      Object to serialize
+     * @param generator
+     *      JSONP generator to serialize with
+     * @param <T>
+     *      Type of serialized object
      */
     <T> void serialize(T object, JsonGenerator generator);
-
 }

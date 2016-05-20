@@ -52,6 +52,7 @@ package javax.json.bind.config;
  * </p>
  *
  * @see javax.json.bind.JsonbConfig
+ * @since JSON Binding 1.0
  */
 public interface PropertyNamingStrategy {
     /**

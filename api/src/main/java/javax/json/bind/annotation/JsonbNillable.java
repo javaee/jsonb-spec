@@ -83,6 +83,8 @@ import static java.lang.annotation.ElementType.TYPE;
  *   <li> a JavaBean property </li>
  *   <li> package </li>
  * </ul>
+ *
+ * @since JSON Binding 1.0
  */
 @JsonbAnnotation
 @Retention(RetentionPolicy.RUNTIME)

@@ -43,22 +43,23 @@ package javax.json.bind.serializer;
 import javax.json.stream.JsonGenerator;
 
 /**
- * Allows custom mapping of java type to json string.
- * Provides both, low level JSONP api and JSONB features.
+ * Interface representing a custom serializer for given type.
  *
  * @param <T> Type to bind serializer for.
  *
- * @author Roman Grigoriadi
- * @author Dmitry Kornilov
+ * @since JSON Binding 1.0
  */
 public interface JsonbSerializer<T> {
 
     /**
      * Serializes an object to JSON.
      *
-     * @param obj object to serialize
-     * @param generator JSON generator to use
-     * @param ctx JSONB mapper context
+     * @param obj
+     *      Object to serialize
+     * @param generator
+     *      JSON generator to use
+     * @param ctx
+     *      JSONB mapper context
      */
     void serialize(T obj, JsonGenerator generator, SerializationContext ctx);
 }

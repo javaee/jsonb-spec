@@ -44,39 +44,51 @@ import javax.json.stream.JsonParser;
 import java.lang.reflect.Type;
 
 /**
+ * <p>Interface representing a custom deserializer for a given type. It provides a low-level API for java object
+ * deserialization from JSON stream using {@link JsonParser}. Unlike {@link javax.json.bind.adapter.JsonbAdapter},
+ * which acts more as converter from one java type to another, deserializer provides more fine grained control over
+ * deserialization process.</p>
  *
- * Deserialize java object from JSON stream. Either JSONP {@link JsonParser} can be used directly
- * as lowest possible level access or {@link DeserializationContext} which acts as JSONB runtime, able to deserialize
- * any java object provided.
+ * <p>{@link DeserializationContext} acts as JSONB runtime, able to deserialize any java object provided.</p>
  *
+ * <p>Sample of custom Deserializer:</p>
  * <pre>
+ *     class Box {
+ *         public BoxInner boxInnerObject;
+ *         public String name;
+ *     }
+ *
  *     BoxDeserializer implements JsonbDeserializer&lt;Box&gt; {
  *         public Box deserialize(JsonParser parser, DeserializationContext ctx, Type rtType) {
- *             while(parser.hasNext()) {
+ *             Box = new Box();
+ *
+ *             while (parser.hasNext()) {
  *                 Event event = parser.next();
  *
- *                 //deserialize inner object with JSONB runtime
- *                 if(event == JsonParser.Event.KEY_NAME &amp;&amp; parser.getString().equals("boxInnerObject") {
- *                     //runs JSONB runtime deserialization as for root object
- *                     BoxInner result = ctx.deserialize(CrateInner.class, jsonParser);
- *                     continue; //JsonParser is pointing to closing curly brace of deserilized JSON object.
- *                 }
+ *                 if (event == JsonParser.Event.KEY_NAME &amp;&amp; parser.getString().equals("boxInnerObject") {
+ *                     // Deserialize inner object
+ *                     box.boxInnerObject = ctx.deserialize(BoxInner.class, jsonParser);
  *
- *                 //user JsonParser for lower level access
- *                 if(event == JsonParser.Event.KEY_NAME &amp;&amp; parser.getString().equals("unexpectedProperty") {
- *                     parser.next()        //move to VALUE or OBJECT / ARRAY
- *                     ...                  //custom business
+ *                 } else if (event == JsonParser.Event.KEY_NAME &amp;&amp; parser.getString().equals("name") {
+ *                     // Deserialize name property
+ *                     parser.next(); // move to VALUE
+ *                     box.name = parser.getString();
  *                 }
  *             }
+ *
+ *             return box;
  *         }
  *     }
  * </pre>
  *
- * In addition to {@link javax.json.bind.adapter.JsonbAdapter}, which acts more as converters from one java type
- * to another, (de)serializer api provides more fine grained control over (de)serialization process.
+ * <p>Deserializers are registered using {@link javax.json.bind.JsonbConfig#withDeserializers(JsonbDeserializer[])}
+ * method or using {@link javax.json.bind.annotation.JsonbTypeDeserializer} annotation on type.</p>
  *
  * @param <T> Type to bind deserializer for.
- *
+ * @see javax.json.bind.JsonbConfig
+ * @see javax.json.bind.annotation.JsonbTypeDeserializer
+ * @see JsonbSerializer
+ * @see javax.json.bind.adapter.JsonbAdapter
  * @since JSON Binding 1.0
  */
 public interface JsonbDeserializer<T> {
@@ -85,12 +97,12 @@ public interface JsonbDeserializer<T> {
      * Deserialize JSON stream into object.
      *
      * @param parser
-     *      Json parser
+     *      Json parser.
      * @param ctx
-     *      Deserialization context
+     *      Deserialization context.
      * @param rtType
-     *      Type of returned object
-     * @return deserialized instance
+     *      Type of returned object.
+     * @return Deserialized instance.
      */
     T deserialize(JsonParser parser, DeserializationContext ctx, Type rtType);
 }

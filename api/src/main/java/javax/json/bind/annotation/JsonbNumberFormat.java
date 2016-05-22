@@ -45,17 +45,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- *     Annotation provides way how to set custom number format to field or JavaBean property.
- * </p>
+ * <p>Annotation provides way how to set custom number format to field or JavaBean property.</p>
  *
- * <p>
- *     The pattern format is specified in {@link java.text.DecimalFormat}
- * </p>
+ * <p>The pattern format is specified in {@link java.text.DecimalFormat}</p>
  *
  * <p><b>Usage</b></p>
- * <p> The {@code @JsonbNumberFormat} annotation can be used with the following
- *     program elements:
+ * <p>The {@code @JsonbNumberFormat} annotation can be used with the following program elements:</p>
  * <ul>
  *   <li> field </li>
  *   <li> method </li>

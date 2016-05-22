@@ -41,14 +41,11 @@
 package javax.json.bind.config;
 
 /**
- * <p>
- *  Provides mechanism how to define customized order when serializing properties.
- * </p>
+ * <p>Provides mechanism how to define customized order when serializing properties.</p>
  *
- * <p>
- *  This strategy can be set via {@link javax.json.bind.JsonbConfig}.
- * </p>
+ * <p>This strategy can be set via {@link javax.json.bind.JsonbConfig}.</p>
  *
+ * @see javax.json.bind.JsonbConfig
  * @since JSON Binding 1.0
  */
 public final class PropertyOrderStrategy {

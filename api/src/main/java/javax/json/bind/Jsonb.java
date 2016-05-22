@@ -46,27 +46,25 @@ import java.io.Writer;
 import java.lang.reflect.Type;
 
 /**
- * <p>
- * {@code Jsonb} provides an abstraction over the JSON Binding framework operations:
+ * <p>{@code Jsonb} provides an abstraction over the JSON Binding framework operations:</p>
  *
  * <ul>
  * <li>{@code fromJson}: read JSON input, deserialize to Java objects content tree
  * <li>{@code toJson}: serialize Java objects content tree to JSON input
  * </ul>
  *
- * <p>
- * Instance of this class is created using {@link javax.json.bind.JsonbBuilder JsonbBuilder}
- * builder methods:
+ * <p>Instance of this class is created using {@link javax.json.bind.JsonbBuilder JsonbBuilder}
+ * builder methods:</p>
  * <pre>{@code
  * // Example 1 - Creating Jsonb using default JsonbBuilder instance provided by default JsonbProvider
- Jsonb jsonb = JsonbBuilder.create();
-
- // Example 2 - Creating Jsonb instance for a specific provider specified by a class name
- Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl).build();
-
- // Example 3 - Creating Jsonb instance from a custom provider implementation
- Jsonb jsonb = new CustomJsonbBuilder().build();
- }</pre>
+ * Jsonb jsonb = JsonbBuilder.create();
+ *
+ * // Example 2 - Creating Jsonb instance for a specific provider specified by a class name
+ * Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl).build();
+ *
+ * // Example 3 - Creating Jsonb instance from a custom provider implementation
+ * Jsonb jsonb = new CustomJsonbBuilder().build();
+ * }</pre>
  *
  * <b>Deserializing (reading) JSON</b><br>
  * <blockquote>
@@ -83,10 +81,8 @@ import java.lang.reflect.Type;
  * throwing JsonbException.
  * </blockquote>
  *
- * <p>
- * <b>Serializing (writing) to JSON</b><br>
+ * <p><b>Serializing (writing) to JSON</b></p>
  * <blockquote>
- * <p>
  * Serialization writes the representation of a Java object content tree into
  * JSON data.
  * </blockquote>
@@ -100,7 +96,7 @@ import java.lang.reflect.Type;
  *    </pre>
  * </blockquote>
  *
- * <b>Encoding</b><br>
+ * <p><b>Encoding</b></p>
  * <blockquote>
  * In deserialization operations ({@code fromJson}), encoding of JSON data is detected automatically.
  * Use the {@link javax.json.bind.JsonbConfig JsonbConfig} API to configure expected
@@ -116,13 +112,13 @@ import java.lang.reflect.Type;
  * <a href="http://tools.ietf.org/html/rfc7159">RFC 7159</a> and supported by Java Platform.
  * </blockquote>
  *
- * For optimal use, {@code JsonbBuilder} and {@code Jsonb} instances should be
+ * <p>For optimal use, {@code JsonbBuilder} and {@code Jsonb} instances should be
  * reused - for a typical use-case, only one {@code Jsonb} instance is
- * required by an application.
+ * required by an application.</p>
  *
- * <p> All the methods in this class are safe for use by multiple concurrent threads. </p>
+ * <p>All the methods in this class are safe for use by multiple concurrent threads.</p>
  *
- * <p> Calling {@code Closable.close()} method will cleanup all CDI managed components
+ * <p>Calling {@code Closable.close()} method will cleanup all CDI managed components
  * (such as adapters with CDI dependencies) created during interaction with Jsonb.
  * Calling {@code close()} must be done after all threads has finished interaction with Jsonb.
  * If there are remaining threads working with Jsonb and {@code close()} is called, behaviour is undefined.

@@ -47,18 +47,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- *     Annotation provides way how to customize visibility strategy of the JSON Binding.
- * </p>
+ * <p>Annotation provides way how to customize visibility strategy of the JSON Binding.</p>
  *
- * <p>
- *     It allows for example to specify, that only public getters and
- *     setter should be visible.
- * </p>
+ * <p>It allows for example to specify, that only public getters and setter should be visible.</p>
  *
  * <p><b>Usage</b></p>
- * <p> The {@code @JsonbVisibility} annotation can be used with the following
- *     program elements:
+ * <p>The {@code @JsonbVisibility} annotation can be used with the following program elements:</p>
  * <ul>
  *   <li> type </li>
  *   <li> package </li>

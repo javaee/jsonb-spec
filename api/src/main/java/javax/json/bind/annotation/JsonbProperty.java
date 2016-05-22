@@ -46,14 +46,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- *     Allows customization of field (or JavaBean property) name.
- *     This name is used either in serialization or in deserialization.
- * </p>
+ * <p>Allows customization of field (or JavaBean property) name.This name is used either in serialization or
+ * in deserialization.</p>
  *
  * <p><b>Usage</b></p>
- * <p> The {@code @JsonbProperty} annotation can be used with the following
- *     program elements:
+ * <p>The {@code @JsonbProperty} annotation can be used with the following program elements:</p>
  * <ul>
  *   <li> a JavaBean property </li>
  *   <li> field </li>

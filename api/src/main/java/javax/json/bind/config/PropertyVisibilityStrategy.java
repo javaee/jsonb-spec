@@ -44,14 +44,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * <p>
- *  Provides mechanism how to define customized property visibility strategy.
- * </p>
+ * <p>Provides mechanism how to define customized property visibility strategy.</p>
  *
- * <p>
- *  This strategy can be set via {@link javax.json.bind.JsonbConfig}.
- * </p>
+ * <p>This strategy can be set via {@link javax.json.bind.JsonbConfig}.</p>
  *
+ * @see javax.json.bind.JsonbConfig
  * @since JSON Binding 1.0
  */
 public interface PropertyVisibilityStrategy {

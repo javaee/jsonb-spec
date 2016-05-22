@@ -40,47 +40,51 @@
 package javax.json.bind.adapter;
 
 /**
- * <p>
- *     Allows to define custom mapping for given java type.
- *     The target type could be string or some mappable java type.
- * </p>
- * <p>
- *     On serialization "Original" type is converted into "Adapted" type. After that "Adapted" type is serialized to
- *     JSON the standard way.
- * </p>
- * <p>
- *     On deserialization it works the reverse way: JSON data are deserialized into "Adapted" type which is converted to
- *     "Original" type after that.
- * </p>
+ * <p>Allows to define custom mapping for given java type. The target type could be string or some
+ * mappable java type.</p>
+ *
+ * <p>On serialization "Original" type is converted into "Adapted" type. After that "Adapted" type is serialized to
+ * JSON the standard way.</p>
+ *
+ * <p>On deserialization it works the reverse way: JSON data are deserialized into "Adapted" type which is converted
+ * to "Original" type after that.</p>
+ *
+ * <p>Adapters are registered using {@link javax.json.bind.JsonbConfig#withAdapters(JsonbAdapter[])} method
+ * or using {@link javax.json.bind.annotation.JsonbTypeAdapter} annotation on class field.</p>
  *
  * @param <Original> The type that JSONB doesn't know how to handle
  * @param <Adapted> The type that JSONB knows how to handle out of the box
  *
- * <p>
- * Adapter runtime "Original" and "Adapted" generic types are inferred from subclassing information,
- * which is mandatory for adapter to work.
- * </p>
+ * <p>Adapter runtime "Original" and "Adapted" generic types are inferred from subclassing information,
+ * which is mandatory for adapter to work.</p>
  *
+ * <p>Sample 1:</p>
  * <pre>
  * {@code
- *      // Generic information is provided by sublcassing.
+ *      // Generic information is provided by subclassing.
  *      class BoxToCrateAdapter implements JsonbAdapter<Box<Integer>, Crate<String>> {...};
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter());
  *
  *      // Generic information is provided by subclassing with anonymous class
- *      jsonbConfig.withAdapters(new JsonbAdapter<Box<Integer>, Crate<String>> {...};
+ *      jsonbConfig.withAdapters(new JsonbAdapter<Box<Integer>, Crate<String>> {...});
+ * }
+ * </pre>
  *
- *      // in following case..
- *      BoxToCrateAdapter<T> implements JsonbAdapter<Box<T>, Integer<T>> {...}
+ * <p>Sample 2:</p>
+ * <pre>
+ * {@code
+ *      BoxToCrateAdapter<T> implements JsonbAdapter<Box<T>, Integer<T>> {...};
  *
- *      // Here, generic information is lost due to type erasure
+ *      // Bad way: Generic type information is lost due to type erasure
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>());
  *
- *      // instead subclassing with anonymous class will work (note anonymous class curly braces)
+ *      // Proper way: Anonymous class holds generic type information
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>(){});
  * }
  * </pre>
  *
+ * @see javax.json.bind.JsonbConfig
+ * @see javax.json.bind.annotation.JsonbTypeAdapter
  * @since JSON Binding 1.0
  */
 public interface JsonbAdapter<Original, Adapted> {
@@ -90,7 +94,7 @@ public interface JsonbAdapter<Original, Adapted> {
      * After conversion Adapted type will be mapped to JSON the standard way.
      *
      * @param obj
-     *      Object to convert
+     *      Object to convert.
      * @return Converted object which will be serialized to JSON.
      * @throws Exception if there is an error during the conversion.
      */
@@ -100,7 +104,7 @@ public interface JsonbAdapter<Original, Adapted> {
      * This method is used on deserialization only. It contains a conversion logic from type Adapted to type Original.
      *
      * @param obj
-     *      Object to convert
+     *      Object to convert.
      * @return Converted object representing pojo to be set into object graph.
      * @throws Exception if there is an error during the conversion.
      */

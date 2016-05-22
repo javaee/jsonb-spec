@@ -49,20 +49,16 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 
 /**
- * <p>
- * Prevents mapping of a Java Bean property, field or type to JSON representation.
- * <p>
+ * <p>Prevents mapping of a Java Bean property, field or type to JSON representation.</p>
  *
  * <p><b>Usage</b></p>
- * <p> The {@code @JsonbTransient} annotation can be used with the following
- *     program elements:
+ * <p>The {@code @JsonbTransient} annotation can be used with the following program elements:</p>
  * <ul>
  *   <li> a JavaBean property </li>
  *   <li> field </li>
  * </ul>
  *
- * <p>{@code @JsonbTransient} is mutually exclusive with all other
- * JSON Binding defined annotations. </p>
+ * <p>{@code @JsonbTransient} is mutually exclusive with all other JSON Binding defined annotations. </p>
  *
  * @since JSON Binding 1.0
  */

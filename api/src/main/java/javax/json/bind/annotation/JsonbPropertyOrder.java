@@ -46,14 +46,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- *     Specifies order in which fields (or JavaBean properties) will be serialized.
- * </p>
+ * <p>Specifies order in which fields (or JavaBean properties) will be serialized.</p>
  *
- * <p>
- *     Partial mapping can also be specified. In that case, the order of properties
- *     not specified in partial mapping is not defined and thus not guaranteed.
- * </p>
+ * <p>Partial mapping can also be specified. In that case, the order of properties not specified in partial
+ * mapping is not defined and thus not guaranteed.</p>
  *
  * @since JSON Binding 1.0
  */

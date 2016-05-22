@@ -49,13 +49,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- *     Annotation provides way how to set custom JsonbSerializer to field or JavaBean property.
- * </p>
+ * <p>Annotation provides way how to set custom JsonbSerializer to field or JavaBean property.</p>
  *
  * <p><b>Usage</b></p>
- * <p> The {@code @JsonbSerializer} annotation can be used with the following
- *     program elements:
+ * <p>The {@code @JsonbSerializer} annotation can be used with the following program elements:</p>
  * <ul>
  *   <li> field </li>
  *   <li> method </li>

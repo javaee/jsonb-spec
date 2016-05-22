@@ -41,15 +41,11 @@
 package javax.json.bind.config;
 
 /**
- * <p>
- *     Allows to define custom property naming strategy.
- *     Specifies predefined property naming strategies.
- *     Does not override JsonbProperty value.
- * </p>
+ * <p>Allows to define custom property naming strategy.
+ * Specifies predefined property naming strategies.
+ * Does not override JsonbProperty value.</p>
  *
- * <p>
- *     This strategy can be set via {@link javax.json.bind.JsonbConfig}.
- * </p>
+ * <p>This strategy can be set via {@link javax.json.bind.JsonbConfig}.</p>
  *
  * @see javax.json.bind.JsonbConfig
  * @since JSON Binding 1.0

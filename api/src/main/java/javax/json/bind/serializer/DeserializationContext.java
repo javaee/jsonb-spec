@@ -45,8 +45,9 @@ import javax.json.stream.JsonParser;
 import java.lang.reflect.Type;
 
 /**
- * JSONB Mapper functionality on top of JSONP parser.
+ * Provides JSONB Mapper functionality on top of JSONP parser.
  *
+ * @see JsonbDeserializer
  * @since JSON Binding 1.0
  */
 public interface DeserializationContext {
@@ -69,10 +70,10 @@ public interface DeserializationContext {
      * @param clazz
      *      Type to deserialize into. No arg constructor required.
      * @param parser
-     *      JSONP parser to drive
+     *      JSONP parser to drive.
      * @param <T>
-     *      Type of class
-     * @return Deserialized instance
+     *      Type of class.
+     * @return Deserialized instance.
      */
     <T> T deserialize(Class<T> clazz, JsonParser parser);
 
@@ -94,10 +95,10 @@ public interface DeserializationContext {
      * @param type
      *      Type to deserialize into. No arg constructor required.
      * @param parser
-     *      JSONP parser to drive
+     *      JSONP parser to drive.
      * @param <T>
-     *      Type to deserialize into
-     * @return Deserialized instance
+     *      Type to deserialize into.
+     * @return Deserialized instance.
      */
     <T> T deserialize(Type type, JsonParser parser);
 }

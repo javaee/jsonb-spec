@@ -393,13 +393,13 @@ public class JsonbConfig {
     }
 
     /**
-     * Property used to specify custom date format.
+     * Property used to specify custom date format. This format will be used by default for all date classes
+     * serialization and deserialization.
      *
      * @param dateFormat
-     *      Custom date format as specified in {@link java.text.SimpleDateFormat} used be default for all
-     *      dates serialization and deserialization.
+     *      Custom date format as specified in {@link java.time.format.DateTimeFormatter}.
      * @param locale
-     *      Locale, default is null
+     *      Locale, default is null.
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withDateFormat(final String dateFormat, final Locale locale) {
@@ -411,7 +411,7 @@ public class JsonbConfig {
      * Property used to specify custom locale.
      *
      * @param locale
-     *      Locale, must not be null
+     *      Locale, must not be null.
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withLocale(final Locale locale) {

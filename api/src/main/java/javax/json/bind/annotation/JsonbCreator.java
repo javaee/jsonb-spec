@@ -45,23 +45,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>
- *     Annotation provides way how to use custom constructor or factory method
- *     to create instance of the associated class.
- * </p>
+ * <p>Annotation provides way how to use custom constructor or factory method to create instance of the associated
+ * class.</p>
  *
- * <p>
- *     Only one constructor or static factory method can be annotated
- *     with {@code JsonbCreator} in a given class.
- * </p>
- * <p>
- *     The {@code @JsonbCreator} annotation is intended to be used with
- *     constructors/methods with parameters. Such parameters could be
- *     annotated for instance with {@code @JsonbProperty}.
- * </p>
+ * <p>Only one constructor or static factory method can be annotated with {@code JsonbCreator} in a given class.</p>
+ *
+ * <p>The {@code @JsonbCreator} annotation is intended to be used with constructors/methods with parameters.
+ * Such parameters could be annotated for instance with {@code @JsonbProperty}.</p>
+ *
  * <p><b>Usage</b></p>
- * <p> The {@code @JsonbCreator} annotation can be used with the following
- *     program elements:
+ * <p>The {@code @JsonbCreator} annotation can be used with the followingprogram elements:</p>
  * <ul>
  *   <li> method </li>
  *   <li> constructor </li>

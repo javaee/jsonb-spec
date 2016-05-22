@@ -45,6 +45,7 @@ import javax.json.stream.JsonGenerator;
 /**
  * Provides JSONB internals for custom serializers.
  *
+ * @see JsonbSerializer
  * @since JSON Binding 1.0
  */
 public interface SerializationContext {
@@ -55,13 +56,13 @@ public interface SerializationContext {
      * instance is shared with JSONB and user serializer.
      *
      * @param key
-     *      JSON key name
+     *      JSON key name.
      * @param object
-     *      Object to serialize
+     *      Object to serialize.
      * @param generator
-     *      JSONP generator to serialize with
+     *      JSONP generator to serialize with.
      * @param <T>
-     *      Type of serialized object
+     *      Type of serialized object.
      */
     <T> void serialize(String key, T object, JsonGenerator generator);
 
@@ -73,11 +74,11 @@ public interface SerializationContext {
      * Method without key parameter is intended to serialize inside JSON_ARRAYs.
      *
      * @param object
-     *      Object to serialize
+     *      Object to serialize.
      * @param generator
-     *      JSONP generator to serialize with
+     *      JSONP generator to serialize with.
      * @param <T>
-     *      Type of serialized object
+     *      Type of serialized object.
      */
     <T> void serialize(T object, JsonGenerator generator);
 }

@@ -45,8 +45,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>Annotation provides way how to use custom constructor or factory method to create instance of the associated
- * class.</p>
+ * <p>This annotation identifies the custom constructor or factory method to use when creating an instance
+ * of the associated class.</p>
  *
  * <p>Only one constructor or static factory method can be annotated with {@code JsonbCreator} in a given class.</p>
  *

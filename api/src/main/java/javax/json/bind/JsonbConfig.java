@@ -91,7 +91,7 @@ public class JsonbConfig {
 
     /**
      * Property used to specify whether or not the serialized
-     * JSON data is formatted with linefeeds and indentation.
+     * JSON data is formatted with line feeds and indentation.
      */
     public static final String FORMATTING = "jsonb.formatting";
 
@@ -187,7 +187,7 @@ public class JsonbConfig {
      * Return value of particular configuration property. The method can
      * only be used to retrieve one of the standard JSON Binding properties defined
      * in this class or a provider specific property. Attempting to get an undefined
-     * property will result in a JsonbException being thrown.
+     * property will result in an empty Optional value.
      * See <a href="#supportedProps"> Supported Properties</a>.
      *
      * @param name

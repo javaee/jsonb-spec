@@ -73,7 +73,7 @@ package javax.json.bind.adapter;
  * <p>Sample 2:</p>
  * <pre>
  * {@code
- *      BoxToCrateAdapter<T> implements JsonbAdapter<Box<T>, Integer<T>> {...};
+ *      BoxToCrateAdapter<T> implements JsonbAdapter<Box<T>, Integer> {...};
  *
  *      // Bad way: Generic type information is lost due to type erasure
  *      jsonbConfig.withAdapters(new BoxToCrateAdapter<Integer>());

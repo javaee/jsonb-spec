@@ -468,7 +468,7 @@
                         <update>false</update>
                         <!-- check that year is correct -->
                         <ignoreYear>false</ignoreYear>
-                        <templateFile>etc/config/copyright.txt</templateFile>
+                        <templateFile>${project.build.directory}/../etc/config/copyright.txt</templateFile>
                     </configuration>
                     <executions>
                         <execution>

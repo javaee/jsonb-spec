@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, 2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -82,7 +82,7 @@ public abstract class JsonbProvider {
      * A constant representing the name of the default
      * {@link javax.json.bind.spi.JsonbProvider JsonbProvider} implementation class.
      */
-    private static final String DEFAULT_PROVIDER = "org.eclipse.persistence.json.bind.JsonBindingProvider";
+    private static final String DEFAULT_PROVIDER = "org.eclipse.yasson.JsonBindingProvider";
 
     /**
      * Creates a JSON Binding provider object by using the

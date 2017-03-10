@@ -75,7 +75,7 @@ import java.lang.reflect.Type;
  * Reading (deserializing) object content tree from a File:<br><br>
  *    <pre>
  *     Jsonb jsonb = JsonbBuilder.create();
- *     Book book = jsonb.fromJson(new File("jsonfile.json"), Book.class);</pre>
+ *     Book book = jsonb.fromJson(new FileReader("jsonfile.json"), Book.class);</pre>
  * If the deserialization process is unable to deserialize the JSON content to an object
  * content tree, fatal error is reported that terminates processing by
  * throwing JsonbException.
@@ -89,7 +89,7 @@ import java.lang.reflect.Type;
  * <blockquote>
  * Writing (serializing) object content tree to a File:<br><br>
  *    <pre>
- *     jsonb.toJson(object, new File("foo.json");</pre>
+ *     jsonb.toJson(object, new FileWriter("foo.json"));</pre>
  * Writing (serializing) to a Writer:<br><br>
  *    <pre>
  *     jsonb.toJson(object, new PrintWriter(System.out));

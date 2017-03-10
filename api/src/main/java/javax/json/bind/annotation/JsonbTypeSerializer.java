@@ -54,6 +54,7 @@ import java.lang.annotation.Target;
  * <p><b>Usage</b></p>
  * <p>The {@code @JsonbSerializer} annotation can be used with the following program elements:</p>
  * <ul>
+ *   <li> type </li>
  *   <li> field </li>
  *   <li> method </li>
  * </ul>

@@ -60,9 +60,19 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
  *
  * <p>{@code @JsonbTransient} is mutually exclusive with all other JSON Binding defined annotations. </p>
  *
+ * <p>If a class field is annotated with {@code @JsonbTransient}, exception is thrown when this field,
+ * getter or setter is annotated with other JSON Binding annotations.</p>
+ *
+ * <p>If a getter is annotated with {@code @JsonbTransient}, exception is thrown if when the field
+ * or this getter are annotated with other JSON Binding annotations. Exception is not thrown
+ * if JSON Binding annotations are presented on the setter.</p>
+ *
+ * <p>If a setter is annotated with {@code @JsonbTransient}, exception is thrown if when the field
+ * or this setter are annotated with other JSON Binding annotations. Exception is not thrown
+ * if JSON Binding annotations are presented on the getter.</p>
+ *
  * @since JSON Binding 1.0
  */
-
 @JsonbAnnotation
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ANNOTATION_TYPE, FIELD, METHOD})

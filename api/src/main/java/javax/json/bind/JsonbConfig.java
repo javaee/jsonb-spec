@@ -347,7 +347,15 @@ public class JsonbConfig {
      * @return This JsonbConfig instance.
      */
     public final JsonbConfig withAdapters(final JsonbAdapter... adapters) {
-        return setProperty(ADAPTERS, adapters);
+        final Optional<Object> property = getProperty(ADAPTERS);
+        if (!property.isPresent()) {
+            return setProperty(ADAPTERS, adapters);
+        }
+        JsonbAdapter[] storedAdapters = (JsonbAdapter[]) property.get();
+        JsonbAdapter[] newAdapters = new JsonbAdapter[storedAdapters.length + adapters.length];
+        System.arraycopy(storedAdapters, 0, newAdapters, 0, storedAdapters.length);
+        System.arraycopy(adapters, 0, newAdapters, storedAdapters.length + 1, adapters.length);
+        return setProperty(ADAPTERS, newAdapters);
     }
 
     /**

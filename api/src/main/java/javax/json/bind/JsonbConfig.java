@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, 2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -163,9 +163,7 @@ public class JsonbConfig {
     /**
      * Set the particular configuration property to a new value. The method can
      * only be used to set one of the standard JSON Binding properties defined in
-     * this class or a provider specific property. Attempting to set an undefined
-     * property will result in a JsonbException being thrown.
-     * See <a href="#supportedProps"> Supported Properties</a>.
+     * this class or a provider specific property.
      *
      * @param name
      *      The name of the property to be set. This value can either

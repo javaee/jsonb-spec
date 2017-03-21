@@ -161,12 +161,6 @@ public class JsonbConfig {
     public static final String LOCALE = "jsonb.locale";
 
     /**
-     * Property used to specify behaviour on deserialization when JSON document contains properties
-     * which doesn't exist in the target class. Default value is 'true'.
-     */
-    public static final String FAIL_ON_UNKNOWN_PROPERTIES = "jsonb.fail-on-unknown-properties";
-
-    /**
      * Set the particular configuration property to a new value. The method can
      * only be used to set one of the standard JSON Binding properties defined in
      * this class or a provider specific property.
@@ -428,16 +422,5 @@ public class JsonbConfig {
      */
     public final JsonbConfig withLocale(final Locale locale) {
         return setProperty(LOCALE, locale);
-    }
-
-    /**
-     * Property used to specify custom locale.
-     *
-     * @param failOnUnknownProperties
-     *      Indicates whatever JSON-B should fail if JSON property doesn't exist in the target class.
-     * @return This JsonbConfig instance.
-     */
-    public final JsonbConfig withFailOnUnknownProperties(final Boolean failOnUnknownProperties) {
-        return setProperty(FAIL_ON_UNKNOWN_PROPERTIES, failOnUnknownProperties);
     }
 }

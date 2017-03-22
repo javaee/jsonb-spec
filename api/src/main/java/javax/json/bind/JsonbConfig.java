@@ -421,7 +421,7 @@ public class JsonbConfig {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void mergeProperties(String propertyKey, T[] values, Class<T> tClass) {
+    private <T> void mergeProperties(final String propertyKey, final T[] values, final Class<T> tClass) {
         final Optional<Object> property = getProperty(propertyKey);
         if (!property.isPresent()) {
             setProperty(propertyKey, values);

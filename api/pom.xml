@@ -96,7 +96,7 @@
         <connection>scm:git:git://java.net/jsonb-spec~git</connection>
         <developerConnection>scm:git:ssh://git.java.net/jsonb-spec~git</developerConnection>
         <url>http://java.net/projects/jsonb-spec/sources/git/show</url>
-        <tag>javax.json.bind-api-1.0.0-M2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>

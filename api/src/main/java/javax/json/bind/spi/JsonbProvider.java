@@ -85,6 +85,12 @@ public abstract class JsonbProvider {
     private static final String DEFAULT_PROVIDER = "org.eclipse.yasson.JsonBindingProvider";
 
     /**
+     * Protected constructor.
+     */
+    protected JsonbProvider() {
+    }
+
+    /**
      * Creates a JSON Binding provider object by using the
      * {@link java.util.ServiceLoader#load(Class)} method. The first provider of
      * {@code JsonbProvider} class from list of providers returned by

@@ -1,0 +1,31 @@
+# maven noise
+target
+
+# osx noise
+.DS_Store
+profile
+
+#IntelliJ Idea noise
+.idea
+*.iws
+*.ipr
+*.iml
+
+# TeX build noise
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.tex~
+*.thm
+*.toc
+/spec/Makefile.fdb_latexmk
+/spec/Makefile.fls
+/spec/spec.synctex.gz
+/spec/spec.xwm
+
+# eclipse noise
+.settings/
+.classpath
+.project

@@ -46,10 +46,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p>Specifies order in which fields (or JavaBean properties) will be serialized.</p>
+ * <p>Specifies order in which properties are serialized.</p>
  *
- * <p>Partial mapping can also be specified. In that case, the order of properties not specified in partial
- * mapping is not defined and thus not guaranteed.</p>
+ * <p>Partial mapping can also be specified. In that case, properties included
+ * in annotation declaration will be serialized first (in defined order), followed
+ * by any properties not included in the definition. The order of properties not
+ * included in the definition is not guaranteed.</p>
  *
  * @since JSON Binding 1.0
  */
@@ -59,7 +61,8 @@ import java.lang.annotation.Target;
 public @interface JsonbPropertyOrder {
 
     /**
-     * Order in which fields (or JavaBean properties) will be serialized.
+     * Order in which properties are serialized. Names must correspond to original
+     * names defined in Java class before any customization applied.
      */
     String[] value();
 }

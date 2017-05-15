@@ -363,7 +363,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                     <extensions>true</extensions>
                     <configuration>
                         <instructions>
@@ -376,9 +376,8 @@
                             <Implementation-Version>${spec.implementation.version}</Implementation-Version>
                             <Specification-Version>${spec.specification.version}</Specification-Version>
                             <Specification-Vendor>Oracle Corporation</Specification-Vendor>
-                            <specversion>${spec.specification.version}</specversion>
-                            <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
                             <_nodefaultversion>false</_nodefaultversion>
+                            <Export-Package>javax.json.bind.*</Export-Package>
                             <_failok>true</_failok> <!-- FIXME: FELIX-5430 -->
                         </instructions>
                     </configuration>
@@ -658,7 +657,7 @@
         <non.final>true</non.final>
         <skip.release.tests>false</skip.release.tests>
         <spec.version>${last.final.spec.version}</spec.version>
-        <javax.json.version>1.1.0-M1</javax.json.version>
+        <javax.json.version>1.1.0-M2</javax.json.version>
     </properties>
 
     <reporting>

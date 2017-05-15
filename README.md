@@ -7,6 +7,7 @@ JSON-B is a standard binding layer for converting Java objects to/from JSON mess
 [Java API for JSON Binding 1.0 Specification license](https://jcp.org/aboutJava/communityprocess/licenses/jsr367/SpecLicense-JSR_367_JSON_B-1.0-8.18.14.pdf)
 
 ## Links
-- JSON-B official web site: https://json-p.net
+- JSON-B official web site: http://json-b.net
+- Discussion groups: https://javaee.groups.io/g/jsonb-spec
 - JSR-367 page on JCP site: https://jcp.org/en/jsr/detail?id=367
 - Yasson (Reference Implementation): https://github.com/eclipse/yasson

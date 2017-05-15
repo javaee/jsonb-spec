@@ -65,6 +65,8 @@ public @interface JsonbTypeAdapter {
 
     /**
      * Custom JsonbAdapter which provides custom mapping for given field or JavaBean property.
+     *
+     * @return Adapter to use.
      */
     Class<? extends JsonbAdapter> value();
 }

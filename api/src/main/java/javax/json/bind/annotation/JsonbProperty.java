@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015, 2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -65,14 +65,16 @@ import java.lang.annotation.Target;
 public @interface JsonbProperty {
 
     /**
-     *
      * Customized name of the field (or JavaBean property).
+     *
+     * @return Customized property name.
      */
     String value() default "";
 
     /**
+     * Switches o/off serialization of null values.
      *
-     * True if field with null value should be serialized as key/value pair into JSON with null value.
+     * @return True if field with null value should be serialized as key/value pair into JSON with null value.
      */
     boolean nillable() default false;
 }

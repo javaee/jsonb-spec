@@ -67,7 +67,9 @@ import java.lang.annotation.Target;
 public @interface JsonbTypeSerializer {
 
     /**
-     * Custom JsonbSerializer which provides custom mapping for given field or JavaBean property.
+     * Custom {@link JsonbSerializer} which provides custom mapping for given field or JavaBean property.
+     *
+     * @return Serializaer to use.
      */
     Class<? extends JsonbSerializer> value();
 }

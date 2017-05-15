@@ -70,7 +70,9 @@ import java.lang.annotation.Target;
 public @interface JsonbTypeDeserializer {
 
     /**
-     * Custom JsonbDeserializer which provides custom mapping for given field or JavaBean property.
+     * Custom {@link JsonbDeserializer} which provides custom mapping for given field or JavaBean property.
+     *
+     * @return Deserializer to use.
      */
     Class<? extends JsonbDeserializer> value();
 }

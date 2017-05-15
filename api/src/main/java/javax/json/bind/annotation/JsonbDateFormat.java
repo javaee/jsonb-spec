@@ -85,11 +85,15 @@ public @interface JsonbDateFormat {
 
     /**
      * Specifies the date pattern to use.
+     *
+     * @return Date pattern to use.
      */
     String value() default DEFAULT_FORMAT;
 
     /**
      * Custom {@link java.util.Locale} to use.
+     *
+     * @return Locale to use.
      */
     String locale() default DEFAULT_LOCALE;
 

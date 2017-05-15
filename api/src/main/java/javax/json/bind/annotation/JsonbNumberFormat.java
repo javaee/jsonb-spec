@@ -74,11 +74,15 @@ public @interface JsonbNumberFormat {
 
     /**
      * Specifies the number pattern to use.
+     *
+     * @return Number pattern to use.
      */
     String value() default "";
 
     /**
      * Custom {@link java.util.Locale} to use.
+     *
+     * @return Custom locale to use.
      */
     String locale() default DEFAULT_LOCALE;
 }

@@ -10,12 +10,12 @@
     and Distribution License("CDDL") (collectively, the "License").  You
     may not use this file except in compliance with the License.  You can
     obtain a copy of the License at
-    https://glassfish.java.net/public/CDDL+GPL_1_1.html
-    or packager/legal/LICENSE.txt.  See the License for the specific
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
     language governing permissions and limitations under the License.
 
     When distributing the software, include this License Header Notice in each
-    file and include the License file at packager/legal/LICENSE.txt.
+    file and include the License file at LICENSE.txt.
 
     GPL Classpath Exception:
     Oracle designates this particular file as subject to the "Classpath"
@@ -56,46 +56,37 @@
     <packaging>jar</packaging>
     <name>javax.json.bind-api</name>
 
-    <url>http://jsonb-spec.java.net</url>
+    <url>https://javaee.github.io/jsonb-spec</url>
 
     <organization>
         <name>Oracle Corporation</name>
-        <url>http://www.oracle.com/</url>
+        <url>http://www.oracle.com</url>
     </organization>
 
     <issueManagement>
-        <system>jira</system>
-        <url>http://java.net/jira/browse/JSONB_SPEC</url>
+        <system>github</system>
+        <url>https://github.com/javaee/jsonb-spec/issues</url>
     </issueManagement>
 
     <mailingLists>
         <mailingList>
-            <name>JSR367 Expert Group List</name>
-            <archive>jsr367-experts@jsonb-spec.java.net</archive>
-        </mailingList>
-        <mailingList>
-            <name>JSON-Binding Users List</name>
-            <archive>users@jsonb-spec.java.net</archive>
+            <name>JSON-B Discussion Group </name>
+            <archive>jsonb-spec@javaee.groups.io</archive>
         </mailingList>
     </mailingLists>
 
     <licenses>
         <license>
-            <name>CDDL 1.1</name>
-            <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
-            <distribution>repo</distribution>
-        </license>
-        <license>
-            <name>GPL2 w/ CPE</name>
-            <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+            <name>Dual license consisting of the CDDL v1.1 and GPL v2</name>
+            <url>https://oss.oracle.com/licenses/CDDL+GPL-1.1</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
 
     <scm>
-        <connection>scm:git:git://java.net/jsonb-spec~git</connection>
-        <developerConnection>scm:git:ssh://git.java.net/jsonb-spec~git</developerConnection>
-        <url>http://java.net/projects/jsonb-spec/sources/git/show</url>
+        <connection>scm:git:git://github.com/javaee/jsonb-spec.git</connection>
+        <developerConnection>scm:git:git@github.com:javaee/jsonb-spec.git</developerConnection>
+        <url>https://github.com/javaee/jsonb-spec</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -105,9 +96,8 @@
             <id>maiden168</id>
             <name>Dmitry Kornilov</name>
             <organization>Oracle</organization>
-            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
             <roles>
-                <role>JSON Binding 1.0 Spec Lead</role>
+                <role>Spec Lead</role>
             </roles>
             <timezone>CET</timezone>
         </developer>
@@ -116,32 +106,8 @@
             <id>roman.grigoriadi</id>
             <name>Roman Grigoriadi</name>
             <organization>Oracle</organization>
-            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
             <roles>
-                <role>JSON Binding 1.0 Developer</role>
-            </roles>
-            <timezone>CET</timezone>
-        </developer>
-        <developer>
-            <email>snajper@java.net</email>
-            <id>MartiNG</id>
-            <name>Martin Grebac</name>
-            <organization>Oracle</organization>
-            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
-            <roles>
-                <role>JSON Binding 1.0 Co-Spec Lead</role>
-            </roles>
-            <timezone>CET</timezone>
-            <url>https://blogs.oracle.com/mgrebac/</url>
-        </developer>
-        <developer>
-            <email>voyto@java.net</email>
-            <id>MartinV</id>
-            <name>Martin Vojtek</name>
-            <organization>Oracle</organization>
-            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
-            <roles>
-                <role>JSON Binding 1.0 Co-Spec Lead</role>
+                <role>Developer</role>
             </roles>
             <timezone>CET</timezone>
         </developer>

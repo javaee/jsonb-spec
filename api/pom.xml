@@ -477,7 +477,7 @@
                     <artifactId>glassfish-copyright-maven-plugin</artifactId>
                     <version>1.40</version>
                     <configuration>
-                        <excludeFile>${project.build.directory}/../etc/config/copyright-exclude</excludeFile>
+                        <excludeFile>${basedir}/../etc/config/copyright-exclude</excludeFile>
                         <!--svn|mercurial|git - defaults to svn-->
                         <scm>git</scm>
                         <!-- turn on/off debugging -->
@@ -490,7 +490,7 @@
                         <update>false</update>
                         <!-- check that year is correct -->
                         <ignoreYear>false</ignoreYear>
-                        <templateFile>${project.build.directory}/../etc/config/copyright.txt</templateFile>
+                        <templateFile>${basedir}/../etc/config/copyright.txt</templateFile>
                     </configuration>
                     <executions>
                         <execution>
@@ -504,12 +504,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.15</version>
+                    <version>2.17</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>6.2</version>
+                            <version>6.11.2</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -624,7 +624,7 @@
         <non.final>true</non.final>
         <skip.release.tests>false</skip.release.tests>
         <spec.version>${last.final.spec.version}</spec.version>
-        <javax.json.version>1.1.0-M2</javax.json.version>
+        <javax.json.version>1.1</javax.json.version>
     </properties>
 
     <reporting>

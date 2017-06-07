@@ -27,3 +27,6 @@
 /META-INF/services/
 /README
 spec-license.html
+copyright-exclude
+api/etc/config/copyright.txt
+nb-configuration.xml

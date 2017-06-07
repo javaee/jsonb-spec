@@ -617,7 +617,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <last.final.spec.version>0.2</last.final.spec.version>
+        <last.final.spec.version>0.9</last.final.spec.version>
         <milestone.number>01</milestone.number>
         <next.final.spec.version>1.0</next.final.spec.version>
         <new.spec.version>${next.final.spec.version}</new.spec.version>

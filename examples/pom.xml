@@ -3,7 +3,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 2015, 2017 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -51,74 +51,62 @@
 
     <groupId>javax.json.bind</groupId>
     <artifactId>javax.json.bind-examples</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>javax.json.bind-examples</name>
 
-    <url>http://jsonb-spec.java.net</url>
+    <url>https://javaee.github.io/jsonb-spec</url>
 
     <organization>
         <name>Oracle Corporation</name>
-        <url>http://www.oracle.com/</url>
+        <url>http://www.oracle.com</url>
     </organization>
 
     <issueManagement>
-        <system>jira</system>
-        <url>http://java.net/jira/browse/JSONB_SPEC</url>
+        <system>github</system>
+        <url>https://github.com/javaee/jsonb-spec/issues</url>
     </issueManagement>
 
     <mailingLists>
         <mailingList>
-            <name>JSR367 Expert Group List</name>
-            <archive>jsr367-experts@jsonb-spec.java.net</archive>
-        </mailingList>
-        <mailingList>
-            <name>JSON-Binding Users List</name>
-            <archive>users@jsonb-spec.java.net</archive>
+            <name>JSON-B Discussion Group </name>
+            <archive>jsonb-spec@javaee.groups.io</archive>
         </mailingList>
     </mailingLists>
 
     <licenses>
         <license>
-            <name>CDDL 1.1</name>
-            <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
-            <distribution>repo</distribution>
-        </license>
-        <license>
-            <name>GPL2 w/ CPE</name>
-            <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+            <name>Dual license consisting of the CDDL v1.1 and GPL v2</name>
+            <url>https://oss.oracle.com/licenses/CDDL+GPL-1.1</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
 
     <scm>
-        <connection>scm:git:git://java.net/jsonb-spec~git</connection>
-        <developerConnection>scm:git:ssh://git.java.net/jsonb-spec~git</developerConnection>
-        <url>http://java.net/projects/jsonb-spec/sources/git/show</url>
+        <connection>scm:git:git://github.com/javaee/jsonb-spec.git</connection>
+        <developerConnection>scm:git:git@github.com:javaee/jsonb-spec.git</developerConnection>
+        <url>https://github.com/javaee/jsonb-spec</url>
         <tag>HEAD</tag>
     </scm>
 
     <developers>
         <developer>
-            <email>snajper@java.net</email>
-            <id>MartiNG</id>
-            <name>Martin Grebac</name>
+            <email>dmitry.kornilov@oracle.com</email>
+            <id>maiden168</id>
+            <name>Dmitry Kornilov</name>
             <organization>Oracle</organization>
-            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
             <roles>
-                <role>JSON Binding 1.0 Spec Lead</role>
+                <role>Spec Lead</role>
             </roles>
             <timezone>CET</timezone>
-            <url>https://blogs.oracle.com/mgrebac/</url>
         </developer>
         <developer>
-            <email>voyto@java.net</email>
-            <id>MartinV</id>
-            <name>Martin Vojtek</name>
+            <email>roman.grigoriadi@oracle.com</email>
+            <id>roman.grigoriadi</id>
+            <name>Roman Grigoriadi</name>
             <organization>Oracle</organization>
-            <organizationUrl>http://jsonb-spec.java.net</organizationUrl>
             <roles>
-                <role>JSON Binding 1.0 Co-Spec Lead</role>
+                <role>Developer</role>
             </roles>
             <timezone>CET</timezone>
         </developer>
@@ -247,7 +235,6 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>2.13</version>
                     <configuration>
-                        <outputDirectory>${project.build.directory}/checkstyle</outputDirectory>
                         <outputFile>${project.build.directory}/checkstyle/checkstyle-result.xml</outputFile>
                         <configLocation>${basedir}/../../etc/config/checkstyle.xml</configLocation>
                     </configuration>
@@ -330,12 +317,12 @@
             <dependency>
                 <groupId>javax.json.bind</groupId>
                 <artifactId>javax.json.bind-api</artifactId>
-                <version>0.1-SNAPSHOT</version>
+                <version>1.0.0-RC2</version>
             </dependency>
             <dependency>
                 <groupId>javax.json</groupId>
                 <artifactId>javax.json-api</artifactId>
-                <version>1.0</version>
+                <version>1.1</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
@@ -350,7 +337,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.4</version>
             </plugin>
         </plugins>
     </reporting>

@@ -1,8 +1,47 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2015, 2017 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
 package examples.mapping;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbException;
 import java.util.*;
 
 import static examples.mapping.Utils.*;
@@ -16,15 +55,14 @@ public class DefaultMappingGenerics {
     }
 
     public static void toJson_generics(Jsonb jsonb) throws Exception {
-
-        //standard generic class
+        // Standard generic class
         MyGenericClass<String, Integer> myGenericClassField = new MyGenericClass<>();
         myGenericClassField.field1 = "value1";
         myGenericClassField.field2 = 3;
 
         assertEquals("{\"field1\":\"value1\",\"field2\":3}", jsonb.toJson(myGenericClassField));
 
-        //cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
+        // Cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
         MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = new MyCyclicGenericClass<>();
         CyclicSubClass cyclicSubClass = new CyclicSubClass();
         cyclicSubClass.subField = "subFieldValue";
@@ -32,7 +70,7 @@ public class DefaultMappingGenerics {
 
         assertEquals("{\"field1\":{\"subField\":\"subFieldValue\"}}", jsonb.toJson(myCyclicGenericClass));
 
-        //functional interface
+        // Functional interface
         FunctionalInterface<String> myFunction = () -> {return "value1";};
 
         assertEquals("{\"value\":\"value1\"}", jsonb.toJson(myFunction));
@@ -53,14 +91,14 @@ public class DefaultMappingGenerics {
 
         assertEquals("{\"value\":\"initValue\"}", jsonb.toJson(myFunction));
 
-        //nested generic with concrete parameter type
+        // Nested generic with concrete parameter type
         NestedGenericConcreteClass nestedGenericConcreteClass = new NestedGenericConcreteClass();
         nestedGenericConcreteClass.list = new ArrayList<>();
         nestedGenericConcreteClass.list.add("value1");
 
         assertEquals("{\"list\":[\"value1\"]}", jsonb.toJson(nestedGenericConcreteClass));
 
-        //generic with wildcard
+        // Generic with wildcard
         GenericWithWildcardClass genericWithWildcardClass = new GenericWithWildcardClass();
 
         List<Map<String, String>> list = new ArrayList<>();
@@ -74,7 +112,7 @@ public class DefaultMappingGenerics {
 
         assertEquals("{\"wildcardList\":[{\"k1\":\"v1\"}]}", jsonb.toJson(genericWithWildcardClass));
 
-        //multi level generics
+        // Multi-level generics
         MyGenericClass<MyGenericClass<String, String>, Integer> multiLevelGeneric = new MyGenericClass<>();
 
         MyGenericClass<String, String> myGenericClass = new MyGenericClass<>();
@@ -86,7 +124,7 @@ public class DefaultMappingGenerics {
 
         assertEquals("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}", jsonb.toJson(multiLevelGeneric));
 
-        //bounded generics
+        // Bounded generics
         BoundedGenericClass<HashSet<Integer>, Circle> boundedGenericClass = new BoundedGenericClass<>();
         List<Shape> shapeList = new ArrayList<>();
         DefaultMappingGenerics defaultMappingGenerics = new DefaultMappingGenerics();
@@ -123,39 +161,39 @@ public class DefaultMappingGenerics {
         MyGenericClass<String, Integer> myGenericInstance = jsonb.fromJson("{\"field1\":\"value1\", \"field2\":1}",
                 DefaultMappingGenerics.class.getField("myGenericClassField").getGenericType());
 
-        //cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
+        // Cyclic generic class is not supported by default mapping, but may be supported by JSON Binding implementations
         MyCyclicGenericClass<CyclicSubClass> myCyclicGenericClass = jsonb.fromJson("{\"field1\":{\"subField\":\"subFieldValue\"}}",
                 DefaultMappingGenerics.class.getField("myCyclicGenericClassField").getGenericType());
 
-        //deserialize into (generic) interface is by default unsupported (with the exception of concrete interfaces
-        //defined elsewhere in default mapping, e.g. java.lang.Number)
+        // Deserialize into (generic) interface is by default unsupported (with the exception of concrete interfaces
+        // defined elsewhere in default mapping, e.g. java.lang.Number)
 
-        //nested generic concrete class, I am able to access signature of List<String> from class file
+        // Nested generic concrete class, I am able to access signature of List<String> from class file
         NestedGenericConcreteClass nestedGenericConcreteClass = jsonb.fromJson("{\"list\":[\"value1\"]}", NestedGenericConcreteClass.class);
 
-        //generic with wildcard
+        // Generic with wildcard
 
-        //wildcardList is treated as List<Object>
+        // WildcardList is treated as List<Object>
         GenericWithWildcardClass genericWithWildcardClass = jsonb.fromJson("{\"wildcardList\":[{\"k1\":\"v1\"}]}", GenericWithWildcardClass.class);
         assert(genericWithWildcardClass.wildcardList.get(0) instanceof Map);
 
-        //multi level generics
+        // Multi-level generics
 
-        //T,U is treated as Object
+        // T,U is treated as Object
         MyGenericClass multiLevelGeneric = jsonb.fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}", MyGenericClass.class);
 
         assert(multiLevelGeneric.field1 instanceof Map);
         assert(multiLevelGeneric.field2 instanceof Integer);
 
-        //deserialize with runtime type
+        // Deserialize with runtime type
         MyGenericClass<MyGenericClass<String, String>, Integer> myGenericClass = jsonb.fromJson("{\"field1\":{\"field1\":\"f1\",\"field2\":\"f2\"},\"field2\":3}",
                 DefaultMappingGenerics.class.getField("multiLevelGenericClassField").getGenericType());
 
-        //bounded generics
+        // Bounded generics
         BoundedGenericClass<HashSet<Integer>, Circle> boundedGeneric = jsonb.fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
                 DefaultMappingGenerics.class.getField("boundedGenericClass").getGenericType());
 
-        //exception incompatible types
+        // Exception incompatible types
         try {
             BoundedGenericClass<HashSet<Integer>, Circle> otherGeneric = jsonb.fromJson("{\"boundedSet\":[3],\"superList\":[{\"radius\":2.5}]}",
                     DefaultMappingGenerics.class.getField("otherBoundedGenericClass").getGenericType());
@@ -164,8 +202,8 @@ public class DefaultMappingGenerics {
             System.out.println("intValue="+intValue);
             assert(false);
         } catch (ClassCastException e) {
-            //exception - incompatible types
-            //Double cannot be converted to Integer
+            // Exception - incompatible types
+            // Double cannot be converted to Integer
         }
     }
 
@@ -176,7 +214,7 @@ public class DefaultMappingGenerics {
         public BoundedGenericClass() {}
     }
 
-    static interface FunctionalInterface<T> {
+    interface FunctionalInterface<T> {
         public T getValue();
     }
 

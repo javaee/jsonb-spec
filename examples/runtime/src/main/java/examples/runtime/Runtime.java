@@ -43,12 +43,14 @@ package examples.runtime;
 import examples.model.Author;
 import examples.model.Book;
 import examples.model.Language;
+
 import java.nio.charset.StandardCharsets;
 import javax.json.bind.Jsonb;
 
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
-import org.eclipse.persistence.json.bind.CustomJsonbBuilder;
+
+import com.example.jsonb.CustomJsonbBuilder;
 
 public class Runtime {
 
@@ -62,71 +64,71 @@ public class Runtime {
         book.author.firstName = "Jara";
         book.author.lastName = "Cimrman";
 
-/**
- * Shortcut use
- */
-{
-        Jsonb jsonb = JsonbBuilder.create();
-
         /**
-         * Write an object content tree using default JSON mapping
-            {
-              "id" : 101,
-              "author" : {
-                "firstName" : "Jara",
-                "lastName" : "Cimrman"
-              },
-              "lang" : "CZECH"
-            }
-        */
-        String json = jsonb.toJson(book);
-
-        /**
-         * Read JSON document (from above) into an object content tree using default mapping
+         * Shortcut use
          */
-        Book b = jsonb.fromJson(json, Book.class);
-}
+        {
+            Jsonb jsonb = JsonbBuilder.create();
 
-/**
- * Default, reuse
- */
-{
-        Jsonb jsonb = JsonbBuilder.create();
-        String json = jsonb.toJson(book);
-        Book b = jsonb.fromJson(json, Book.class);
-}
+            /**
+             * Write an object content tree using default JSON mapping
+             {
+             "id" : 101,
+             "author" : {
+             "firstName" : "Jara",
+             "lastName" : "Cimrman"
+             },
+             "lang" : "CZECH"
+             }
+             */
+            String json = jsonb.toJson(book);
 
-/**
- * Custom providers
- */
-{
-        // Lookup different provider by provider class name
-        JsonbBuilder.newBuilder("foo.bar.ProviderImpl").build();
+            /**
+             * Read JSON document (from above) into an object content tree using default mapping
+             */
+            Book b = jsonb.fromJson(json, Book.class);
+        }
 
-        // Use an explicit implementation of JsonbProvider
-        Jsonb jsonb = new CustomJsonbBuilder().build();
-}
+        /**
+         * Default, reuse
+         */
+        {
+            Jsonb jsonb = JsonbBuilder.create();
+            String json = jsonb.toJson(book);
+            Book b = jsonb.fromJson(json, Book.class);
+        }
 
-/**
- * Configuration
- */
+        /**
+         * Custom providers
+         */
+        {
+            // Lookup different provider by provider class name
+            JsonbBuilder.newBuilder("foo.bar.ProviderImpl").build();
 
-    JsonbConfig config = new JsonbConfig()
-                            .withEncoding(StandardCharsets.UTF_16.name())
-                            .withFormatting(true);
+            // Use an explicit implementation of JsonbProvider
+            Jsonb jsonb = new CustomJsonbBuilder().build();
+        }
 
-{
-    // Default configuration
-    Jsonb jsonb = JsonbBuilder.create(config);
-    String json = jsonb.toJson(book);
-}
-{
-    // Default configuration with specific builder
-    Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl")
+        /**
+         * Configuration
+         */
+        JsonbConfig config = new JsonbConfig()
+                .withEncoding(StandardCharsets.UTF_16.name())
+                .withFormatting(true);
+
+        {
+            // Default configuration
+            Jsonb jsonb = JsonbBuilder.create(config);
+            String json = jsonb.toJson(book);
+        }
+
+        {
+            // Default configuration with specific builder
+            Jsonb jsonb = JsonbBuilder.newBuilder("foo.bar.ProviderImpl")
                     .withConfig(config)
                     .build();
-    jsonb.toJson(book);
-}
+            jsonb.toJson(book);
+        }
 
     }
 }

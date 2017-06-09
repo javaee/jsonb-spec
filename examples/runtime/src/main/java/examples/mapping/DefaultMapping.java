@@ -1,3 +1,43 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 2015, 2017 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
 package examples.mapping;
 
 import javax.json.*;
@@ -14,29 +54,29 @@ import static examples.mapping.Utils.*;
 public class DefaultMapping {
 
     public static void main(String[] args) throws Exception {
-        //statements true for default mapping
+        // Statements true for default mapping
+        //   - no support for deserialization of polymorphic types
+        //   - no support for deserialization of anonymous classes
+        //   - fail fast exception strategy
 
-        //no support for deserialization of polymorphic types
-        //no support for deserialization of anonymous classes
+        // Handling of null values:
+        //   objects ->
+        //     toJson:  null -> property not present
+        //     fromJson: null value found -> null value set into field
+        //   arrays ->
+        //     toJson: null -> null element in the json array
+        //     fromJson: null element in the json array -> null element in the list
 
-        //fail fast exception strategy
-
-        //handling of null values:
-        //objects ->
-        //toJson:  null -> property not present
-        //fromJson: property not present or null value found -> null value set into field
-        //arrays ->
-        //toJson: null -> null element in the json array
-        //fromJson: null element in the json array -> null element in the list
-
-        //access to fields
-        //by default we are using public getters/setters methods
-        //if getter/setter method is not found, use public field
-        //if field is not found, but getter/setter method is present, use getter/setter method
+        // Access to fields
+        //   by default we are using public getters/setters methods
+        //   if getter/setter method is not found, use public field
+        //   if field is not found, but getter/setter method is present, use getter/setter method
 
         Jsonb jsonb = JsonbBuilder.create();
         fromJson_Primitives(jsonb);
         toJson_Primitives(jsonb);
+
+        exceptions(jsonb);
 
         fromJson_Collections(jsonb);
         toJson_Collection(jsonb);
@@ -82,84 +122,83 @@ public class DefaultMapping {
     }
 
     public static void fromJson_Primitives(Jsonb jsonb) {
-        //String
+        // String
         String str = jsonb.fromJson("\"some_string\"", String.class);
 
-        //String escaping
+        // String escaping
         String escapedString = jsonb.fromJson("\" \\\" \\\\ \\/ \\b \\f \\n \\r \\t \\u0039\"", String.class);
         assertEquals(" \" \\ / \b \f \n \r \t 9", escapedString);
 
-        //Character
+        // Character
         Character ch = jsonb.fromJson("\"\uFFFF\"", Character.class);
 
-        //Byte
+        // Byte
         Byte byte1 = jsonb.fromJson("1", Byte.class);
 
-        //Short
+        // Short
         Short short1 = jsonb.fromJson("1", Short.class);
 
-        //Integer
+        // Integer
         Integer int1 = jsonb.fromJson("1", Integer.class);
 
-        //Long
+        // Long
         Long long1 = jsonb.fromJson("1", Long.class);
 
-        //Float
+        // Float
         Float float1 = jsonb.fromJson("1.2", Float.class);
 
-        //Double
+        // Double
         Double double1 = jsonb.fromJson("1.2", Double.class);
 
-        //BigInteger
+        // BigInteger
         BigInteger bigInteger = jsonb.fromJson("1", BigInteger.class);
 
-        //BigDecimal
+        // BigDecimal
         BigDecimal bigDecimal = jsonb.fromJson("1.2", BigDecimal.class);
 
-        //Number
+        // Number
         Number number = (BigDecimal)jsonb.fromJson("1.2", Number.class);
 
-        //Boolean
+        // Boolean
         Boolean trueValue = jsonb.fromJson("true", Boolean.class);
 
-        //Boolean
+        // Boolean
         Boolean falseValue = jsonb.fromJson("false", Boolean.class);
 
-        //null
+        // null
         Object nullValue = jsonb.fromJson("null", Object.class);
 
         assert(nullValue == null);
     }
 
     public static void exceptions(Jsonb jsonb) {
-        //Exception
-        //fail fast strategy by default
+        // Fail fast strategy by default
 
-        //incompatible types
+        // incompatible types
         try {
             jsonb.fromJson("not_a_number", Integer.class);
             assert(false);
         } catch (JsonbException e) {}
 
-        //incompatible types
+        // incompatible types
         try {
             jsonb.fromJson("[null,1]", int[].class);
             assert(false);
         } catch (JsonbException e) {}
 
-        //bad structure
+        // bad structure
         try {
             jsonb.fromJson("[1,2", int[].class);
             assert(false);
         } catch (JsonbException e) {}
 
-        //overflow - Value out of range
+        // overflow - Value out of range
         try {
             jsonb.fromJson(""+new Integer(Byte.MAX_VALUE + 1)+"", Byte.class);
             assert(false);
         } catch (JsonbException e) {}
 
-        //underflow - Value out of range
+        // underflow - Value out of range
         try {
             jsonb.fromJson(""+new Integer(Byte.MIN_VALUE - 1)+"", Byte.class);
             assert(false);
@@ -167,110 +206,107 @@ public class DefaultMapping {
     }
 
     public static void toJson_Primitives(Jsonb jsonb) {
-
-        //String
+        // String
         assertEquals("\"some_string\"", jsonb.toJson("some_string"));
 
-        //escaped String
+        // Escaped String
         assertEquals("\" \\\\ \\\" / \\b \\f \\n \\r \\t 9\"", jsonb.toJson(" \\ \" / \b \f \n \r \t \u0039"));
 
-        //Character
+        // Character
         assertEquals("\"\uFFFF\"", jsonb.toJson('\uFFFF'));
 
-        //Byte
+        // Byte
         assertEquals("1", jsonb.toJson((byte)1));
 
-        //Short
+        // Short
         assertEquals("1", jsonb.toJson((short)1));
 
-        //Integer
+        // Integer
         assertEquals("1", jsonb.toJson(1));
 
-        //Long
+        // Long
         assertEquals("5", jsonb.toJson(5L));
 
-        //Float
+        // Float
         assertEquals("1.2", jsonb.toJson(1.2f));
 
-        //Double
+        // Double
         assertEquals("1.2", jsonb.toJson(1.2));
 
-        //BigInteger
+        // BigInteger
         assertEquals("1", jsonb.toJson(new BigInteger("1")));
 
-        //BigDecimal
+        // BigDecimal
         assertEquals("1.2", jsonb.toJson(new BigDecimal("1.2")));
 
-        //Number
+        // Number
         assertEquals("1.2", jsonb.toJson((java.lang.Number)1.2));
 
-        //Boolean true
+        // Boolean true
         assertEquals("true", jsonb.toJson(true));
 
-        //Boolean false
+        // Boolean false
         assertEquals("false", jsonb.toJson(false));
 
-        //null
+        // null
         assertEquals("null", jsonb.toJson(null));
     }
 
     public static void fromJson_Structures(Jsonb jsonb) {
-
-        //Map
+        // Map
         Map<String, Object> map = (Map<String,Object>)jsonb.fromJson("{\"name\":\"unknown object\"}", Object.class);
 
-        //mapping for number  -> Integer, Long, BigDecimal
+        // Mapping for number  -> Integer, Long, BigDecimal
         Map<String, Object> mapWithBigDecimal = (Map<String, Object>)jsonb.fromJson("{\"intValue\":5,\"longValue\":17179869184,\"otherValue\":1.2}", Object.class);
         assert(mapWithBigDecimal.get("intValue") instanceof Integer);
         assert(mapWithBigDecimal.get("longValue") instanceof Long);
         assert(mapWithBigDecimal.get("otherValue") instanceof BigDecimal);
 
-        //Collection
+        // Collection
         Collection<Object> collection = (Collection<Object>)jsonb.fromJson("[{\"value\":\"first\"}, {\"value\":\"second\"}]", Object.class);
 
-        //JsonStructure
+        // JsonStructure
         JsonStructure jsonStructure = jsonb.fromJson("{\"name\":\"unknown object\"}", JsonStructure.class);
 
-        //JsonObject
+        // JsonObject
         JsonObject jsonObject = jsonb.fromJson("{\"name\":\"unknown object\"}", JsonObject.class);
 
-        //JsonArray
+        // JsonArray
         JsonArray jsonArray = jsonb.fromJson("[{\"value\":\"first\"},{\"value\":\"second\"}]", JsonArray.class);
 
-        //JsonValue
+        // JsonValue
         JsonValue jsonValue = jsonb.fromJson("1", JsonValue.class);
     }
 
     public static void toJson_Structures(Jsonb jsonb) {
-
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonObject jsonObject = factory.createObjectBuilder().
                 add("name", "home").
                 add("city", "Prague")
                 .build();
 
-        //JsonObject
+        // JsonObject
         assertEquals("{\"name\":\"home\",\"city\":\"Prague\"}", jsonb.toJson(jsonObject));
 
         JsonArray jsonArray = factory.createArrayBuilder().add(jsonObject).add(jsonObject).build();
 
-        //JsonArray
+        // JsonArray
         assertEquals("[{\"name\":\"home\",\"city\":\"Prague\"},{\"name\":\"home\",\"city\":\"Prague\"}]", jsonb.toJson(jsonArray));
 
-        //JsonStructure
+        // JsonStructure
         assertEquals("[{\"name\":\"home\",\"city\":\"Prague\"},{\"name\":\"home\",\"city\":\"Prague\"}]", jsonb.toJson((JsonStructure)jsonArray));
 
-        //JsonValue
+        // JsonValue
         assertEquals("true", jsonb.toJson(JsonValue.TRUE));
 
-        //Map
+        // Map
         Map<String, Object> commonMap = new LinkedHashMap<>();
         commonMap.put("first", 1);
         commonMap.put("second", 2);
 
         assertEquals("{\"first\":1,\"second\":2}", jsonb.toJson(commonMap));
 
-        //Collection
+        // Collection
         Collection<Object> commonList = new ArrayList<>();
         commonList.add(1);
         commonList.add(2);
@@ -279,50 +315,42 @@ public class DefaultMapping {
     }
 
     public static void fromJson_Collections(Jsonb jsonb) {
-
-        //support deserialization of java.util.Collection and java.util.Map and its subinterfaces and implementing (sub)classes
-
-        //Collection, Map
-
-        //Set, HashSet, NavigableSet, SortedSet, TreeSet, LinkedHashSet, TreeHashSet
-
-        //HashMap, NavigableMap, SortedMap, TreeMap, LinkedHashMap, TreeHashMap
-
-        //List, ArrayList, LinkedList
-
-        //Deque, ArrayDeque, Queue, PriorityQueue
+        // Support deserialization of java.util.Collection and java.util.Map and its subinterfaces and implementing (sub)classes
+        //   Collection, Map
+        //   Set, HashSet, NavigableSet, SortedSet, TreeSet, LinkedHashSet
+        //   HashMap, NavigableMap, SortedMap, TreeMap, LinkedHashMap
+        //   List, ArrayList, LinkedList
+        //   Deque, ArrayDeque, Queue, PriorityQueue
 
         Collection<Object> collection = jsonb.fromJson("[\"first\",\"second\"]", Collection.class);
 
         Map<String, Object> map = jsonb.fromJson("{\"first\":\"second\"}", Map.class);
 
-        //concrete implementation of Map
+        // Concrete implementation of Map
         HashMap<String, Object> hashMap = jsonb.fromJson("{\"first\":\"second\"}", HashMap.class);
 
-        //concrete implementation of Collection
+        // Concrete implementation of Collection
         ArrayList<Object> arrayList = jsonb.fromJson("[\"first\",\"second\"]", ArrayList.class);
 
-        //deque
+        // Deque
         Deque<String> dequeList = jsonb.fromJson("[\"first\",\"second\"]", Deque.class);
         assert(dequeList.size() == 2);
         assertEquals("first", dequeList.getFirst());
         assertEquals("second", dequeList.getLast());
 
-        //JSON Binding supports default deserialization of the following interfaces
-        //syntax: interface -> default implementation
-
-        //Collection -> ArrayList
-        //Set -> HashSet
-        //NavigableSet -> TreeSet
-        //SortedSet -> TreeSet
-        //Map -> HashMap
-        //SortedMap -> TreeMap
-        //NavigableMap -> TreeMap
-        //Deque -> ArrayDeque
-        //Queue -> ArrayDeque
-
-        //any implementation of Collection and Map with public default constructor is deserializable
-
+        // JSON Binding supports default deserialization of the following interfaces
+        //   syntax: interface -> default implementation
+        //   Collection -> ArrayList
+        //   Set -> HashSet
+        //   NavigableSet -> TreeSet
+        //   SortedSet -> TreeSet
+        //   Map -> HashMap
+        //   SortedMap -> TreeMap
+        //   NavigableMap -> TreeMap
+        //   Deque -> ArrayDeque
+        //   Queue -> ArrayDeque
+        //
+        // any implementation of Collection and Map with public default constructor is deserializable
     }
 
     public static void toJson_Collection(Jsonb jsonb) {
@@ -337,9 +365,9 @@ public class DefaultMapping {
 
         assertEquals("{\"1\":1,\"2\":2,\"3\":3}", jsonb.toJson(map));
 
-        //any implementation of Collection and Map is serializable
+        // Any implementation of Collection and Map is serializable
 
-        //deque
+        // Deque
         Deque<String> deque = new ArrayDeque<>();
         deque.add("first");
         deque.add("second");
@@ -348,53 +376,49 @@ public class DefaultMapping {
     }
 
     public static void fromJson_Arrays(Jsonb jsonb) {
+        // Support of arrays of types that JSON Binding is able to deserialize
+        //   Byte[], Short[], Integer[] Long[], Float[], Double[], BigInteger[], BigDecimal[], Number[]
+        //   Object[], JsonArray[], JsonObject[], JsonStructure[]
+        //   String[], Character[]
+        //   byte[], short[], int[], long[], float[], double[], char[], boolean[]
+        //   java.net.URL[], java.net.URI[]
+        //   Map[], Collection[], other collections ...
+        //   enum
+        //   support of multidimensional arrays
 
-        //support of arrays of types that JSON Binding is able to deserialize
-        //Byte[], Short[], Integer[] Long[], Float[], Double[], BigInteger[], BigDecimal[], Number[]
-        //Object[], JsonArray[], JsonObject[], JsonStructure[]
-        //String[], Character[]
-        //byte[], short[], int[], long[], float[], double[], char[], boolean[]
-        //java.net.URL[], java.net.URI[]
-        //Map[], Collection[], other collections ...
-        //enum, EnumSet, EnumMap
-        //support of multidimensional arrays
+        // Several examples
 
-
-        //Several examples
-
-        //Byte arrays
+        // Byte arrays
         Byte[] byteArray = jsonb.fromJson("[1,2]", Byte[].class);
 
-        //Integer array
+        // Integer array
         Integer[] integerArray = jsonb.fromJson("[1,2]", Integer[].class);
 
-        //int array
+        // int array
         int[] intArray = jsonb.fromJson("[1,2]", int[].class);
 
-        //String arrays
+        // String arrays
         String[] stringArray = jsonb.fromJson("[\"first\",\"second\"]", String[].class);
 
-        //multidimensional arrays
+        // Multidimensional arrays
         String[][] stringMultiArray = jsonb.fromJson("[[\"first\", \"second\"], [\"third\" , \"fourth\"]]", String[][].class);
 
-        //default mapping should handle multidimensional arrays of types supported by default mapping, e.g. Map
+        // Default mapping should handle multidimensional arrays of types supported by default mapping, e.g. Map
         Map<String, Object>[][] mapMultiArray = jsonb.fromJson("[[{\"1\":2}, {\"3\":4}],[{\"5\":6},{\"7\":8}]]", Map[][].class);
     }
 
     public static void toJson_Arrays(Jsonb jsonb) {
+        // Support of arrays of types that JSON Binding is able to serialize
+        //   Byte[], Short[], Integer[] Long[], Float[], Double[], BigInteger[], BigDecimal[], Number[]
+        //   Object[], JsonArray[], JsonObject[], JsonStructure[]
+        //   String[], Character[]
+        //   byte[], short[], int[], long[], float[], double[], char[], boolean[]
+        //   java.net.URL[], java.net.URI[]
+        //   Map[], Collection[], other collections ...
+        //   enum
+        //   support of multidimensional arrays
 
-        //support of arrays of types that JSON Binding is able to serialize
-        //Byte[], Short[], Integer[] Long[], Float[], Double[], BigInteger[], BigDecimal[], Number[]
-        //Object[], JsonArray[], JsonObject[], JsonStructure[]
-        //String[], Character[]
-        //byte[], short[], int[], long[], float[], double[], char[], boolean[]
-        //java.net.URL[], java.net.URI[]
-        //Map[], Collection[], other collections ...
-        //enum, EnumSet, EnumMap
-        //support of multidimensional arrays
-
-
-        //Several examples
+        // Several examples
 
         Byte[] byteArray = {1, 2, 3};
 
@@ -434,14 +458,14 @@ public class DefaultMapping {
     public EnumMap<Language, String> languageEnumMap = new EnumMap<>(Language.class);
 
     public static void fromJson_Enums(Jsonb jsonb) throws Exception {
+        EnumSet<Language> languageEnumSet = jsonb.fromJson("[\"Slovak\", \"English\"]",
+                DefaultMapping.class.getField("languageEnumSet").getGenericType());
 
-        EnumSet<Language> languageEnumSet = jsonb.fromJson("[\"Slovak\", \"English\"]", DefaultMapping.class.getField("languageEnumSet").getGenericType());
-
-        EnumMap<Language, String> languageEnumMap = jsonb.fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]", DefaultMapping.class.getField("languageEnumMap").getGenericType());
+        EnumMap<Language, String> languageEnumMap = jsonb.fromJson("[\"Slovak\" : \"sk\", \"Czech\" : \"cz\"]",
+                DefaultMapping.class.getField("languageEnumMap").getGenericType());
     }
 
     public static void toJson_Enums(Jsonb jsonb) {
-
         Language language = Language.Slovak;
 
         assertEquals("\"Slovak\"", jsonb.toJson(language));
@@ -462,42 +486,49 @@ public class DefaultMapping {
     }
 
     public static void fromJson_POJOs(Jsonb jsonb) {
-
         POJO pojo = jsonb.fromJson("{\"id\":1, \"name\":\"pojoName\"}", POJO.class);
 
         POJO nullPOJO = jsonb.fromJson("{\"id\":1, \"name\":null}", POJO.class);
         assert(null == nullPOJO.name);
 
-        //just public nested class
-        POJOWithNestedClass pojoWithNestedClass = jsonb.fromJson("{\"id\":1, \"name\":\"pojo_name\", \"nestedClass\" : {\"nestedId\":2, \"nestedName\" : \"nestedPojoName\"}}", POJOWithNestedClass.class);
+        // Just public nested class
+        POJOWithNestedClass pojoWithNestedClass =
+                jsonb.fromJson("{\"id\":1, \"name\":\"pojo_name\", \"nestedClass\" : {\"nestedId\":2, \"nestedName\" : \"nestedPojoName\"}}",
+                        POJOWithNestedClass.class);
 
-        //just public nested class
-        POJOWithNestedClass.NestedClass nestedClass = jsonb.fromJson("{\"nestedId\":2, \"nestedName\" : \"nestedPojoName\"}", POJOWithNestedClass.NestedClass.class);
+        // Just public nested class
+        POJOWithNestedClass.NestedClass nestedClass = jsonb.fromJson("{\"nestedId\":2, \"nestedName\" : \"nestedPojoName\"}",
+                POJOWithNestedClass.NestedClass.class);
 
-        POJOWithStaticNestedClass pojoWithStaticNestedClass = jsonb.fromJson("{\"id\":1, \"name\":\"pojoName\"}", POJOWithStaticNestedClass.class);
+        POJOWithStaticNestedClass pojoWithStaticNestedClass = jsonb.fromJson("{\"id\":1, \"name\":\"pojoName\"}",
+                POJOWithStaticNestedClass.class);
 
-        POJOWithStaticNestedClass.StaticNestedClass staticNestedClass = jsonb.fromJson("{\"nestedId\":2, \"nestedName\" : \"nestedPojoName\"}", POJOWithStaticNestedClass.StaticNestedClass.class);
+        POJOWithStaticNestedClass.StaticNestedClass staticNestedClass = jsonb.fromJson("{\"nestedId\":2, \"nestedName\" : \"nestedPojoName\"}",
+                POJOWithStaticNestedClass.StaticNestedClass.class);
 
-        POJOWithMixedFieldAccess pojoWithMixedFieldAccess = jsonb.fromJson("{\"id\":5, \"name\":\"new_name\", \"active\":true, \"valid\":true}", POJOWithMixedFieldAccess.class);
+        POJOWithMixedFieldAccess pojoWithMixedFieldAccess = jsonb.fromJson("{\"id\":5, \"name\":\"new_name\", \"active\":true, \"valid\":true}",
+                POJOWithMixedFieldAccess.class);
 
         assert(pojoWithMixedFieldAccess.id.intValue() == 10);
         assert(pojoWithMixedFieldAccess.name.equals("new_name"));
         assert(pojoWithMixedFieldAccess.active);
         assert(pojoWithMixedFieldAccess.valid);
 
-        //composite class
-        CompositePOJO compositePOJO = jsonb.fromJson("{\"compositeId\":\"13\",\"inner\":{\"id\":4,\"name\":\"innerPOJO\"},\"stringArray\":[\"first\",\"second\"],\"stringList\":[\"one\":\"two\"]}", CompositePOJO.class);
+        // Composite class
+        CompositePOJO compositePOJO =
+                jsonb.fromJson("{\"compositeId\":\"13\",\"inner\":{\"id\":4,\"name\":\"innerPOJO\"}," +
+                        "\"stringArray\":[\"first\",\"second\"],\"stringList\":[\"one\":\"two\"]}",
+                        CompositePOJO.class);
     }
 
     public static void toJson_POJOs(Jsonb jsonb) {
-
         POJO pojo = new POJO();
         pojo.setId(1);
         pojo.setName("pojoName");
 
         assertEquals("{\"id\":1,\"name\":\"pojoName\"}", jsonb.toJson(pojo));
 
-        //pojo with nested class
+        // Pojo with nested class
         POJOWithNestedClass pojoWithNestedClass = new POJOWithNestedClass();
         pojoWithNestedClass.setName("pojoName");
         pojoWithNestedClass.setId(1);
@@ -508,9 +539,10 @@ public class DefaultMapping {
 
         pojoWithNestedClass.setNestedClass(nestedClass);
 
-        assertEquals("{\"id\":1,\"name\":\"pojo_name\",\"nestedClass\":{\"nestedId\":2,\"nestedName\":\"nestedPojoName\"}}", jsonb.toJson(pojoWithNestedClass));
+        assertEquals("{\"id\":1,\"name\":\"pojo_name\",\"nestedClass\":{\"nestedId\":2,\"nestedName\":\"nestedPojoName\"}}",
+                jsonb.toJson(pojoWithNestedClass));
 
-        //nested class
+        // Nested class
         assertEquals("{\"nestedId\":2,\"nestedName\":\"nestedPojoName\"}", jsonb.toJson(nestedClass));
 
         //pojo with static nested class
@@ -520,7 +552,7 @@ public class DefaultMapping {
 
         assertEquals("{\"id\":1,\"name\":\"pojoName\"}", jsonb.toJson(pojoWithStaticNestedClass));
 
-        //static nested class
+        // Static nested class
         POJOWithStaticNestedClass.StaticNestedClass staticNestedClass = new POJOWithStaticNestedClass.StaticNestedClass();
         staticNestedClass.setNestedId(2);
         staticNestedClass.setNestedName("nestedPojoName");
@@ -531,7 +563,7 @@ public class DefaultMapping {
 
         assertEquals("{\"active\":true,\"id\":2,\"name\":\"pojoName\",\"valid\":false}", jsonb.toJson(pojoWithMixedFieldAccess));
 
-        //composite class
+        // Composite class
         CompositePOJO compositePOJO = new CompositePOJO();
         compositePOJO.setCompositeId(13);
         compositePOJO.setStringArray(new String[]{"first", "second"});
@@ -541,9 +573,9 @@ public class DefaultMapping {
         innerPOJO.setName("innerPOJO");
         compositePOJO.setInner(innerPOJO);
 
-        assertEquals("{\"compositeId\":\"13\",\"inner\":{\"id\":4,\"name\":\"innerPOJO\"},\"stringArray\":[\"first\",\"second\"],\"stringList\":[\"one\":\"two\"]}",
+        assertEquals("{\"compositeId\":\"13\",\"inner\":{\"id\":4,\"name\":\"innerPOJO\"},\"stringArray\":[\"first\",\"second\"]," +
+                "\"stringList\":[\"one\":\"two\"]}",
                 jsonb.toJson(compositePOJO));
-
     }
 
     static class CompositePOJO {
@@ -610,7 +642,7 @@ public class DefaultMapping {
             this.name = name;
         }
 
-        //other supported attributes
+        // Other supported attributes
     }
 
     private static class POJOWithNestedClass {
@@ -645,7 +677,7 @@ public class DefaultMapping {
             this.nestedClass = nestedClass;
         }
 
-        //other supported attributes
+        // Other supported attributes
 
         public class NestedClass {
             private Integer nestedId;
@@ -695,7 +727,7 @@ public class DefaultMapping {
             this.name = name;
         }
 
-        //other supported attributes
+        // Other supported attributes
 
         public static class StaticNestedClass {
             private Integer nestedId;
@@ -754,12 +786,11 @@ public class DefaultMapping {
     }
 
     private static void fromJson_Inheritance(Jsonb jsonb) {
-        //we need public constructor
+        // We need public constructor
         Dog animal = jsonb.fromJson("{\"age\":5, \"name\":\"Rex\"}", Dog.class);
     }
 
     public static void toJson_Inheritance(Jsonb jsonb) {
-
         DefaultMapping defaultMapping = new DefaultMapping();
 
         Dog dog = defaultMapping.new Dog();
@@ -801,7 +832,7 @@ public class DefaultMapping {
     }
 
     public static void toJson_Anonymous_Class(Jsonb jsonb) {
-        //same mechanism as POJOs with inheritance
+        // Same mechanism as POJOs with inheritance
 
         assertEquals("{\"id\":1,\"name\":\"pojoName\"}", jsonb.toJson(new POJO() {
             @Override
@@ -824,7 +855,6 @@ public class DefaultMapping {
     }
 
     public static void toJson_URL_URI(Jsonb jsonb) throws Exception {
-
         java.net.URL url = new java.net.URL("https://www.jcp.org/en/jsr/detail?id=367#3");
 
         assertEquals("\"https://www.jcp.org/en/jsr/detail?id=367#3\"", jsonb.toJson(url));
@@ -850,9 +880,7 @@ public class DefaultMapping {
     }
 
     public static void fromJson_Instantiation(Jsonb jsonb) {
-
-        //public or protected constructor must be present
-
+        // Public or protected constructor must be present
         try {
             POJOWithoutDefaultArgConstructor pojo = jsonb.fromJson("{\"id\":\"1\"}", POJOWithoutDefaultArgConstructor.class);
             assert(false);
@@ -921,7 +949,7 @@ public class DefaultMapping {
     }
 
     public static void toJson_attributesOrdering(Jsonb jsonb) {
-        //lexicographical order
+        // Lexicographical order
         AttributesOrderingClass attributesOrderingClass = new AttributesOrderingClass();
         attributesOrderingClass.aField = "text";
         attributesOrderingClass.cField = "text";
@@ -940,14 +968,15 @@ public class DefaultMapping {
         assertEquals("{\"aField\":\"aField\",\"bField\":\"bField\",\"cField\":\"cField\",\"aa\":\"aa\",\"bb\":\"bb\",\"cc\":\"cc\"}",
                 jsonb.toJson(attributesOrderingWithInheritance));
 
-        AttributesOrderingWithCounterClass attributesOrderingWithCounterClass = jsonb.fromJson("{\"second\":\"a\",\"third\":\"b\",\"first\":\"c\"}", AttributesOrderingWithCounterClass.class);
+        AttributesOrderingWithCounterClass attributesOrderingWithCounterClass = jsonb.fromJson("{\"second\":\"a\",\"third\":\"b\",\"first\":\"c\"}",
+                AttributesOrderingWithCounterClass.class);
         assertEquals("a0", attributesOrderingWithCounterClass.second);
         assertEquals("b1", attributesOrderingWithCounterClass.third);
         assertEquals("c2", attributesOrderingWithCounterClass.first);
     }
 
     public static void toJson_nullValues(Jsonb jsonb) {
-        //array
+        // Array
         List<String> stringList = new ArrayList<>();
         stringList.add("value1");
         stringList.add(null);
@@ -955,7 +984,7 @@ public class DefaultMapping {
 
         assertEquals("[\"value1\",null,\"value3\"]", jsonb.toJson(stringList));
 
-        //java object
+        // Java object
         POJO pojo = new POJO();
         pojo.id = 1;
         pojo.name = null;
@@ -964,7 +993,7 @@ public class DefaultMapping {
     }
 
     public static void fromJson_nullValues(Jsonb jsonb) {
-        //array
+        // Array
         ArrayList<Object> stringList = jsonb.fromJson("[\"value1\",null,\"value3\"]", ArrayList.class);
         assert(stringList.size() == 3);
         Iterator<Object> iterator = stringList.iterator();
@@ -972,7 +1001,7 @@ public class DefaultMapping {
         assert(null == iterator.next());
         assertEquals("value3", iterator.next());
 
-        //java object
+        // Java object
         POJOWithInitialValue pojoWithInitialValue = jsonb.fromJson("{\"name\":\"newName\"}", POJOWithInitialValue.class);
         assert(pojoWithInitialValue.id.intValue() == 4);
         assertEquals("newName", pojoWithInitialValue.name);
@@ -988,29 +1017,29 @@ public class DefaultMapping {
     }
 
     public static void fromJson_modifiers(Jsonb jsonb) {
-        //deserialization of final field is ignored
-        ModifiersClass modifiersClass = jsonb.fromJson("{\"finalField\":\"newFinalValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
+        // Deserialization of final field is ignored
+        ModifiersClass modifiersClass = jsonb.fromJson("{\"finalField\":\"newFinalValue\",\"regularField\":\"newRegularValue\"}",
+                ModifiersClass.class);
         assertEquals("finalField", modifiersClass.finalField);
         assertEquals("newRegularValue", modifiersClass.regularField);
 
-        //deserialization of static field is ignored
+        // Deserialization of static field is ignored
         modifiersClass = jsonb.fromJson("{\"staticField\":\"newStaticValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
         assertEquals("staticValue", modifiersClass.staticField);
         assertEquals("newRegularValue", modifiersClass.regularField);
 
-        //deserialization of transient field is ignored
+        // Deserialization of transient field is ignored
         modifiersClass = jsonb.fromJson("{\"transientField\":\"newTransientValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
         assertEquals("transientField", modifiersClass.transientField);
         assertEquals("newRegularValue", modifiersClass.regularField);
 
-        //deserialization of unknown field is ignored
+        // Deserialization of unknown field is ignored
         modifiersClass = jsonb.fromJson("{\"unknownField\":\"newUnknownValue\",\"regularField\":\"newRegularValue\"}", ModifiersClass.class);
         assertEquals("newRegularValue", modifiersClass.regularField);
     }
 
     public static void toJson_optional(Jsonb jsonb) {
-
-        //Optional
+        // Optional
         assertEquals("\"strValue\"", jsonb.toJson(Optional.of("strValue")));
 
         assertEquals("null", jsonb.toJson(Optional.ofNullable(null)));
@@ -1034,21 +1063,21 @@ public class DefaultMapping {
 
         assertEquals("{}", jsonb.toJson(nullOptionalField));
 
-        //OptionalInt
+        // OptionalInt
         assertEquals("1", jsonb.toJson(OptionalInt.of(1)));
         assertEquals("null", jsonb.toJson(OptionalInt.empty()));
 
-        //OptionalLong
+        // OptionalLong
         assertEquals("123", jsonb.toJson(OptionalLong.of(123)));
         assertEquals("null", jsonb.toJson(OptionalLong.empty()));
 
-        //OptionalDouble
+        // OptionalDouble
         assertEquals("1.2", jsonb.toJson(OptionalDouble.of(1.2)));
         assertEquals("null", jsonb.toJson(OptionalDouble.empty()));
     }
 
     public static void fromJson_optional(Jsonb jsonb) {
-        //Optional
+        // Optional
         Optional<String> stringValue = jsonb.fromJson("\"optionalString\"", Optional.class);
         assert(stringValue.isPresent());
         assertEquals("optionalString", stringValue.get());
@@ -1066,7 +1095,7 @@ public class DefaultMapping {
         OptionalClass nullOptionalClass = jsonb.fromJson("{\"optionalField\":null}", OptionalClass.class);
         assert(nullOptionalClass.optionalField == null);
 
-        //OptionalInt
+        // OptionalInt
         OptionalInt optionalInt = jsonb.fromJson("1", OptionalInt.class);
         assert(optionalInt.isPresent());
         assert(optionalInt.getAsInt() == 1);
@@ -1074,7 +1103,7 @@ public class DefaultMapping {
         OptionalInt emptyOptionalInt = jsonb.fromJson("null", OptionalInt.class);
         assert(!emptyOptionalInt.isPresent());
 
-        //OptionalLong
+        // OptionalLong
         OptionalLong optionalLong = jsonb.fromJson("123", OptionalLong.class);
         assert(optionalLong.isPresent());
         assert(optionalLong.getAsLong() == 123L);
@@ -1082,7 +1111,7 @@ public class DefaultMapping {
         OptionalLong emptyOptionalLong = jsonb.fromJson("null", OptionalLong.class);
         assert(!emptyOptionalLong.isPresent());
 
-        //OptionalDouble
+        // OptionalDouble
         OptionalDouble optionalDouble = jsonb.fromJson("1.2", OptionalDouble.class);
         assert(optionalDouble.isPresent());
         assert(optionalDouble.getAsDouble() == 1.2);
@@ -1092,7 +1121,6 @@ public class DefaultMapping {
     }
 
     public static void toJson_accessors(Jsonb jsonb) {
-
         AccessorsClass accessorsClass = new AccessorsClass();
         accessorsClass.setPrivateFieldWithPrivateAccessors(1);
         accessorsClass.setPrivateFieldWithPublicAccessors(2);
@@ -1229,5 +1257,4 @@ public class DefaultMapping {
             this.third = third+(counter++);
         }
     }
-
 }

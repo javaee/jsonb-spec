@@ -6,7 +6,7 @@
 
 JSON-B is a standard binding layer for converting Java objects to/from JSON messages. It defines a default mapping algorithm for converting existing Java classes to JSON, while enabling developers to customize the mapping process through the use of Java annotations.
 
-== {component-name} Installation
+== Installation
 
 === Coordinates
 

@@ -93,7 +93,7 @@
     <developers>
         <developer>
             <email>dmitry.kornilov@oracle.com</email>
-            <id>maiden168</id>
+            <id>dmitry.kornilov</id>
             <name>Dmitry Kornilov</name>
             <organization>Oracle</organization>
             <roles>
@@ -513,7 +513,6 @@
                         </dependency>
                     </dependencies>
                     <configuration>
-                        <outputDirectory>${project.build.directory}/checkstyle</outputDirectory>
                         <outputFile>${project.build.directory}/checkstyle/checkstyle-result.xml</outputFile>
                         <configLocation>${basedir}/../etc/config/checkstyle.xml</configLocation>
                         <failOnViolation>true</failOnViolation>

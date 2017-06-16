@@ -52,7 +52,7 @@
 
     <groupId>javax.json.bind</groupId>
     <artifactId>javax.json.bind-api</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <name>javax.json.bind-api</name>
 
@@ -87,7 +87,7 @@
         <connection>scm:git:git://github.com/javaee/jsonb-spec.git</connection>
         <developerConnection>scm:git:git@github.com:javaee/jsonb-spec.git</developerConnection>
         <url>https://github.com/javaee/jsonb-spec</url>
-        <tag>HEAD</tag>
+        <tag>1.0</tag>
     </scm>
 
     <developers>

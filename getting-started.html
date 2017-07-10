@@ -117,31 +117,24 @@
         &lt;name&gt;Maven Java Net Snapshots and Releases&lt;/name&gt;
         &lt;url&gt;https://maven.java.net/content/groups/public/&lt;/url&gt;
     &lt;/repository&gt;
-
-    &lt;!-- Needed for Yasson --&gt;
-    &lt;repository&gt;
-        &lt;id&gt;yasson-snapshots&lt;/id&gt;
-        &lt;name&gt;Yasson Snapshots repository&lt;/name&gt;
-        &lt;url&gt;https://repo.eclipse.org/content/repositories/yasson-snapshots&lt;/url&gt;
-    &lt;/repository&gt;
 &lt;/repositories&gt;</code></pre>
                 <h4>Add the following dependencies:</h4>
                 <pre><code class="xml">&lt;dependency&gt;
     &lt;groupId&gt;javax.json.bind&lt;/groupId&gt;
     &lt;artifactId&gt;javax.json.bind-api&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
 &lt;/dependency&gt;
                     
 &lt;dependency&gt;
     &lt;groupId&gt;org.eclipse&lt;/groupId&gt;
     &lt;artifactId&gt;yasson&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
 &lt;/dependency&gt;
 
 &lt;dependency&gt;
     &lt;groupId&gt;org.glassfish&lt;/groupId&gt;
     &lt;artifactId&gt;javax.json&lt;/artifactId&gt;
-    &lt;version&gt;1.1.0-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
             </div>
         </div>
@@ -174,7 +167,7 @@ Jsonb jsonb = JsonbBuilder.create();
 String result = jsonb.toJson(dog);
 
 // Deserialize back
-dog = jsonb.fromJson("{name:\"Falco\",age:4,bitable:false}", Dog.class);</code></pre>
+dog = jsonb.fromJson("{\"age\":4,\"bitable\":false,\"name\":\"Falco\"}", Dog.class);</code></pre>
             </div>
         </div>
     </div>
@@ -200,7 +193,7 @@ Jsonb jsonb = JsonbBuilder.create();
 String result = jsonb.toJson(dogs);
 
 // Deserialize back
-dogs = jsonb.fromJson(result, new ArrayList&lt;Dog&gt;(){}.getClass());</code></pre>
+dogs = jsonb.fromJson(result, new ArrayList&lt;Dog&gt;(){}.getClass().getGenericSuperclass());</code></pre>
             </div>
         </div>
     </div>

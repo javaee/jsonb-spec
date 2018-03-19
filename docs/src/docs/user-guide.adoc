@@ -33,14 +33,14 @@ JSON-B is a standard binding layer for converting Java objects to/from JSON mess
     <dependency>
         <groupId>javax.json.bind</groupId>
         <artifactId>javax.json.bind-api</artifactId>
-        <version>1.0.0-RC2</version>
+        <version>1.0</version>
     </dependency>
 
     <!-- Yasson (JSON-B RI) -->
     <dependency>
         <groupId>org.eclipse</groupId>
         <artifactId>yasson</artifactId>
-        <version>1.0.0-RC1</version>
+        <version>1.0.1</version>
         <scope>runtime</scope>
     </dependency>
 </dependencies>

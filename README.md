@@ -1,13 +1,11 @@
 # Java API for JSON Binding (JSON-B)
 
-JSON-B is a standard binding layer for converting Java objects to/from JSON messages. It defines a default mapping algorithm for converting existing Java classes to JSON, while enabling developers to customize the mapping process through the use of Java annotations.
-
-## License
-
-[Java API for JSON Binding 1.0 Specification license](https://jcp.org/aboutJava/communityprocess/licenses/jsr367/SpecLicense-JSR_367_JSON_B-1.0-8.18.14.pdf)
+:warning: This project is now part of the EE4J initiative. The activity on this project has been paused while it is being migrated to the Eclipse Foundation. See [here](https://www.eclipse.org/ee4j/status.php) for the overall EE4J transition status.
 
 ## Links
-- JSON-B official web site: http://json-b.net
-- Discussion groups: https://javaee.groups.io/g/jsonb-spec
+
+- JSON-B community web site: http://json-b.net
+- Eclipse Project for JSON-B: https://projects.eclipse.org/projects/ee4j.jsonb
+- Discussion groups: jsonb-dev@eclipse.org
 - JSR-367 page on JCP site: https://jcp.org/en/jsr/detail?id=367
-- Yasson (Reference Implementation): https://github.com/eclipse/yasson
+- Yasson (Reference Implementation): https://github.com/eclipse-ee4j/yasson

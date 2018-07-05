@@ -285,12 +285,14 @@ or using @JsonbPropertyOrder annotation on class:
 
 [source,java]
 ----
-@JsonbPropertyOrder(PropertyOrderStrategy.ANY)
+@JsonbPropertyOrder({ "profession", "name" })
 public class Person {
     private String name;
     private String profession;
 }
 ----
+
+IMPORTANT: `@JsonbPropertyOrder` takes property names and not a `PropertyOrderStrategy`.
 
 ==== Ignoring properties
 
